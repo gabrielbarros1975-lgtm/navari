@@ -3,7 +3,6 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { VideoPlayer } from "@/components/VideoPlayer";
 import { Reveal } from "@/components/Reveal";
-import { PlatformFeatureCards } from "@/components/PlatformFeatures";
 import { Button } from "@/components/ui/button";
 import { brl } from "@/lib/price";
 import {
@@ -29,7 +28,6 @@ import {
   Compass,
   User,
   Award,
-  Sparkles,
   Tv,
   Mic,
   CalendarCheck,
@@ -50,14 +48,14 @@ const Workshop = () => {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
 
-      {/* 1. HERO / ABERTURA */}
+      {/* 1. HERO / ABERTURA COM VÍDEO NO TOPO */}
       <section className="lp-section lp-surface pt-28 md:pt-32 pb-16">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Coluna Vídeo / Thumbnail */}
-            <div className="hero-in lg:pr-4" style={{ animationDelay: "80ms" }}>
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="flex flex-col gap-10 items-center text-center">
+            {/* VÍDEO NO TOPO DA PÁGINA */}
+            <div className="w-full max-w-4xl hero-in" style={{ animationDelay: "80ms" }}>
               {workshop.videoUrl ? (
-                <div className="rounded-2xl overflow-hidden border border-border shadow-2xl">
+                <div className="rounded-2xl overflow-hidden border border-gold/40 shadow-2xl bg-black">
                   <VideoPlayer videoUrl={workshop.videoUrl} title={workshop.title} />
                 </div>
               ) : (
@@ -77,71 +75,49 @@ const Workshop = () => {
                         <Play className="w-7 h-7 translate-x-0.5" fill="currentColor" />
                       </div>
                     </div>
-                    <span className="text-xs font-semibold tracking-wider text-white bg-[hsl(212,42%,9%)]/85 px-4 py-1.5 rounded-full border border-gold/40">
-                      Vídeo de apresentação em breve
-                    </span>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Coluna de Conteúdo do Hero */}
-            <div className="flex flex-col gap-6 text-center lg:text-left">
-              <div>
-                <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold/15 border border-gold/30 text-gold text-xs font-semibold uppercase tracking-[0.2em]">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  IMERSÃO ONLINE
-                </span>
-              </div>
-
+            {/* CONTEÚDO DO HERO ABAIXO DO VÍDEO */}
+            <div className="max-w-3xl flex flex-col gap-6 items-center">
               <h1
-                className="hero-in font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight md:leading-[1.15]"
+                className="hero-in font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight"
                 style={{ animationDelay: "160ms" }}
               >
                 {workshop.title}
               </h1>
 
               <p
-                className="hero-in text-lg md:text-xl font-medium text-gold/90 italic leading-relaxed border-l-2 border-gold/40 pl-4 my-1 text-left"
+                className="hero-in text-lg md:text-xl font-medium text-gold/90 italic leading-relaxed max-w-2xl"
                 style={{ animationDelay: "220ms" }}
               >
                 {workshop.subtitle}
               </p>
 
-              <div className="space-y-2 text-sm text-muted-foreground text-left">
-                <p className="leading-relaxed">
-                  Uma imersão objetiva sobre a incorporação imobiliária sob a perspectiva do Registro de Imóveis, percorrendo seus principais fundamentos, documentos e etapas registrais.
-                </p>
-                <p className="leading-relaxed">
-                  A proposta é proporcionar uma visão geral do procedimento e aproximar a legislação da prática da qualificação registral.
-                </p>
-              </div>
+              <p className="text-base text-muted-foreground leading-relaxed max-w-2xl">
+                Uma imersão objetiva sobre a incorporação imobiliária sob a perspectiva do Registro de Imóveis, percorrendo seus principais fundamentos, documentos e etapas registrais para aproximar a legislação da prática da qualificação registral.
+              </p>
 
               {/* Informações de Data / Formato */}
               <div
-                className="hero-in flex flex-col sm:flex-row flex-wrap items-center lg:items-start justify-center lg:justify-start gap-4 text-sm text-foreground/90 font-medium py-2"
+                className="hero-in flex flex-wrap items-center justify-center gap-4 text-sm text-foreground/90 font-medium py-2"
                 style={{ animationDelay: "280ms" }}
               >
-                <span className="flex items-center gap-2 bg-card/60 border border-border px-3.5 py-2 rounded-lg">
+                <span className="flex items-center gap-2 bg-card/80 border border-border px-4 py-2 rounded-xl shadow-sm">
                   <Calendar className="w-4 h-4 text-gold shrink-0" />
                   Sábado · 17 de outubro de 2026
                 </span>
-                <span className="flex items-center gap-2 bg-card/60 border border-border px-3.5 py-2 rounded-lg">
+                <span className="flex items-center gap-2 bg-card/80 border border-border px-4 py-2 rounded-xl shadow-sm">
                   <Video className="w-4 h-4 text-gold shrink-0" />
                   Online · Ao vivo
                 </span>
               </div>
 
-              <div className="bg-gold/10 border border-gold/25 rounded-xl p-4 text-sm text-foreground/90 text-left">
-                <p className="font-semibold text-gold mb-1">Uma manhã 100% prática</p>
-                <p className="text-muted-foreground text-xs leading-relaxed">
-                  Uma manhã inteira dedicada a compreender, de forma organizada e prática, o caminho da incorporação imobiliária no Registro de Imóveis.
-                </p>
-              </div>
-
               <div className="hero-in pt-2" style={{ animationDelay: "340ms" }}>
-                <a href="#inscricao" className="block sm:inline-block">
-                  <Button variant="hero" size="xl" className="gap-2 w-full sm:w-auto shadow-lg shadow-gold/20">
+                <a href="#inscricao">
+                  <Button variant="hero" size="xl" className="gap-2 px-8 shadow-xl shadow-gold/20 font-bold text-base">
                     Garantir minha vaga
                     <ChevronRight className="w-5 h-5" />
                   </Button>
@@ -376,7 +352,7 @@ const Workshop = () => {
             </div>
           </Reveal>
 
-          {/* Mídias & Vídeos do Wyllian Nava (Reels & Podcasts) */}
+          {/* Mídias & Vídeos do Wyllian Nava */}
           <Reveal className="max-w-5xl mx-auto mt-16 space-y-8">
             <div className="text-center space-y-2">
               <h3 className="font-display text-2xl font-bold text-foreground">
@@ -484,7 +460,7 @@ const Workshop = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {workshop.targetAudience?.map((audience, index) => {
-              const icons = [Building2, Scale, Briefcase, Compass, User, Sparkles];
+              const icons = [Building2, Scale, Briefcase, Compass, User, Award];
               const IconComp = icons[index % icons.length];
               return (
                 <Reveal key={index} delayMs={index * 60}>
@@ -601,28 +577,7 @@ const Workshop = () => {
         </div>
       </section>
 
-      {/* 8. PLATAFORMA */}
-      <section id="plataforma" className="lp-section lp-surface py-20 scroll-mt-24">
-        <div className="container mx-auto px-4">
-          <Reveal className="max-w-3xl mx-auto text-center mb-16 space-y-4">
-            <span className="text-xs font-semibold tracking-[0.2em] uppercase text-gold">
-              Acesso Posterior
-            </span>
-            <h2 className="font-display text-3xl md:text-4xl font-bold">
-              Depois do evento, o conteúdo continua disponível
-            </h2>
-            <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
-              A gravação da imersão ficará disponível na plataforma para os participantes da modalidade correspondente.
-            </p>
-          </Reveal>
-
-          <Reveal>
-            <PlatformFeatureCards />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* 9. PERGUNTAS FREQUENTES */}
+      {/* 8. PERGUNTAS FREQUENTES */}
       <section id="faq" className="lp-section lp-surface-raised py-20 scroll-mt-24">
         <div className="container mx-auto px-4">
           <Reveal className="max-w-3xl mx-auto">
