@@ -1,0 +1,249 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /*
+   * Paleta oficial, extraída da marca NAVA.
+   * Proporção pretendida: ~70% navy, ~20% tons claros, ~10% dourado.
+   * O dourado é champagne/bronze (#BDA276), não amarelo saturado.
+   */
+  :root {
+    /* #0D1620 navy profundo */
+    --background: 212 42% 9%;
+    /* #F5F2EC branco quente */
+    --foreground: 40 31% 94%;
+
+    /* #151F2B navy secundário */
+    --card: 213 34% 13%;
+    --card-foreground: 40 31% 94%;
+
+    --popover: 213 34% 13%;
+    --popover-foreground: 40 31% 94%;
+
+    /* #BDA276 dourado principal, reservado a botões e detalhes */
+    --primary: 37 35% 60%;
+    --primary-foreground: 212 42% 9%;
+
+    /* #333E4B azul ardósia */
+    --secondary: 213 19% 25%;
+    --secondary-foreground: 40 31% 94%;
+
+    --muted: 213 19% 25%;
+    /* #B8BEC5 cinza azulado */
+    --muted-foreground: 212 10% 75%;
+
+    --accent: 213 19% 25%;
+    --accent-foreground: 40 31% 94%;
+
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 40 31% 94%;
+
+    --border: 213 19% 25%;
+    --input: 213 19% 25%;
+    --ring: 37 35% 60%;
+
+    --radius: 0.75rem;
+
+    /* Sombras precisam ser mais densas sobre fundo escuro */
+    --shadow-card: 0 1px 2px hsl(212 42% 4% / 0.4), 0 2px 8px hsl(212 42% 4% / 0.35);
+    --shadow-card-hover: 0 4px 12px hsl(212 42% 4% / 0.45), 0 8px 28px hsl(212 42% 4% / 0.4);
+
+    /* #BDA276 e #E3CFAD: dourado e sua variação clara para hover */
+    --gold: 37 35% 60%;
+    --gold-foreground: 212 42% 9%;
+    --gold-light: 38 49% 78%;
+    /* #7B6D5A bronze: só bordas e detalhes, contraste insuficiente para texto */
+    --bronze: 35 15% 42%;
+
+    --sidebar-background: 213 34% 13%;
+    --sidebar-foreground: 40 31% 94%;
+    --sidebar-primary: 37 35% 60%;
+    --sidebar-primary-foreground: 212 42% 9%;
+    --sidebar-accent: 213 19% 25%;
+    --sidebar-accent-foreground: 40 31% 94%;
+    --sidebar-border: 213 19% 25%;
+    --sidebar-ring: 37 35% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Source Serif 4', serif;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-card border border-border rounded-xl;
+    box-shadow: var(--shadow-card);
+  }
+
+  .glass-card-hover {
+    @apply glass-card;
+    transition: box-shadow 200ms ease-out, border-color 200ms ease-out, transform 200ms ease-out;
+  }
+
+  .glass-card-hover:hover {
+    box-shadow: var(--shadow-card-hover);
+    border-color: hsl(var(--primary) / 0.3);
+    transform: translateY(-3px);
+  }
+
+  .gradient-text {
+    color: hsl(var(--primary));
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.4s ease-out;
+  }
+
+  /* Nível base da landing */
+  .lp-surface {
+    background-color: hsl(var(--background));
+  }
+
+  /* Nível elevado: navy secundário, separa da superfície base */
+  .lp-surface-raised {
+    background-color: hsl(var(--card));
+  }
+
+  /*
+   * Seção com foto de fundo. A imagem entra por style inline (Vite resolve o
+   * caminho) e o véu escuro garante contraste do texto por cima.
+   */
+  .lp-surface-photo {
+    /* navy de segurança: se a foto não carregar, a seção não fica transparente */
+    background-color: hsl(var(--background));
+    background-size: cover;
+    background-position: 70% center;
+    color: hsl(var(--foreground));
+  }
+
+  @media (min-width: 768px) {
+    .lp-surface-photo {
+      background-attachment: fixed;
+    }
+  }
+
+  /* Placa de vidro sobre a foto, para o bloco de texto respirar */
+  .lp-photo-card {
+    background-color: hsl(var(--background) / 0.62);
+    backdrop-filter: blur(2px);
+    border: 1px solid hsl(var(--gold) / 0.22);
+  }
+
+  /*
+   * Seção "de tela cheia" — mas isso só faz sentido em telas grandes.
+   * No celular, forçar 100dvh em seções curtas (ex.: a citação de "Por que
+   * este workshop") deixava mais da metade da tela vazia, empurrando o
+   * conteúdo real para bem mais scroll do que precisava. No celular a
+   * altura acompanha o conteúdo; só vira "tela cheia" a partir do desktop.
+   */
+  .lp-section {
+    display: flex;
+    align-items: center;
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .lp-section > * {
+    width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .lp-section {
+      /* dvh evita o salto quando a barra do navegador do celular aparece/some */
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
+  }
+
+  /* Scroll-reveal: elements ease in as they enter the viewport */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /*
+   * Entrada do hero ao carregar a página — diferente do .reveal (que só
+   * dispara com scroll): o hero já está na tela no primeiro frame, então
+   * anima direto, em cascata (cada elemento usa animation-delay inline).
+   */
+  .hero-in {
+    animation: hero-in 800ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* Pulso suave no botão de play, enquanto o vídeo real não é publicado */
+  .play-pulse::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background: hsl(var(--gold));
+    animation: play-pulse 2.2s ease-out infinite;
+  }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hero-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes play-pulse {
+  0% { transform: scale(1); opacity: 0.45; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .hero-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .play-pulse::before {
+    animation: none;
+    display: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
