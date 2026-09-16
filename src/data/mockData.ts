@@ -12,11 +12,55 @@ export const mockNextLive = {
 // TODO: preencher data, preço e links de checkout do Mercado Pago antes de divulgar.
 export const mockWorkshop: Workshop = {
   id: "workshop-incorporacao-1",
-  title: "Imersão em Incorporação Imobiliária: 10 Passos da Estruturação ao Registro",
+  title: "Incorporação Imobiliária: da prenotação ao registro",
   subtitle:
-    "Um sábado inteiro sobre o registro de incorporação na prática, com quem qualifica esses processos no cartório.",
+    "“Uma manhã 100% prática desenhada para você entender como as peças se encaixam e eliminar a insegurança na hora de protocolizar a sua incorporação.”",
   whyText:
-    "Os erros que travam uma incorporação não estão nos livros. Estão no memorial mal montado, na documentação incompleta, na permuta mal estruturada.",
+    "A incorporação imobiliária reúne aspectos jurídicos, registrais, documentais e técnicos que precisam dialogar entre si; contratos, construção e uma série de exigências que, na prática, podem transformar um procedimento aparentemente simples em um verdadeiro desafio.",
+  whyParagraphs: [
+    "A incorporação imobiliária reúne aspectos jurídicos, registrais, documentais e técnicos que precisam dialogar entre si; contratos, construção e uma série de exigências que, na prática, podem transformar um procedimento aparentemente simples em um verdadeiro desafio.",
+    "E é justamente por isso que esta imersão foi pensada.",
+    "Em mais de 4 horas de aula, você terá uma visão ampla, organizada e prática da incorporação imobiliária sob a perspectiva do Registro de Imóveis, compreendendo o caminho que começa na análise do imóvel e chega ao registro do memorial de incorporação.",
+    "Você vai compreender o que acontece quando uma incorporação chega à serventia, quais são os principais documentos envolvidos, o que precisa ser analisado, onde estão os pontos mais sensíveis da qualificação e quais são as principais questões que costumam gerar dúvidas entre os profissionais que atuam nessa área.",
+    "Compreender como esses elementos são analisados no Registro de Imóveis permite enxergar o procedimento para além da legislação e aproximar a teoria daquilo que efetivamente acontece na qualificação registral.",
+  ],
+  whyHighlights: [
+    "Não é uma aula para simplesmente percorrer os artigos da Lei de Incorporações.",
+    "É uma aula para entender como as peças se encaixam.",
+  ],
+  learningTopics: [
+    "O que caracteriza uma incorporação imobiliária e quando ela é necessária?",
+    "Quem pode atuar como incorporador e quais cuidados devem ser observados na análise de sua legitimidade?",
+    "O que o Registro de Imóveis precisa verificar antes mesmo de começar a analisar os documentos do art. 32?",
+    "Como analisar a matrícula do imóvel que será objeto da incorporação?",
+    "Quais são os principais documentos que compõem o memorial de incorporação e qual é a finalidade de cada um?",
+    "O que efetivamente deve ser conferido em cada documento?",
+    "Como compreender a relação entre matrícula, terreno, projeto, unidades autônomas, áreas comuns e frações ideais?",
+    "Como analisar os quadros de áreas e identificar inconsistências que podem repercutir na qualificação registral?",
+    "Como lidar com ônus, indisponibilidades, ações e certidões positivas?",
+    "A certidão positiva impede o registro da incorporação?",
+    "Quais situações realmente constituem óbice ao registro e quais não devem ser transformadas em exigência?",
+    "Como estruturar uma qualificação registral segura, objetiva e fundamentada?",
+    "Como elaborar uma nota devolutiva que permita ao interessado compreender exatamente o que precisa ser corrigido?",
+    "Quais são os erros mais comuns encontrados na documentação de uma incorporação?",
+    "O que muda quando existe patrimônio de afetação?",
+    "O que acontece depois do registro do memorial de incorporação?",
+    "Qual é a diferença entre o registro da incorporação, o condomínio especial sobre frações ideais e a instituição e especificação do condomínio edilício?",
+    "O que o profissional precisa saber sobre os atos posteriores e a evolução registral do empreendimento?",
+  ],
+  materialTitle: "A Incorporação Imobiliária no Registro de Imóveis: um guia prático de qualificação registral",
+  materialSubtitle: "Atualizado conforme a legislação vigente, as normas do CNJ e do TJMA e a jurisprudência administrativa.",
+  targetAudience: [
+    "Profissionais de serventias extrajudiciais",
+    "Advogados",
+    "Incorporadores e construtores",
+    "Engenheiros e arquitetos",
+    "Corretores de imóveis",
+    "Demais profissionais que atuam no mercado imobiliário",
+  ],
+  targetAudienceNote:
+    "Não é necessário ser advogado ou já possuir conhecimento aprofundado em incorporação imobiliária. A proposta desta primeira imersão é oferecer uma compreensão geral e prática do tema sob a perspectiva registral.",
+  registrationOpenDate: "07 de setembro de 2026",
   instructor: "Dr. Wyllian Nava",
   instructorCredentials: [
     { text: "Oficial Substituto do 3º Registro de Imóveis de São Luís/MA", instagram: "3risaoluis" },
@@ -25,61 +69,41 @@ export const mockWorkshop: Workshop = {
       text: "Membro consultivo da Comissão de Direito Notarial e Registral da OAB/MA",
       instagram: "notarialeregistraloabma",
     },
-    { text: "Técnica registral aplicada" },
+    { text: "Membro consultivo da Comissão de Regularização Fundiária da OAB/MA" },
+    { text: "Palestrante e professor de diversos cursos na área de Direito Notarial e Registral" },
   ],
   instructorPhotoUrl: "/wyllian.jpg",
-  dateLabel: "Sábado · data a confirmar",
-  format: "Online · ao vivo",
-  durationLabel: "Dia inteiro (aprox. 8h)",
-  // TODO: colar o link (YouTube/Vimeo) do vídeo de apresentação assim que gravado.
+  dateLabel: "Sábado · 17 de outubro de 2026",
+  format: "Online · Ao vivo",
+  durationLabel: "Manhã 100% prática (aprox. 4h)",
   videoUrl: null,
-  agenda: [
-    {
-      title: "Fundamentos da incorporação",
-      topics: [
-        "Conceito de incorporação e partes envolvidas",
-        "Legislação aplicável (Lei 4.591/64 e Lei do SERP)",
-      ],
-    },
-    {
-      title: "Documentação e registro",
-      topics: [
-        "Memorial de incorporação: elaboração e registro",
-        "Patrimônio de afetação e RET",
-      ],
-    },
-    {
-      title: "Estruturação do empreendimento",
-      topics: ["SPE e SCP: quando usar cada uma", "Erros mais comuns que travam o registro"],
-    },
-    {
-      title: "Comercialização",
-      topics: ["Contratos de venda na planta", "Lei do distrato na prática"],
-    },
-  ],
+  agenda: [],
   tiers: [
     {
       id: "ao-vivo",
-      name: "Ao vivo",
-      price: 450,
+      name: "AO VIVO",
+      originalPrice: 397,
+      price: 296.40,
+      installmentValue: 24.70,
       installments: 12,
       includes: [
-        "Acesso à imersão ao vivo, online (sábado, dia inteiro)",
-        "Interação direta com o Dr. Wyllian Nava",
-        "Certificado de participação",
+        "Participação na imersão online e ao vivo",
+        "Interação durante a imersão",
+        "Material didático digital",
+        "Certificado digital de participação",
       ],
       checkoutUrl: null,
     },
     {
       id: "ao-vivo-mais-plataforma",
-      name: "Ao vivo + Plataforma",
-      price: 800,
+      name: "AO VIVO + gravação da imersão",
+      originalPrice: 450,
+      price: 357.60,
+      installmentValue: 29.80,
       installments: 12,
       includes: [
-        "Tudo do ingresso Ao vivo",
-        "Gravação da imersão publicada na plataforma",
-        "Acesso a todos os cursos da plataforma por 1 ano",
-        "Concorre ao sorteio de um livro",
+        "Acesso posterior à gravação da imersão pelo período de 1 ano",
+        "Acesso ao material exclusivo utilizado na imersão",
       ],
       checkoutUrl: null,
       highlight: true,
@@ -87,37 +111,40 @@ export const mockWorkshop: Workshop = {
   ],
   faq: [
     {
-      question: "O workshop é online ou presencial?",
-      answer: "É online, ao vivo, direto de onde você estiver. Um sábado, dia inteiro.",
+      question: "A imersão é online ou presencial?",
+      answer: "A primeira imersão será realizada online e ao vivo, permitindo a participação de profissionais de qualquer localidade.",
     },
     {
-      question: "A aula fica gravada?",
+      question: "A aula ficará gravada?",
       answer:
-        "Fica. Quem escolher o ingresso Ao vivo + Plataforma assiste à gravação na plataforma depois do evento e ainda fica com acesso a todos os cursos por um ano.",
+        "Sim. A imersão será gravada. O acesso posterior à gravação estará disponível na modalidade de inscrição que incluir acesso à plataforma.",
     },
     {
-      question: "Como funciona o sorteio do livro?",
+      question: "Posso comprar somente a gravação, sem participar ao vivo?",
       answer:
-        "Quem tem o ingresso Ao vivo + Plataforma concorre ao sorteio de um livro, realizado durante a imersão.",
+        "Nesta primeira edição, a proposta é priorizar a participação na imersão ao vivo. A eventual disponibilização posterior da gravação para aquisição separada ainda será definida.",
     },
     {
-      question: "Posso comprar só a gravação, sem participar ao vivo?",
-      answer:
-        "Ainda não. Nesta primeira turma, a gravação é liberada para quem participa ao vivo. Depois ela vira um curso na plataforma, vendido separadamente.",
-    },
-    {
-      question: "Tem certificado?",
-      answer: "Sim, certificado de participação para todos os inscritos.",
+      question: "Haverá certificado?",
+      answer: "Sim. Será emitido certificado digital de participação, com a carga horária correspondente à imersão.",
     },
     {
       question: "Preciso ser advogado para acompanhar?",
       answer:
-        "Não. O conteúdo é voltado para quem atua com registro de imóveis no dia a dia. Cartorários, advogados e corretores conseguem acompanhar.",
+        "Não. A imersão foi pensada para diferentes profissionais que atuam ou possuem interesse na incorporação imobiliária e no Registro de Imóveis.",
     },
     {
-      question: "Quando abrem as inscrições?",
+      question: "Preciso ter experiência prévia com incorporação imobiliária?",
       answer:
-        "Em breve. Quem entrar na lista de prioridade é avisado primeiro, antes da divulgação geral.",
+        "Não. A proposta desta primeira imersão é oferecer um panorama geral e prático da incorporação imobiliária sob a perspectiva do Registro de Imóveis, sem exigir conhecimento aprofundado prévio.",
+    },
+    {
+      question: "Quando será realizada a imersão?",
+      answer: "A imersão acontecerá no sábado do dia 17 de outubro de 2026.",
+    },
+    {
+      question: "Quando serão abertas as inscrições?",
+      answer: "07 de setembro de 2026.",
     },
   ],
 };

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Phone, MapPin } from "lucide-react";
 import { navaMonograma } from "@/data/images";
 
 export function Footer() {
@@ -20,7 +20,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-muted-foreground text-xs text-center md:text-left max-w-xs">
-              Cursos e imersões para profissionais de cartórios de registro de imóveis.
+              Cursos, imersões e conteúdos especializados em Registro de Imóveis.
             </p>
           </div>
 
@@ -35,25 +35,29 @@ export function Footer() {
               FAQ
             </a>
             <a
-              href="mailto:contato@cartorioedu.com.br"
-              className="flex items-center gap-1.5 py-1 hover:text-primary transition-colors"
+              href="https://wa.me/5598984923268"
+              target="_blank"
+              rel="noreferrer"
+              className="py-1 hover:text-primary transition-colors"
             >
-              <Mail className="w-4 h-4" />
               Contato
             </a>
           </nav>
         </div>
 
         <div className="border-t border-border/50 mt-6 pt-6 flex flex-col-reverse md:flex-row items-center justify-center md:justify-between gap-3 text-xs text-muted-foreground text-center">
-          <p>© {new Date().getFullYear()} Dr. Wyllian Nava. Todos os direitos reservados.</p>
+          <p>© 2026 Dr. Wyllian Nava. Todos os direitos reservados.</p>
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
-            <span className="inline-flex items-center gap-1.5">
+            <a
+              href="tel:98984923268"
+              className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
+            >
               <Phone className="w-3.5 h-3.5" />
-              (98) 3232-1500
-            </span>
+              Contato: (98) 98492-3268
+            </a>
             <span className="inline-flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5" />
-              São Luís, MA
+              Localização: São Luís, MA
             </span>
           </div>
         </div>

@@ -34,8 +34,12 @@ export interface Lesson {
 export interface WorkshopTier {
   id: string;
   name: string;
-  /** Valor total em reais. */
+  /** Valor original em reais (riscado) */
+  originalPrice?: number;
+  /** Valor total promocional à vista em reais. */
   price: number;
+  /** Valor da parcela mensal em reais (ex: 24.70 para 12x de R$ 24,70). */
+  installmentValue?: number;
   /** Número máximo de parcelas exibidas na vitrine. */
   installments: number;
   includes: string[];
@@ -64,6 +68,14 @@ export interface Workshop {
   title: string;
   subtitle: string;
   whyText: string;
+  whyParagraphs?: string[];
+  whyHighlights?: string[];
+  learningTopics?: string[];
+  targetAudience?: string[];
+  targetAudienceNote?: string;
+  materialTitle?: string;
+  materialSubtitle?: string;
+  registrationOpenDate?: string;
   instructor: string;
   /** Lista curta e essencial, não uma biografia longa. */
   instructorCredentials: InstructorCredential[];
