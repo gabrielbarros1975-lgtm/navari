@@ -72,7 +72,7 @@ export const mockWorkshop: Workshop = {
     { text: "Membro consultivo da Comissão de Regularização Fundiária da OAB/MA" },
     { text: "Palestrante e professor de diversos cursos na área de Direito Notarial e Registral" },
   ],
-  instructorPhotoUrl: "/wyllian.jpg",
+  instructorPhotoUrl: "/foto_wyllian.jpeg",
   dateLabel: "Sábado · 17 de outubro de 2026",
   format: "Online · Ao vivo",
   durationLabel: "Manhã 100% prática (aprox. 4h)",
