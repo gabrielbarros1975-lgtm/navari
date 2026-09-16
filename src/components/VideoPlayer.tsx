@@ -23,19 +23,20 @@ export function VideoPlayer({ videoUrl, title }: VideoPlayerProps) {
     );
   }
 
-  // Convert YouTube watch URLs to embed URLs
+  // Convert YouTube and Vimeo watch URLs to embed URLs
   const getEmbedUrl = (url: string) => {
     if (url.includes("youtube.com/watch")) {
       const videoId = new URL(url).searchParams.get("v");
       return `https://www.youtube.com/embed/${videoId}`;
     }
     if (url.includes("youtu.be/")) {
-      const videoId = url.split("youtu.be/")[1];
+      const videoId = url.split("youtu.be/")[1]?.split("?")[0];
       return `https://www.youtube.com/embed/${videoId}`;
     }
     if (url.includes("vimeo.com/")) {
-      const videoId = url.split("vimeo.com/")[1];
-      return `https://player.vimeo.com/video/${videoId}`;
+      const match = url.match(/vimeo\.com\/(?:video\/)?([0-9]+)/);
+      const videoId = match ? match[1] : url.split("vimeo.com/")[1]?.split("?")[0];
+      return `https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0`;
     }
     return url;
   };

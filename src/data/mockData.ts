@@ -76,7 +76,7 @@ export const mockWorkshop: Workshop = {
   dateLabel: "Sábado · 17 de outubro de 2026",
   format: "Online · Ao vivo",
   durationLabel: "Manhã 100% prática (aprox. 4h)",
-  videoUrl: null,
+  videoUrl: "https://vimeo.com/1227199151?share=copy&fl=sv&fe=ci",
   agenda: [],
   tiers: [
     {
