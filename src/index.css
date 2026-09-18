@@ -57,15 +57,6 @@
     --gold-light: 38 49% 78%;
     /* #7B6D5A bronze: só bordas e detalhes, contraste insuficiente para texto */
     --bronze: 35 15% 42%;
-
-    --sidebar-background: 213 34% 13%;
-    --sidebar-foreground: 40 31% 94%;
-    --sidebar-primary: 37 35% 60%;
-    --sidebar-primary-foreground: 212 42% 9%;
-    --sidebar-accent: 213 19% 25%;
-    --sidebar-accent-foreground: 40 31% 94%;
-    --sidebar-border: 213 19% 25%;
-    --sidebar-ring: 37 35% 60%;
   }
 }
 

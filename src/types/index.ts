@@ -14,6 +14,23 @@ export interface Course {
   installments?: number;
   /** Curso ainda não liberado: aparece na listagem, mas sem acesso. */
   comingSoon?: boolean;
+  /** Selo exibido no card no lugar do padrão "Em breve" (ex.: "Em desenvolvimento", "Imersão ao vivo"). */
+  statusLabel?: string;
+  /** Quando presente, o card linka para este endereço (ex.: a seção de inscrição da imersão) em vez de /course/:id. */
+  externalHref?: string;
+  /** Texto do botão de destaque exibido no card. Só faz sentido junto de externalHref. */
+  ctaLabel?: string;
+  /** Esconde duração e nº de módulos no card: conteúdo ainda não definido. */
+  hideMeta?: boolean;
+}
+
+export interface CourseTrack {
+  id: string;
+  /** Nome da trilha, também usado como valor de Course.category para agrupar os cursos. */
+  label: string;
+  description: string[];
+  /** Frase de destaque opcional, exibida em caixa dourada ao fim da apresentação da trilha. */
+  highlight?: string;
 }
 
 export interface Module {
@@ -75,6 +92,12 @@ export interface Workshop {
   targetAudienceNote?: string;
   materialTitle?: string;
   materialSubtitle?: string;
+  materialDescription?: string;
+  ebookBadge?: string;
+  ebookIntro?: string;
+  ebookTitle?: string;
+  ebookDescription?: string;
+  ebookNote?: string;
   registrationOpenDate?: string;
   instructor: string;
   /** Lista curta e essencial, não uma biografia longa. */

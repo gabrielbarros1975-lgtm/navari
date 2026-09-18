@@ -12,7 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { mockWorkshop } from "@/data/mockData";
-import { images, cursoThumb } from "@/data/images";
+import { cursoThumb } from "@/data/images";
 import {
   Calendar,
   Video,
@@ -28,9 +28,8 @@ import {
   Compass,
   User,
   Award,
-  Tv,
-  Mic,
   CalendarCheck,
+  Sparkles,
 } from "lucide-react";
 
 const Workshop = () => {
@@ -133,7 +132,7 @@ const Workshop = () => {
         id="por-que"
         className="lp-section lp-surface-photo relative py-20"
         style={{
-          backgroundImage: `linear-gradient(hsl(212 42% 9% / 0.92), hsl(212 42% 9% / 0.92)), url(${images.edificio})`,
+          backgroundImage: `linear-gradient(hsl(212 42% 9% / 0.92), hsl(212 42% 9% / 0.92)), url(/wyllian-apresentando.jpg)`,
         }}
       >
         <div className="container mx-auto px-4">
@@ -156,7 +155,7 @@ const Workshop = () => {
                   E é justamente por isso que esta imersão foi pensada.
                 </p>
                 <p>
-                  Em mais de 4 horas de aula, você terá uma visão ampla, organizada e prática da incorporação imobiliária sob a perspectiva do Registro de Imóveis, compreendendo o caminho que começa na análise do imóvel e chega ao registro do memorial de incorporação.
+                  Em mais de 8 horas de aula ao vivo, você terá uma visão ampla, organizada e prática da incorporação imobiliária sob a perspectiva do Registro de Imóveis, compreendendo o caminho que começa na análise do imóvel e percorre as principais etapas da qualificação e do registro do memorial de incorporação.
                 </p>
               </div>
 
@@ -257,8 +256,12 @@ const Workshop = () => {
                     {workshop.materialSubtitle}
                   </p>
 
+                  <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
+                    {workshop.materialDescription}
+                  </p>
+
                   <p className="text-xs text-gold/90 font-medium">
-                    * Disponibilizado digitalmente para todos os participantes da imersão.
+                    * Disponibilizado digitalmente para todos os participantes da Imersão.
                   </p>
                 </div>
 
@@ -271,6 +274,52 @@ const Workshop = () => {
                   </span>
                   <span className="text-xs text-muted-foreground">
                     Normas CNJ / TJMA
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 4.1 E-BOOK EXCLUSIVO */}
+      <section id="ebook" className="lp-section lp-surface-raised py-16">
+        <div className="container mx-auto px-4">
+          <Reveal className="max-w-4xl mx-auto">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-card via-card to-gold/10 border border-gold/30 p-8 md:p-12 shadow-2xl">
+              <div className="grid grid-cols-1 md:grid-cols-[1fr_240px] items-center gap-8">
+                <div className="space-y-4 text-left">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/15 text-gold text-xs font-semibold uppercase tracking-wider">
+                    <Sparkles className="w-4 h-4" />
+                    {workshop.ebookBadge}
+                  </div>
+
+                  <h3 className="font-display text-xl md:text-2xl font-semibold text-foreground">
+                    {workshop.ebookIntro}
+                  </h3>
+
+                  <p className="font-display text-lg md:text-xl font-bold text-gold">
+                    {workshop.ebookTitle}
+                  </p>
+
+                  <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
+                    {workshop.ebookDescription}
+                  </p>
+
+                  <p className="text-xs text-gold/90 font-medium">
+                    * {workshop.ebookNote}
+                  </p>
+                </div>
+
+                <div className="flex flex-col items-center justify-center p-6 bg-gold/10 rounded-2xl border border-gold/20 text-center space-y-3">
+                  <div className="w-16 h-16 rounded-full bg-gold/20 text-gold flex items-center justify-center">
+                    <BookOpen className="w-8 h-8" />
+                  </div>
+                  <span className="font-display text-sm font-bold text-foreground">
+                    Novo E-book
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    Em breve
                   </span>
                 </div>
               </div>
@@ -348,95 +397,6 @@ const Workshop = () => {
                     </a>
                   </div>
                 </div>
-              </div>
-            </div>
-          </Reveal>
-
-          {/* Mídias & Vídeos do Wyllian Nava */}
-          <Reveal className="max-w-5xl mx-auto mt-16 space-y-8">
-            <div className="text-center space-y-2">
-              <h3 className="font-display text-2xl font-bold text-foreground">
-                Conteúdos, Podcasts e Vídeos
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Confira participações do Dr. Wyllian Nava em podcasts e vídeos educativos sobre Direito Registral.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Card Mídia 1 */}
-              <div className="glass-card p-5 rounded-2xl border border-border/80 hover:border-gold/50 transition-all group space-y-4">
-                <div className="relative aspect-video rounded-xl overflow-hidden bg-secondary flex items-center justify-center">
-                  <img
-                    src={images.edificio}
-                    alt="Vídeo Instagram Reels Dr. Wyllian Nava"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                  />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                    <div className="w-12 h-12 rounded-full bg-gold text-gold-foreground flex items-center justify-center shadow-lg">
-                      <Tv className="w-6 h-6" />
-                    </div>
-                  </div>
-                  <span className="absolute bottom-2 left-2 text-[10px] uppercase font-bold tracking-wider bg-black/80 px-2 py-1 rounded text-gold">
-                    Instagram Reels
-                  </span>
-                </div>
-                <h4 className="font-display font-semibold text-base text-foreground">
-                  A Qualificação Registral na Prática
-                </h4>
-                <p className="text-xs text-muted-foreground">
-                  Análise dos pontos sensíveis na verificação de memoriais de incorporação.
-                </p>
-              </div>
-
-              {/* Card Mídia 2 */}
-              <div className="glass-card p-5 rounded-2xl border border-border/80 hover:border-gold/50 transition-all group space-y-4">
-                <div className="relative aspect-video rounded-xl overflow-hidden bg-secondary flex items-center justify-center">
-                  <img
-                    src={cursoThumb}
-                    alt="Vídeo Instagram Reels Erros Frequentes"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                  />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                    <div className="w-12 h-12 rounded-full bg-gold text-gold-foreground flex items-center justify-center shadow-lg">
-                      <Tv className="w-6 h-6" />
-                    </div>
-                  </div>
-                  <span className="absolute bottom-2 left-2 text-[10px] uppercase font-bold tracking-wider bg-black/80 px-2 py-1 rounded text-gold">
-                    Instagram Reels
-                  </span>
-                </div>
-                <h4 className="font-display font-semibold text-base text-foreground">
-                  Principais Erros em Notas Devolutivas
-                </h4>
-                <p className="text-xs text-muted-foreground">
-                  Como evitar exigências desnecessárias e estruturar processos rápidos.
-                </p>
-              </div>
-
-              {/* Card Mídia 3 */}
-              <div className="glass-card p-5 rounded-2xl border border-border/80 hover:border-gold/50 transition-all group space-y-4">
-                <div className="relative aspect-video rounded-xl overflow-hidden bg-secondary flex items-center justify-center">
-                  <img
-                    src={images.planta}
-                    alt="Participação em Podcast"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                  />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                    <div className="w-12 h-12 rounded-full bg-gold text-gold-foreground flex items-center justify-center shadow-lg">
-                      <Mic className="w-6 h-6" />
-                    </div>
-                  </div>
-                  <span className="absolute bottom-2 left-2 text-[10px] uppercase font-bold tracking-wider bg-black/80 px-2 py-1 rounded text-gold">
-                    Podcast & Entrevistas
-                  </span>
-                </div>
-                <h4 className="font-display font-semibold text-base text-foreground">
-                  Podcast: O Futuro do Registro de Imóveis
-                </h4>
-                <p className="text-xs text-muted-foreground">
-                  Bate-papo sobre tecnologia, legislação e tendências da incorporação imobiliária.
-                </p>
               </div>
             </div>
           </Reveal>

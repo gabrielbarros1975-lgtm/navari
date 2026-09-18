@@ -68,7 +68,7 @@ export function Header() {
 
           <nav className="hidden md:flex items-center gap-7">
             {navLinks.map((link) => (
-              <Link key={link.label} to={link.to} className={linkClass(link.match ?? link.to)}>
+              <Link key={link.label} to={link.to} className={linkClass(link.to)}>
                 {link.label}
               </Link>
             ))}

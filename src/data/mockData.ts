@@ -1,4 +1,4 @@
-import { Course, Workshop } from "@/types";
+import { Course, CourseTrack, Workshop } from "@/types";
 
 export const mockNextLive = {
   id: "live-1",
@@ -14,7 +14,7 @@ export const mockWorkshop: Workshop = {
   id: "workshop-incorporacao-1",
   title: "Incorporação Imobiliária: da prenotação ao registro",
   subtitle:
-    "“Uma manhã 100% prática desenhada para você entender como as peças se encaixam e eliminar a insegurança na hora de protocolizar a sua incorporação.”",
+    "“Um dia inteiro de imersão prática para você compreender como as peças se encaixam e desenvolver uma visão mais segura da incorporação imobiliária sob a perspectiva do Registro de Imóveis.”",
   whyText:
     "A incorporação imobiliária reúne aspectos jurídicos, registrais, documentais e técnicos que precisam dialogar entre si; contratos, construção e uma série de exigências que, na prática, podem transformar um procedimento aparentemente simples em um verdadeiro desafio.",
   whyParagraphs: [
@@ -48,8 +48,18 @@ export const mockWorkshop: Workshop = {
     "Qual é a diferença entre o registro da incorporação, o condomínio especial sobre frações ideais e a instituição e especificação do condomínio edilício?",
     "O que o profissional precisa saber sobre os atos posteriores e a evolução registral do empreendimento?",
   ],
-  materialTitle: "A Incorporação Imobiliária no Registro de Imóveis: um guia prático de qualificação registral",
-  materialSubtitle: "Atualizado conforme a legislação vigente, as normas do CNJ e do TJMA e a jurisprudência administrativa.",
+  materialTitle: "Caderno de Qualificação da Incorporação Imobiliária",
+  materialSubtitle:
+    "Material prático desenvolvido para acompanhar a Imersão e orientar a análise dos principais pontos da qualificação registral da incorporação imobiliária.",
+  materialDescription:
+    "Estruturado para ser utilizado durante a aula e também como ferramenta de consulta posterior, o Caderno organiza os pontos de conferência e as relações entre matrícula, memorial, projeto, quadros técnicos, frações ideais, certidões, convenção e demais documentos do procedimento.",
+  ebookBadge: "Exclusivo da versão completa",
+  ebookIntro: "Receba em primeira mão o novo e-book de Wyllian Nava",
+  ebookTitle: "A Incorporação Imobiliária no Registro de Imóveis: um guia prático de qualificação registral",
+  ebookDescription:
+    "Um material autoral aprofundado, desenvolvido a partir da legislação vigente, da normativa aplicável e da experiência prática na qualificação registral de incorporações imobiliárias.",
+  ebookNote:
+    "O e-book será posteriormente lançado para venda de forma independente. Os participantes da versão completa da Imersão receberão acesso em primeira mão.",
   targetAudience: [
     "Profissionais de serventias extrajudiciais",
     "Advogados",
@@ -87,9 +97,10 @@ export const mockWorkshop: Workshop = {
       installmentValue: 24.70,
       installments: 12,
       includes: [
-        "Participação na imersão online e ao vivo",
-        "Interação durante a imersão",
-        "Material didático digital",
+        "Participação na Imersão online e ao vivo",
+        "Mais de 8 horas de conteúdo",
+        "Interação durante a Imersão",
+        "Caderno de Qualificação da Incorporação Imobiliária",
         "Certificado digital de participação",
       ],
       checkoutUrl: null,
@@ -102,8 +113,9 @@ export const mockWorkshop: Workshop = {
       installmentValue: 29.80,
       installments: 12,
       includes: [
-        "Acesso posterior à gravação da imersão pelo período de 1 ano",
-        "Acesso ao material exclusivo utilizado na imersão",
+        "Tudo o que está incluído na modalidade Ao Vivo",
+        "Acesso à gravação da Imersão por 1 ano",
+        "E-book “A Incorporação Imobiliária no Registro de Imóveis: um guia prático de qualificação registral”, em primeira mão",
       ],
       checkoutUrl: null,
       highlight: true,
@@ -149,117 +161,150 @@ export const mockWorkshop: Workshop = {
   ],
 };
 
+export const courseTracks: CourseTrack[] = [
+  {
+    id: "prenotacao-ao-registro",
+    label: "Da Prenotação ao Registro",
+    description: [
+      "Formações práticas para compreender o percurso do título no Registro de Imóveis, desde sua preparação e apresentação até a qualificação e a prática do ato registral.",
+      "A proposta desta trilha é oferecer uma visão integrada do procedimento, aproximando a estruturação dos títulos da lógica de quem os recebe e qualifica.",
+      "Por isso, ela não é voltada apenas a profissionais externos à serventia. É destinada tanto a quem analisa, prepara, apresenta e acompanha títulos perante o Registro de Imóveis quanto aos profissionais que atuam dentro dos próprios cartórios e desejam compreender o procedimento de ponta a ponta, desde sua origem até o ato final.",
+    ],
+    highlight: "Compreender o título de ponta a ponta.",
+  },
+  {
+    id: "qualificacao-positiva",
+    label: "Qualificação Positiva",
+    description: [
+      "Formações de aprofundamento na prática da qualificação registral.",
+      "Essa trilha é voltada especialmente aos profissionais que atuam dentro do Registro de Imóveis e pretende aprofundar o raciocínio de quem recebe e analisa os títulos, com foco nos pontos de conferência, na fundamentação das exigências e na prática segura dos atos registrais.",
+      "Ela não substitui a trilha Da Prenotação ao Registro nem significa que o profissional da serventia precise optar por uma ou outra.",
+      "O objetivo é justamente que a Da Prenotação ao Registro ofereça a compreensão integral do percurso e que a Qualificação Positiva represente um aprofundamento da etapa central desse caminho: a qualificação registral propriamente dita.",
+      "E “Qualificação Positiva” não significa qualificar para necessariamente admitir o título, mas desenvolver uma qualificação técnica, segura, fundamentada e orientada à correta solução registral, inclusive quando houver necessidade de formulação de exigências.",
+    ],
+  },
+];
+
 export const mockCourses: Course[] = [
+  // Trilha 1 — Da Prenotação ao Registro
   {
-    id: "4",
-    title: "Incorporação Imobiliária",
+    id: "c-imersao-incorporacao",
+    title: "Incorporação Imobiliária: da Prenotação ao Registro",
     description:
-      "Curso baseado na imersão ao vivo com o Dr. Wyllian Nava, com o conteúdo completo do registro de incorporações imobiliárias.",
-    category: "Incorporação Imobiliária",
+      "Uma formação prática para compreender a incorporação imobiliária sob a perspectiva do Registro de Imóveis, percorrendo a documentação, a prenotação, a qualificação e o registro do memorial de incorporação.",
+    category: "Da Prenotação ao Registro",
     instructor: "Dr. Wyllian Nava",
-    duration: "10h 20min",
-    // Ainda não é vendido separado: por enquanto, o conteúdo só existe via a imersão ao vivo.
+    duration: "A definir",
     comingSoon: true,
-    // TODO: confirmar o preço quando o curso gravado for publicado.
-    price: 497,
-    installments: 12,
-    progress: 0,
-    modules: [
-      {
-        id: "m7",
-        title: "Conceitos Básicos",
-        lessons: [
-          { id: "l16", title: "O que é Incorporação", duration: "30min", videoUrl: null, completed: true },
-          { id: "l17", title: "Memorial de Incorporação", duration: "45min", videoUrl: null, completed: false },
-        ],
-      },
-    ],
+    statusLabel: "Imersão ao vivo",
+    externalHref: "/#inscricao",
+    ctaLabel: "Conhecer a Imersão",
+    hideMeta: true,
+    modules: [],
   },
   {
-    id: "1",
+    id: "c-usucapiao-prenotacao",
+    title: "Usucapião Extrajudicial: da Prenotação ao Registro",
+    description:
+      "Uma abordagem prática da documentação, da estruturação do procedimento e dos principais pontos de análise que repercutem na qualificação e no registro da usucapião extrajudicial.",
+    category: "Da Prenotação ao Registro",
+    instructor: "Dr. Wyllian Nava",
+    duration: "A definir",
+    comingSoon: true,
+    statusLabel: "Em desenvolvimento",
+    hideMeta: true,
+    modules: [],
+  },
+  {
+    id: "c-retificacao-prenotacao",
+    title: "Retificação Administrativa: da Prenotação à Averbação",
+    description:
+      "Uma visão prática do processamento da retificação administrativa, desde a preparação do requerimento e da documentação técnica até a qualificação e a averbação no Registro de Imóveis.",
+    category: "Da Prenotação ao Registro",
+    instructor: "Dr. Wyllian Nava",
+    duration: "A definir",
+    comingSoon: true,
+    statusLabel: "Em desenvolvimento",
+    hideMeta: true,
+    modules: [],
+  },
+  {
+    id: "c-inventario-prenotacao",
+    title: "Inventário e Partilha: da Prenotação ao Registro",
+    description:
+      "Preparação, conferência e ingresso dos títulos sucessórios no Registro de Imóveis, com atenção aos principais pontos que repercutem na qualificação e no registro da transmissão.",
+    category: "Da Prenotação ao Registro",
+    instructor: "Dr. Wyllian Nava e convidado especial",
+    duration: "A definir",
+    comingSoon: true,
+    statusLabel: "Em desenvolvimento",
+    hideMeta: true,
+    modules: [],
+  },
+  // Trilha 2 — Qualificação Positiva
+  {
+    id: "c-fundamentos-qualificacao",
     title: "Registro de Imóveis: Fundamentos e Prática",
-    description: "Aprenda os fundamentos do registro de imóveis, desde a matrícula até os procedimentos de averbação e registro.",
-    category: "Registro de Imóveis",
+    description:
+      "Formação de base sobre os princípios, títulos, procedimentos e fundamentos essenciais à prática da qualificação no Registro de Imóveis.",
+    category: "Qualificação Positiva",
     instructor: "Dr. Wyllian Nava",
-    duration: "12h 30min",
+    duration: "A definir",
     comingSoon: true,
-    progress: 0,
-    modules: [
-      {
-        id: "m1",
-        title: "Introdução ao Registro de Imóveis",
-        lessons: [
-          { id: "l1", title: "História e Evolução do Registro", duration: "25min", videoUrl: null, completed: true },
-          { id: "l2", title: "Princípios Registrais", duration: "35min", videoUrl: null, completed: true },
-          { id: "l3", title: "Estrutura do Cartório", duration: "30min", videoUrl: null, completed: false },
-        ],
-      },
-      {
-        id: "m2",
-        title: "Matrícula Imobiliária",
-        lessons: [
-          { id: "l4", title: "Abertura de Matrícula", duration: "40min", videoUrl: null, completed: false },
-          { id: "l5", title: "Elementos da Matrícula", duration: "35min", videoUrl: null, completed: false },
-          { id: "l6", title: "Retificação de Matrícula", duration: "45min", videoUrl: null, completed: false },
-        ],
-      },
-      {
-        id: "m3",
-        title: "Atos de Registro",
-        lessons: [
-          { id: "l7", title: "Compra e Venda", duration: "50min", videoUrl: null, completed: false },
-          { id: "l8", title: "Doação e Permuta", duration: "40min", videoUrl: null, completed: false },
-          { id: "l9", title: "Hipoteca e Alienação Fiduciária", duration: "55min", videoUrl: null, completed: false },
-        ],
-      },
-    ],
+    statusLabel: "Em desenvolvimento",
+    hideMeta: true,
+    modules: [],
   },
   {
-    id: "2",
-    title: "Usucapião Extrajudicial",
-    description: "Curso completo sobre o procedimento de usucapião extrajudicial em cartórios de registro de imóveis.",
-    category: "Usucapião",
+    id: "c-incorporacao-qualificacao",
+    title: "Incorporação Imobiliária no Registro de Imóveis",
+    description:
+      "Análise documental, conferência cruzada das peças, qualificação registral, principais pontos de conferência, exigências e prática dos atos relacionados à incorporação imobiliária.",
+    category: "Qualificação Positiva",
     instructor: "Dr. Wyllian Nava",
-    duration: "8h 15min",
+    duration: "A definir",
     comingSoon: true,
-    progress: 0,
-    modules: [
-      {
-        id: "m4",
-        title: "Fundamentos da Usucapião",
-        lessons: [
-          { id: "l10", title: "Conceito e Modalidades", duration: "30min", videoUrl: null, completed: false },
-          { id: "l11", title: "Requisitos Legais", duration: "35min", videoUrl: null, completed: false },
-        ],
-      },
-      {
-        id: "m5",
-        title: "Procedimento Extrajudicial",
-        lessons: [
-          { id: "l12", title: "Documentação Necessária", duration: "45min", videoUrl: null, completed: false },
-          { id: "l13", title: "Análise e Qualificação", duration: "50min", videoUrl: null, completed: false },
-        ],
-      },
-    ],
+    statusLabel: "Em desenvolvimento",
+    hideMeta: true,
+    modules: [],
   },
   {
-    id: "3",
-    title: "LGPD nos Cartórios",
-    description: "Implementação da Lei Geral de Proteção de Dados nos serviços notariais e de registro.",
-    category: "LGPD",
+    id: "c-usucapiao-qualificacao",
+    title: "Processamento da Usucapião Extrajudicial no Registro de Imóveis",
+    description:
+      "Análise documental, qualificação registral, principais pontos de conferência, exigências e prática do processamento da usucapião no Registro de Imóveis.",
+    category: "Qualificação Positiva",
     instructor: "Dr. Wyllian Nava",
-    duration: "6h 45min",
+    duration: "A definir",
     comingSoon: true,
-    progress: 0,
-    modules: [
-      {
-        id: "m6",
-        title: "Introdução à LGPD",
-        lessons: [
-          { id: "l14", title: "Conceitos Fundamentais", duration: "25min", videoUrl: null, completed: true },
-          { id: "l15", title: "Bases Legais", duration: "30min", videoUrl: null, completed: true },
-        ],
-      },
-    ],
+    statusLabel: "Em desenvolvimento",
+    hideMeta: true,
+    modules: [],
+  },
+  {
+    id: "c-retificacao-qualificacao",
+    title: "Processamento da Retificação Administrativa no Registro de Imóveis",
+    description:
+      "Análise do requerimento, documentação técnica, legitimidade, confrontações, notificações e principais etapas da qualificação do processamento de retificação.",
+    category: "Qualificação Positiva",
+    instructor: "Dr. Wyllian Nava",
+    duration: "A definir",
+    comingSoon: true,
+    statusLabel: "Em desenvolvimento",
+    hideMeta: true,
+    modules: [],
+  },
+  {
+    id: "c-inventario-qualificacao",
+    title: "Inventário e Partilha no Registro de Imóveis",
+    description:
+      "Qualificação dos títulos sucessórios, continuidade, disponibilidade, quinhões e principais questões relacionadas ao registro da transmissão imobiliária.",
+    category: "Qualificação Positiva",
+    instructor: "Dr. Wyllian Nava e convidado especial",
+    duration: "A definir",
+    comingSoon: true,
+    statusLabel: "Em desenvolvimento",
+    hideMeta: true,
+    modules: [],
   },
 ];

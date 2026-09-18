@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { Course } from "@/types";
-import { Clock, User, PlayCircle, Lock } from "lucide-react";
+import { Clock, User, PlayCircle, Lock, Video, ArrowRight } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import { CourseThumb } from "@/components/CourseThumb";
 import { cn } from "@/lib/utils";
 import { brl, installmentValue } from "@/lib/price";
@@ -11,6 +12,7 @@ interface CourseCardProps {
 }
 
 export function CourseCard({ course }: CourseCardProps) {
+  const isFeatured = Boolean(course.externalHref);
   const totalLessons = course.modules.reduce((acc, m) => acc + m.lessons.length, 0);
   const completedLessons = course.modules.reduce(
     (acc, m) => acc + m.lessons.filter((l) => l.completed).length,
@@ -21,17 +23,25 @@ export function CourseCard({ course }: CourseCardProps) {
     <div
       className={cn(
         "glass-card-hover overflow-hidden h-full",
+        isFeatured && "border-gold ring-1 ring-gold/40 shadow-lg shadow-gold/10",
         course.comingSoon ? "cursor-default" : "group"
       )}
     >
       <div className="relative">
-        <CourseThumb category={course.category} className={course.comingSoon ? "opacity-70" : undefined} />
+        <CourseThumb category={course.category} className={course.comingSoon && !isFeatured ? "opacity-70" : undefined} />
 
-        {course.comingSoon ? (
+        {isFeatured ? (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gold text-gold-foreground text-xs font-bold uppercase tracking-wide shadow-md">
+              <Video className="w-3.5 h-3.5" />
+              {course.statusLabel}
+            </span>
+          </div>
+        ) : course.comingSoon ? (
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-background/95 border border-border text-xs font-semibold">
               <Lock className="w-3.5 h-3.5" />
-              Em breve
+              {course.statusLabel ?? "Em breve"}
             </span>
           </div>
         ) : (
@@ -42,9 +52,11 @@ export function CourseCard({ course }: CourseCardProps) {
           </div>
         )}
 
-        <div className="absolute top-3 right-3 px-2 py-1 rounded-md bg-background/90 text-xs font-medium">
-          {course.modules.length} {course.modules.length === 1 ? "módulo" : "módulos"}
-        </div>
+        {!course.hideMeta && (
+          <div className="absolute top-3 right-3 px-2 py-1 rounded-md bg-background/90 text-xs font-medium">
+            {course.modules.length} {course.modules.length === 1 ? "módulo" : "módulos"}
+          </div>
+        )}
       </div>
 
       <div className="p-5 space-y-4">
@@ -64,10 +76,12 @@ export function CourseCard({ course }: CourseCardProps) {
             <User className="w-4 h-4" />
             {course.instructor}
           </span>
-          <span className="flex items-center gap-1">
-            <Clock className="w-4 h-4" />
-            {course.duration}
-          </span>
+          {!course.hideMeta && (
+            <span className="flex items-center gap-1">
+              <Clock className="w-4 h-4" />
+              {course.duration}
+            </span>
+          )}
         </div>
 
         {!course.comingSoon && course.progress !== undefined && course.progress > 0 && (
@@ -97,12 +111,23 @@ export function CourseCard({ course }: CourseCardProps) {
             </p>
           </div>
         )}
+
+        {course.ctaLabel && course.externalHref && (
+          <a href={course.externalHref} className="block pt-1">
+            <Button variant="hero" className="w-full gap-2">
+              {course.ctaLabel}
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+          </a>
+        )}
       </div>
     </div>
   );
 
   if (course.comingSoon) {
-    return <div aria-label={`${course.title} (em breve)`}>{card}</div>;
+    return (
+      <div aria-label={isFeatured ? course.title : `${course.title} (em breve)`}>{card}</div>
+    );
   }
 
   return <Link to={`/course/${course.id}`}>{card}</Link>;
