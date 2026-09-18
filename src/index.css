@@ -100,7 +100,7 @@
   .glass-card-hover:active {
     box-shadow: var(--shadow-card-hover);
     border-color: hsl(var(--primary) / 0.3);
-    transform: scale(0.98);
+    opacity: 0.85;
   }
 
   .gradient-text {
@@ -207,13 +207,17 @@
     animation: play-pulse 2.2s ease-out infinite;
   }
 
-  /* Feedback tátil genérico para cartões/áreas tocáveis (hover não existe no toque) */
+  /*
+   * Feedback tátil genérico para cartões/áreas tocáveis (hover não existe no
+   * toque). Usa opacity, não transform: escala no :active travava/ficava
+   * "presa" em segurar-e-manter no toque em alguns celulares.
+   */
   .tap-scale {
-    transition: transform 150ms ease-out;
+    transition: opacity 150ms ease-out;
   }
 
   .tap-scale:active {
-    transform: scale(0.97);
+    opacity: 0.75;
   }
 
   /* Brilho diagonal que varre o botão principal, chamando atenção sem ser um GIF piscando */
@@ -252,11 +256,6 @@
     animation: pulse-ring 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
   }
 
-  /* Anel dourado que respira em volta do card de ingresso em destaque */
-  .glow-ring {
-    animation: glow-ring 3.6s ease-in-out infinite;
-  }
-
   /* Orbes dourados desfocados, decoração ambiente atrás do hero */
   .ambient-orb {
     position: absolute;
@@ -276,16 +275,99 @@
   .parchment-card {
     --ink: 27 35% 18%;
     --ink-soft: 26 20% 36%;
-    --line: 32 28% 60%;
+    --line: 32 28% 58%;
     position: relative;
     background:
-      radial-gradient(ellipse 60% 50% at 12% 8%, hsl(38 50% 90%) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 50% at 88% 92%, hsl(34 42% 85%) 0%, transparent 60%),
-      linear-gradient(160deg, hsl(40 48% 93%), hsl(36 40% 87%));
-    border: 1px solid hsl(30 25% 70% / 0.6);
+      /* fibra fina de papel, quase imperceptível, em duas direções para dar textura */
+      repeating-linear-gradient(
+        115deg,
+        transparent 0px,
+        transparent 3px,
+        hsl(30 30% 40% / 0.035) 3px,
+        hsl(30 30% 40% / 0.035) 4px
+      ),
+      repeating-linear-gradient(
+        25deg,
+        transparent 0px,
+        transparent 2px,
+        hsl(30 30% 30% / 0.025) 2px,
+        hsl(30 30% 30% / 0.025) 3px
+      ),
+      /* manchas envelhecidas nos quatro cantos */
+      radial-gradient(circle at 8% 10%, hsl(34 46% 78% / 0.55) 0%, transparent 34%),
+      radial-gradient(circle at 92% 14%, hsl(38 40% 80% / 0.45) 0%, transparent 30%),
+      radial-gradient(circle at 10% 92%, hsl(28 42% 74% / 0.5) 0%, transparent 36%),
+      radial-gradient(circle at 90% 90%, hsl(36 38% 78% / 0.45) 0%, transparent 32%),
+      /* base do pergaminho */
+      radial-gradient(ellipse 90% 75% at 50% 42%, hsl(42 52% 94%) 0%, hsl(35 36% 85%) 100%);
+    border: 1px solid hsl(30 25% 66% / 0.6);
     box-shadow:
-      inset 0 1px 0 hsl(40 60% 100% / 0.5),
-      0 24px 48px -20px hsl(212 42% 4% / 0.6);
+      inset 0 1px 0 hsl(40 70% 100% / 0.55),
+      inset 0 -36px 70px -40px hsl(28 32% 32% / 0.4),
+      0 30px 60px -22px hsl(212 42% 4% / 0.65);
+  }
+
+  /* Perspectiva para o leve giro 3D do pergaminho ao se desenrolar */
+  .parchment-frame {
+    perspective: 1600px;
+  }
+
+  /*
+   * "Desenrolar": o pergaminho abre a partir do vinco central quando entra na
+   * tela. Usa clip-path (não scaleY) para não esmagar o texto durante a
+   * animação — o overflow-hidden + border-radius do próprio elemento cuidam
+   * dos cantos arredondados quando o clip volta a 0 0 0 0. Um leve rotateX
+   * dá a sensação de o papel se erguer e assentar, como se estivesse mesmo
+   * sendo desenrolado, e não apenas revelado.
+   */
+  .parchment-unroll {
+    clip-path: inset(48% 0 48% 0);
+    transform: rotateX(12deg) scaleY(0.88);
+    transform-origin: 50% 50%;
+    transition:
+      clip-path 1300ms cubic-bezier(0.65, 0, 0.35, 1),
+      transform 1300ms cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .reveal.is-visible .parchment-unroll {
+    clip-path: inset(0 0 0 0);
+    transform: rotateX(0deg) scaleY(1);
+  }
+
+  /* Vinco central: sombra da dobra do rolo, que se dissolve assim que o papel termina de abrir */
+  .parchment-unroll::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent calc(50% - 22px),
+      hsl(26 35% 22% / 0.4) 50%,
+      transparent calc(50% + 22px)
+    );
+    opacity: 1;
+    transition: opacity 500ms ease 650ms;
+    pointer-events: none;
+  }
+
+  .reveal.is-visible .parchment-unroll::after {
+    opacity: 0;
+  }
+
+  /* Brilho que percorre o papel assim que ele termina de se desenrolar */
+  .parchment-unroll::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 35%, hsl(45 90% 92% / 0.55) 50%, transparent 65%);
+    background-size: 250% 100%;
+    background-position: 160% 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .reveal.is-visible .parchment-unroll::before {
+    animation: parchment-shine 1200ms ease-out 750ms both;
   }
 
   .parchment-heading {
@@ -339,7 +421,22 @@
     box-shadow: 0 10px 22px -10px hsl(212 42% 4% / 0.65);
   }
 
-  /* Cabos dourados nas laterais, lembrando os rolos de madeira/latão do pergaminho */
+  /* A plaquinha só "assenta" depois que o pergaminho termina de se abrir */
+  .parchment-badge-pop {
+    opacity: 0;
+    transform: scale(0.6) translateY(10px);
+    transition:
+      opacity 420ms ease 950ms,
+      transform 650ms cubic-bezier(0.34, 1.56, 0.64, 1) 950ms;
+  }
+
+  .reveal.is-visible .parchment-badge-pop {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  /* Cabos dourados nas laterais, lembrando os rolos de madeira/latão do pergaminho —
+     "telescopam" a partir do centro, junto com o desenrolar do papel. */
   .parchment-rod {
     position: absolute;
     top: -14px;
@@ -348,6 +445,17 @@
     border-radius: 9999px;
     background: linear-gradient(180deg, hsl(var(--gold-light)), hsl(var(--bronze)) 45%, hsl(var(--gold-light)));
     box-shadow: 0 2px 6px hsl(212 42% 4% / 0.35);
+    opacity: 0;
+    transform: scaleY(0.15);
+    transform-origin: 50% 50%;
+    transition:
+      transform 1300ms cubic-bezier(0.65, 0, 0.35, 1),
+      opacity 500ms ease 100ms;
+  }
+
+  .reveal.is-visible .parchment-rod {
+    opacity: 1;
+    transform: scaleY(1);
   }
 
   .parchment-rod::before,
@@ -405,11 +513,6 @@
   100% { transform: scale(1.35); opacity: 0; }
 }
 
-@keyframes glow-ring {
-  0%, 100% { box-shadow: 0 0 0 1px hsl(var(--gold) / 0.4), 0 0 18px 0 hsl(var(--gold) / 0.15); }
-  50% { box-shadow: 0 0 0 1px hsl(var(--gold) / 0.7), 0 0 32px 4px hsl(var(--gold) / 0.3); }
-}
-
 @keyframes float-orb {
   0%, 100% { transform: translate(0, 0) scale(1); }
   50% { transform: translate(-4%, 6%) scale(1.08); }
@@ -418,6 +521,13 @@
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes parchment-shine {
+  0% { opacity: 0; background-position: 160% 0; }
+  15% { opacity: 0.9; }
+  55% { opacity: 0.45; }
+  100% { opacity: 0; background-position: -60% 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -440,7 +550,6 @@
 
   .shimmer-sweep::after,
   .pulse-badge::before,
-  .glow-ring,
   .ambient-orb {
     animation: none;
   }
@@ -449,8 +558,27 @@
     display: none;
   }
 
-  .tap-scale:active {
+  .parchment-unroll {
+    clip-path: inset(0 0 0 0);
     transform: none;
+    transition: none;
+  }
+
+  .parchment-unroll::before,
+  .parchment-unroll::after {
+    display: none;
+  }
+
+  .parchment-rod {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .parchment-badge-pop {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 
   html {

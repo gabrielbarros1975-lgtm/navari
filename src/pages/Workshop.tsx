@@ -14,8 +14,6 @@ import {
 import { mockWorkshop } from "@/data/mockData";
 import { cursoThumb } from "@/data/images";
 import {
-  Calendar,
-  Video,
   CheckCircle,
   ChevronRight,
   Play,
@@ -98,17 +96,12 @@ const Workshop = () => {
 
               {/* Informações de Data / Formato */}
               <div
-                className="hero-in flex flex-wrap items-center justify-center gap-4 text-sm text-foreground/90 font-medium py-2"
+                className="hero-in inline-flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-sm md:text-[15px] text-foreground/85 font-medium bg-card/60 border border-gold/20 px-5 sm:px-6 py-2.5 rounded-full"
                 style={{ animationDelay: "280ms" }}
               >
-                <span className="flex items-center gap-2 bg-card/80 border border-border px-4 py-2 rounded-xl shadow-sm">
-                  <Calendar className="w-4 h-4 text-gold shrink-0" />
-                  Sábado · 17 de outubro de 2026
-                </span>
-                <span className="flex items-center gap-2 bg-card/80 border border-border px-4 py-2 rounded-xl shadow-sm">
-                  <Video className="w-4 h-4 text-gold shrink-0" />
-                  Online · Ao vivo
-                </span>
+                <span>Sábado · 17 de outubro de 2026</span>
+                <span aria-hidden className="hidden sm:block w-px h-3.5 bg-gold/30" />
+                <span>Online · Ao vivo</span>
               </div>
 
               <div className="hero-in pt-2" style={{ animationDelay: "340ms" }}>
@@ -196,55 +189,60 @@ const Workshop = () => {
       <section id="aprendizado" className="lp-section lp-surface-raised py-24 md:py-28">
         <div className="container mx-auto px-4">
           <Reveal className="max-w-5xl mx-auto">
-            <div className="parchment-card rounded-[2rem] md:rounded-[2.5rem] px-6 sm:px-10 md:px-16 pt-14 pb-12 md:pt-16 md:pb-16">
-              {/* Cabos laterais, lembrando os rolos do pergaminho */}
+            {/* Moldura: cabos e plaquinha não podem ser cortados pelo clip-path
+                do "desenrolar" abaixo, por isso ficam num wrapper à parte. */}
+            <div className="relative parchment-frame">
               <span aria-hidden className="parchment-rod parchment-rod-left" />
               <span aria-hidden className="parchment-rod parchment-rod-right" />
 
-              {/* Plaquinha encaixada na borda superior do pergaminho */}
-              <span className="parchment-badge absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 inline-flex items-center px-5 py-2 rounded-md text-xs font-semibold tracking-[0.25em] uppercase whitespace-nowrap">
-                Programa Completo
+              <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 z-10">
+                <span className="parchment-badge parchment-badge-pop inline-flex items-center px-5 py-2 rounded-md text-xs font-semibold tracking-[0.25em] uppercase whitespace-nowrap">
+                  Programa Completo
+                </span>
               </span>
 
-              <div className="text-center max-w-2xl mx-auto space-y-4">
-                <h2 className="parchment-heading font-display text-3xl md:text-5xl font-bold">
-                  O QUE VOCÊ VAI APRENDER
-                </h2>
-                <p className="parchment-text text-base md:text-lg leading-relaxed">
-                  Ao longo da imersão prática, vamos percorrer os principais aspectos da incorporação imobiliária, passando por temas como:
-                </p>
-                <div aria-hidden className="flex items-center justify-center gap-3 pt-2">
-                  <span className="parchment-divider h-px w-14 sm:w-24" />
-                  <span style={{ color: "hsl(var(--bronze))" }}>❖</span>
-                  <span className="parchment-divider h-px w-14 sm:w-24" />
+              {/* O pergaminho em si: "desenrola" a partir do centro quando entra na tela */}
+              <div className="parchment-card parchment-unroll rounded-[2rem] md:rounded-[2.5rem] overflow-hidden px-6 sm:px-10 md:px-16 pt-14 pb-12 md:pt-16 md:pb-16">
+                <div className="text-center max-w-2xl mx-auto space-y-4">
+                  <h2 className="parchment-heading font-display text-3xl md:text-5xl font-bold">
+                    O QUE VOCÊ VAI APRENDER
+                  </h2>
+                  <p className="parchment-text text-base md:text-lg leading-relaxed">
+                    Ao longo da imersão prática, vamos percorrer os principais aspectos da incorporação imobiliária, passando por temas como:
+                  </p>
+                  <div aria-hidden className="flex items-center justify-center gap-3 pt-2">
+                    <span className="parchment-divider h-px w-14 sm:w-24" />
+                    <span style={{ color: "hsl(var(--bronze))" }}>❖</span>
+                    <span className="parchment-divider h-px w-14 sm:w-24" />
+                  </div>
                 </div>
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-14 max-w-4xl mx-auto mt-10">
-                {workshop.learningTopics?.map((topic, index) => (
-                  <Reveal key={index} delayMs={index * 30}>
-                    <div className="parchment-item flex items-start gap-4 py-4 border-b">
-                      <span className="parchment-num font-display text-xl font-bold shrink-0 tabular-nums">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <p className="parchment-text text-sm md:text-base leading-relaxed">
-                        {topic}
-                      </p>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-14 max-w-4xl mx-auto mt-10">
+                  {workshop.learningTopics?.map((topic, index) => (
+                    <Reveal key={index} delayMs={index * 30}>
+                      <div className="parchment-item flex items-start gap-4 py-4 border-b">
+                        <span className="parchment-num font-display text-xl font-bold shrink-0 tabular-nums">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <p className="parchment-text text-sm md:text-base leading-relaxed">
+                          {topic}
+                        </p>
+                      </div>
+                    </Reveal>
+                  ))}
+                </div>
 
-              <div className="parchment-quote-border max-w-3xl mx-auto mt-10 pt-8 border-t text-center">
-                <p className="parchment-quote font-display text-lg md:text-xl font-semibold italic leading-relaxed">
-                  E, especialmente, você vai aprender a enxergar a incorporação como um procedimento registral completo, e não como uma simples lista de documentos.
-                </p>
-              </div>
+                <div className="parchment-quote-border max-w-3xl mx-auto mt-10 pt-8 border-t text-center">
+                  <p className="parchment-quote font-display text-lg md:text-xl font-semibold italic leading-relaxed">
+                    E, especialmente, você vai aprender a enxergar a incorporação como um procedimento registral completo, e não como uma simples lista de documentos.
+                  </p>
+                </div>
 
-              <Compass
-                aria-hidden
-                className="parchment-icon hidden sm:block absolute bottom-6 right-6 w-10 h-10 -rotate-12"
-              />
+                <Compass
+                  aria-hidden
+                  className="parchment-icon hidden sm:block absolute bottom-6 right-6 w-10 h-10 -rotate-12"
+                />
+              </div>
             </div>
           </Reveal>
         </div>
@@ -502,7 +500,7 @@ const Workshop = () => {
                   className={
                     "tap-scale relative h-full flex flex-col justify-between rounded-3xl p-8 bg-card border transition-all duration-300 hover:-translate-y-1 shadow-xl" +
                     (tier.highlight
-                      ? " glow-ring border-gold ring-1 ring-gold/40 shadow-gold/10"
+                      ? " border-gold ring-1 ring-gold/40 shadow-gold/10"
                       : " border-border hover:border-gold/40")
                   }
                 >
