@@ -70,7 +70,6 @@ export const mockWorkshop: Workshop = {
   ],
   targetAudienceNote:
     "Não é necessário ser advogado ou já possuir conhecimento aprofundado em incorporação imobiliária. A proposta desta primeira imersão é oferecer uma compreensão geral e prática do tema sob a perspectiva registral.",
-  registrationOpenDate: "07 de setembro de 2026",
   instructor: "Dr. Wyllian Nava",
   instructorCredentials: [
     { text: "Oficial Substituto do 3º Registro de Imóveis de São Luís/MA", instagram: "3risaoluis" },

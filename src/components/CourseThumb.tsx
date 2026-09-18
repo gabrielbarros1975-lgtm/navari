@@ -1,4 +1,3 @@
-import { Landmark } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface CourseThumbProps {
@@ -29,7 +28,9 @@ export function CourseThumb({ category, className }: CourseThumbProps) {
       />
 
       <div className="relative h-full flex flex-col justify-between p-5">
-        <Landmark className="w-5 h-5 text-gold/70" />
+        <span aria-hidden className="font-display text-3xl text-gold/50 leading-none">
+          §
+        </span>
 
         <div>
           <div className="w-9 h-px bg-gold mb-3" />

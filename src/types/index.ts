@@ -98,7 +98,6 @@ export interface Workshop {
   ebookTitle?: string;
   ebookDescription?: string;
   ebookNote?: string;
-  registrationOpenDate?: string;
   instructor: string;
   /** Lista curta e essencial, não uma biografia longa. */
   instructorCredentials: InstructorCredential[];

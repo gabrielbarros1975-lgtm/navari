@@ -20,16 +20,7 @@ import {
   ChevronRight,
   Play,
   Instagram,
-  BookOpen,
-  ArrowRight,
-  Briefcase,
-  Scale,
-  Building2,
   Compass,
-  User,
-  Award,
-  CalendarCheck,
-  Sparkles,
 } from "lucide-react";
 
 const Workshop = () => {
@@ -48,8 +39,14 @@ const Workshop = () => {
       <Header />
 
       {/* 1. HERO / ABERTURA COM VÍDEO NO TOPO */}
-      <section className="lp-section lp-surface pt-28 md:pt-32 pb-16">
-        <div className="container mx-auto px-4 max-w-5xl">
+      <section className="lp-section lp-surface pt-28 md:pt-32 pb-16 relative overflow-hidden">
+        {/* Orbes dourados ambiente: decoração sutil, não competem com o conteúdo */}
+        <div aria-hidden className="absolute inset-0 -z-0 overflow-hidden">
+          <div className="ambient-orb w-72 h-72 -top-10 -left-16" />
+          <div className="ambient-orb w-80 h-80 top-1/3 -right-20" style={{ animationDelay: "-7s" }} />
+        </div>
+
+        <div className="container mx-auto px-4 max-w-5xl relative">
           <div className="flex flex-col gap-10 items-center text-center">
             {/* VÍDEO NO TOPO DA PÁGINA */}
             <div className="w-full max-w-4xl hero-in" style={{ animationDelay: "80ms" }}>
@@ -116,7 +113,11 @@ const Workshop = () => {
 
               <div className="hero-in pt-2" style={{ animationDelay: "340ms" }}>
                 <a href="#inscricao">
-                  <Button variant="hero" size="xl" className="gap-2 px-8 shadow-xl shadow-gold/20 font-bold text-base">
+                  <Button
+                    variant="hero"
+                    size="xl"
+                    className="shimmer-sweep gap-2 px-8 shadow-xl shadow-gold/20 font-bold text-base"
+                  >
                     Garantir minha vaga
                     <ChevronRight className="w-5 h-5" />
                   </Button>
@@ -191,46 +192,59 @@ const Workshop = () => {
         </div>
       </section>
 
-      {/* 3. O QUE VOCÊ VAI APRENDER */}
-      <section id="aprendizado" className="lp-section lp-surface-raised py-20">
+      {/* 3. O QUE VOCÊ VAI APRENDER — tratamento de pergaminho */}
+      <section id="aprendizado" className="lp-section lp-surface-raised py-24 md:py-28">
         <div className="container mx-auto px-4">
-          <Reveal className="max-w-3xl mx-auto text-center mb-16 space-y-4">
-            <span className="text-xs font-semibold tracking-[0.2em] uppercase text-gold">
-              Programa Completo
-            </span>
-            <h2 className="font-display text-3xl md:text-5xl font-bold">
-              O QUE VOCÊ VAI APRENDER
-            </h2>
-            <p className="text-muted-foreground text-base md:text-lg">
-              Ao longo da imersão prática, vamos percorrer os principais aspectos da incorporação imobiliária, passando por temas como:
-            </p>
-          </Reveal>
+          <Reveal className="max-w-5xl mx-auto">
+            <div className="parchment-card rounded-[2rem] md:rounded-[2.5rem] px-6 sm:px-10 md:px-16 pt-14 pb-12 md:pt-16 md:pb-16">
+              {/* Cabos laterais, lembrando os rolos do pergaminho */}
+              <span aria-hidden className="parchment-rod parchment-rod-left" />
+              <span aria-hidden className="parchment-rod parchment-rod-right" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {workshop.learningTopics?.map((topic, index) => (
-              <Reveal key={index} delayMs={index * 30}>
-                <div className="glass-card-hover h-full p-6 flex flex-col justify-between group rounded-2xl border border-border/80 hover:border-gold/50">
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="font-display text-2xl font-bold text-gold/40 group-hover:text-gold transition-colors">
+              {/* Plaquinha encaixada na borda superior do pergaminho */}
+              <span className="parchment-badge absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 inline-flex items-center px-5 py-2 rounded-md text-xs font-semibold tracking-[0.25em] uppercase whitespace-nowrap">
+                Programa Completo
+              </span>
+
+              <div className="text-center max-w-2xl mx-auto space-y-4">
+                <h2 className="parchment-heading font-display text-3xl md:text-5xl font-bold">
+                  O QUE VOCÊ VAI APRENDER
+                </h2>
+                <p className="parchment-text text-base md:text-lg leading-relaxed">
+                  Ao longo da imersão prática, vamos percorrer os principais aspectos da incorporação imobiliária, passando por temas como:
+                </p>
+                <div aria-hidden className="flex items-center justify-center gap-3 pt-2">
+                  <span className="parchment-divider h-px w-14 sm:w-24" />
+                  <span style={{ color: "hsl(var(--bronze))" }}>❖</span>
+                  <span className="parchment-divider h-px w-14 sm:w-24" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-14 max-w-4xl mx-auto mt-10">
+                {workshop.learningTopics?.map((topic, index) => (
+                  <Reveal key={index} delayMs={index * 30}>
+                    <div className="parchment-item flex items-start gap-4 py-4 border-b">
+                      <span className="parchment-num font-display text-xl font-bold shrink-0 tabular-nums">
                         {String(index + 1).padStart(2, "0")}
                       </span>
-                      <ArrowRight className="w-4 h-4 text-gold/40 group-hover:text-gold group-hover:translate-x-1 transition-all" />
+                      <p className="parchment-text text-sm md:text-base leading-relaxed">
+                        {topic}
+                      </p>
                     </div>
-                    <p className="text-sm font-medium leading-relaxed text-foreground/90">
-                      {topic}
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+                  </Reveal>
+                ))}
+              </div>
 
-          <Reveal className="max-w-4xl mx-auto mt-14">
-            <div className="bg-card border border-gold/40 rounded-2xl p-8 text-center shadow-xl">
-              <p className="font-display text-lg md:text-xl font-semibold text-gold">
-                E, especialmente, você vai aprender a enxergar a incorporação como um procedimento registral completo, e não como uma simples lista de documentos.
-              </p>
+              <div className="parchment-quote-border max-w-3xl mx-auto mt-10 pt-8 border-t text-center">
+                <p className="parchment-quote font-display text-lg md:text-xl font-semibold italic leading-relaxed">
+                  E, especialmente, você vai aprender a enxergar a incorporação como um procedimento registral completo, e não como uma simples lista de documentos.
+                </p>
+              </div>
+
+              <Compass
+                aria-hidden
+                className="parchment-icon hidden sm:block absolute bottom-6 right-6 w-10 h-10 -rotate-12"
+              />
             </div>
           </Reveal>
         </div>
@@ -243,14 +257,14 @@ const Workshop = () => {
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-card via-card to-gold/10 border border-gold/30 p-8 md:p-12 shadow-2xl">
               <div className="grid grid-cols-1 md:grid-cols-[1fr_240px] items-center gap-8">
                 <div className="space-y-4 text-left">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/15 text-gold text-xs font-semibold uppercase tracking-wider">
-                    <BookOpen className="w-4 h-4" />
-                    MATERIAL DIDÁTICO
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
+                      Material didático
+                    </p>
+                    <h3 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+                      {workshop.materialTitle}
+                    </h3>
                   </div>
-
-                  <h3 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-                    {workshop.materialTitle}
-                  </h3>
 
                   <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
                     {workshop.materialSubtitle}
@@ -265,16 +279,27 @@ const Workshop = () => {
                   </p>
                 </div>
 
-                <div className="flex flex-col items-center justify-center p-6 bg-gold/10 rounded-2xl border border-gold/20 text-center space-y-3">
-                  <div className="w-16 h-16 rounded-full bg-gold/20 text-gold flex items-center justify-center">
-                    <Award className="w-8 h-8" />
+                <div className="flex flex-col items-center justify-center gap-4">
+                  <div className="relative w-24 h-32">
+                    <div className="absolute inset-0 translate-x-2 translate-y-2 rounded-lg bg-gold/10 border border-gold/20" />
+                    <div className="absolute inset-0 translate-x-1 translate-y-1 rounded-lg bg-gold/15 border border-gold/25" />
+                    <div className="relative w-full h-full rounded-lg bg-gradient-to-br from-secondary to-card border border-gold/40 shadow-lg flex flex-col justify-between p-3">
+                      <div className="w-6 h-0.5 bg-gold" />
+                      <div className="space-y-1.5">
+                        <div className="h-1 w-full bg-foreground/20 rounded-full" />
+                        <div className="h-1 w-3/4 bg-foreground/20 rounded-full" />
+                        <div className="h-1 w-full bg-foreground/20 rounded-full" />
+                      </div>
+                    </div>
                   </div>
-                  <span className="font-display text-sm font-bold text-foreground">
-                    Guia Prático Registral
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    Normas CNJ / TJMA
-                  </span>
+                  <div className="text-center space-y-1">
+                    <span className="font-display text-sm font-bold text-foreground block">
+                      Guia Prático Registral
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      Normas CNJ / TJMA
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -289,14 +314,14 @@ const Workshop = () => {
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-card via-card to-gold/10 border border-gold/30 p-8 md:p-12 shadow-2xl">
               <div className="grid grid-cols-1 md:grid-cols-[1fr_240px] items-center gap-8">
                 <div className="space-y-4 text-left">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/15 text-gold text-xs font-semibold uppercase tracking-wider">
-                    <Sparkles className="w-4 h-4" />
-                    {workshop.ebookBadge}
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
+                      {workshop.ebookBadge}
+                    </p>
+                    <h3 className="font-display text-xl md:text-2xl font-semibold text-foreground">
+                      {workshop.ebookIntro}
+                    </h3>
                   </div>
-
-                  <h3 className="font-display text-xl md:text-2xl font-semibold text-foreground">
-                    {workshop.ebookIntro}
-                  </h3>
 
                   <p className="font-display text-lg md:text-xl font-bold text-gold">
                     {workshop.ebookTitle}
@@ -311,16 +336,30 @@ const Workshop = () => {
                   </p>
                 </div>
 
-                <div className="flex flex-col items-center justify-center p-6 bg-gold/10 rounded-2xl border border-gold/20 text-center space-y-3">
-                  <div className="w-16 h-16 rounded-full bg-gold/20 text-gold flex items-center justify-center">
-                    <BookOpen className="w-8 h-8" />
+                <div className="flex flex-col items-center justify-center gap-4">
+                  <div className="relative w-24 h-32">
+                    <div className="absolute inset-0 translate-x-2 translate-y-2 rounded-lg bg-gold/10 border border-gold/20" />
+                    <div className="absolute inset-0 translate-x-1 translate-y-1 rounded-lg bg-gold/15 border border-gold/25" />
+                    <div className="relative w-full h-full rounded-lg bg-gradient-to-br from-secondary to-card border border-gold/40 shadow-lg flex flex-col justify-between p-3 overflow-hidden">
+                      <span className="absolute -right-8 top-3 rotate-45 bg-gold text-gold-foreground text-[9px] font-bold uppercase tracking-wider px-8 py-0.5">
+                        Em breve
+                      </span>
+                      <div className="w-6 h-0.5 bg-gold" />
+                      <div className="space-y-1.5">
+                        <div className="h-1 w-full bg-foreground/20 rounded-full" />
+                        <div className="h-1 w-3/4 bg-foreground/20 rounded-full" />
+                        <div className="h-1 w-full bg-foreground/20 rounded-full" />
+                      </div>
+                    </div>
                   </div>
-                  <span className="font-display text-sm font-bold text-foreground">
-                    Novo E-book
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    Em breve
-                  </span>
+                  <div className="text-center space-y-1">
+                    <span className="font-display text-sm font-bold text-foreground block">
+                      Novo E-book
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      Em breve
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -418,23 +457,17 @@ const Workshop = () => {
             </p>
           </Reveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {workshop.targetAudience?.map((audience, index) => {
-              const icons = [Building2, Scale, Briefcase, Compass, User, Award];
-              const IconComp = icons[index % icons.length];
-              return (
-                <Reveal key={index} delayMs={index * 60}>
-                  <div className="glass-card p-6 rounded-2xl border border-border/80 hover:border-gold/50 flex items-center gap-4 transition-all">
-                    <div className="w-12 h-12 rounded-xl bg-gold/15 text-gold flex items-center justify-center shrink-0">
-                      <IconComp className="w-6 h-6" />
-                    </div>
-                    <span className="font-display text-base font-semibold text-foreground">
-                      {audience}
-                    </span>
-                  </div>
-                </Reveal>
-              );
-            })}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-5 max-w-3xl mx-auto">
+            {workshop.targetAudience?.map((audience, index) => (
+              <Reveal key={index} delayMs={index * 60}>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-gold shrink-0" />
+                  <span className="font-display text-base font-semibold text-foreground">
+                    {audience}
+                  </span>
+                </div>
+              </Reveal>
+            ))}
           </div>
 
           <Reveal className="max-w-3xl mx-auto mt-12">
@@ -451,7 +484,7 @@ const Workshop = () => {
       <section id="inscricao" className="lp-section lp-surface-raised py-20 scroll-mt-24">
         <div className="container mx-auto px-4">
           <Reveal className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-red-500/15 border border-red-500/30 text-red-400 text-xs font-semibold uppercase tracking-widest">
+            <span className="pulse-badge inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-red-500/15 border border-red-500/30 text-red-400 text-xs font-semibold uppercase tracking-widest">
               VAGAS LIMITADAS
             </span>
             <h2 className="font-display text-3xl md:text-5xl font-bold">
@@ -467,9 +500,9 @@ const Workshop = () => {
               <Reveal key={tier.id} delayMs={index * 100}>
                 <div
                   className={
-                    "relative h-full flex flex-col justify-between rounded-3xl p-8 bg-card border transition-all duration-300 hover:-translate-y-1 shadow-xl" +
+                    "tap-scale relative h-full flex flex-col justify-between rounded-3xl p-8 bg-card border transition-all duration-300 hover:-translate-y-1 shadow-xl" +
                     (tier.highlight
-                      ? " border-gold ring-1 ring-gold/40 shadow-gold/10"
+                      ? " glow-ring border-gold ring-1 ring-gold/40 shadow-gold/10"
                       : " border-border hover:border-gold/40")
                   }
                 >
@@ -566,17 +599,6 @@ const Workshop = () => {
                 </AccordionItem>
               ))}
             </Accordion>
-
-            {/* Inscrições Abertura Info */}
-            <div className="mt-10 p-6 rounded-2xl bg-gold/10 border border-gold/30 text-center space-y-2">
-              <div className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
-                <CalendarCheck className="w-4 h-4" />
-                Abertura das inscrições: 07 de setembro de 2026
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Data do evento: Sábado, 17 de outubro de 2026 (Online · Ao vivo)
-              </p>
-            </div>
           </Reveal>
         </div>
       </section>
@@ -584,14 +606,14 @@ const Workshop = () => {
       {/* Barra fixa de conversão (mobile) */}
       <div
         className={
-          "fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 backdrop-blur transition-transform duration-300 md:hidden" +
+          "fixed bottom-0 left-0 right-0 z-40 border-t border-gold/30 bg-background/95 backdrop-blur shadow-[0_-8px_24px_-8px_hsl(212_42%_4%/0.5)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:hidden" +
           (showStickyBar ? " translate-y-0" : " translate-y-full")
         }
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div className="container mx-auto px-4 py-3">
           <a href="#inscricao" className="block">
-            <Button variant="hero" size="lg" className="w-full gap-2 font-bold shadow-lg">
+            <Button variant="hero" size="lg" className="shimmer-sweep w-full gap-2 font-bold shadow-lg">
               Garantir minha vaga
               <ChevronRight className="w-4 h-4" />
             </Button>

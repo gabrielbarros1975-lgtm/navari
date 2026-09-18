@@ -25,20 +25,20 @@ export function Footer() {
           </div>
 
           <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
-            <Link to="/courses" className="py-1 hover:text-primary transition-colors">
+            <Link to="/courses" className="py-1 hover:text-primary active:text-primary transition-colors">
               Cursos
             </Link>
-            <a href="/#inscricao" className="py-1 hover:text-primary transition-colors">
+            <a href="/#inscricao" className="py-1 hover:text-primary active:text-primary transition-colors">
               Imersão
             </a>
-            <a href="/#faq" className="py-1 hover:text-primary transition-colors">
+            <a href="/#faq" className="py-1 hover:text-primary active:text-primary transition-colors">
               FAQ
             </a>
             <a
               href="https://wa.me/5598984923268"
               target="_blank"
               rel="noreferrer"
-              className="py-1 hover:text-primary transition-colors"
+              className="py-1 hover:text-primary active:text-primary transition-colors"
             >
               Contato
             </a>

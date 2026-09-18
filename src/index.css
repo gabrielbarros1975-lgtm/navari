@@ -96,6 +96,13 @@
     transform: translateY(-3px);
   }
 
+  /* Toque no celular não tem :hover — o card precisa responder mesmo assim */
+  .glass-card-hover:active {
+    box-shadow: var(--shadow-card-hover);
+    border-color: hsl(var(--primary) / 0.3);
+    transform: scale(0.98);
+  }
+
   .gradient-text {
     color: hsl(var(--primary));
   }
@@ -170,7 +177,7 @@
   /* Scroll-reveal: elements ease in as they enter the viewport */
   .reveal {
     opacity: 0;
-    transform: translateY(28px);
+    transform: translateY(28px) scale(0.98);
     transition:
       opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
       transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -199,6 +206,178 @@
     background: hsl(var(--gold));
     animation: play-pulse 2.2s ease-out infinite;
   }
+
+  /* Feedback tátil genérico para cartões/áreas tocáveis (hover não existe no toque) */
+  .tap-scale {
+    transition: transform 150ms ease-out;
+  }
+
+  .tap-scale:active {
+    transform: scale(0.97);
+  }
+
+  /* Brilho diagonal que varre o botão principal, chamando atenção sem ser um GIF piscando */
+  .shimmer-sweep {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer-sweep::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      transparent 30%,
+      hsl(var(--gold-light) / 0.55) 48%,
+      hsl(var(--gold-light) / 0.55) 52%,
+      transparent 70%
+    );
+    background-size: 250% 100%;
+    animation: shimmer-sweep 3.2s ease-in-out infinite;
+    animation-delay: 1.2s;
+  }
+
+  /* Selo de urgência com pulso sutil no anel, sem tremer o texto */
+  .pulse-badge {
+    position: relative;
+  }
+
+  .pulse-badge::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 9999px;
+    border: 1px solid hsl(0 70% 55% / 0.6);
+    animation: pulse-ring 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+
+  /* Anel dourado que respira em volta do card de ingresso em destaque */
+  .glow-ring {
+    animation: glow-ring 3.6s ease-in-out infinite;
+  }
+
+  /* Orbes dourados desfocados, decoração ambiente atrás do hero */
+  .ambient-orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(60px);
+    pointer-events: none;
+    background: radial-gradient(circle, hsl(var(--gold) / 0.35), transparent 70%);
+    animation: float-orb 14s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  /*
+   * "O que você vai aprender": tratamento de pergaminho, inspirado no mockup
+   * do cliente. Tudo continua HTML/texto real (acessibilidade, SEO, reveal
+   * por item) — só a pele muda para papel envelhecido sobre o fundo navy.
+   */
+  .parchment-card {
+    --ink: 27 35% 18%;
+    --ink-soft: 26 20% 36%;
+    --line: 32 28% 60%;
+    position: relative;
+    background:
+      radial-gradient(ellipse 60% 50% at 12% 8%, hsl(38 50% 90%) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 88% 92%, hsl(34 42% 85%) 0%, transparent 60%),
+      linear-gradient(160deg, hsl(40 48% 93%), hsl(36 40% 87%));
+    border: 1px solid hsl(30 25% 70% / 0.6);
+    box-shadow:
+      inset 0 1px 0 hsl(40 60% 100% / 0.5),
+      0 24px 48px -20px hsl(212 42% 4% / 0.6);
+  }
+
+  .parchment-heading {
+    color: hsl(var(--ink));
+  }
+
+  .parchment-text {
+    color: hsl(var(--ink-soft));
+  }
+
+  .parchment-divider {
+    background-color: hsl(var(--line));
+  }
+
+  .parchment-item {
+    border-color: hsl(var(--line) / 0.4);
+    transition: border-color 200ms ease;
+  }
+
+  .parchment-item:active {
+    border-color: hsl(var(--bronze) / 0.7);
+  }
+
+  .parchment-num {
+    color: hsl(var(--bronze));
+    transition: color 200ms ease;
+  }
+
+  .parchment-item:hover .parchment-num,
+  .parchment-item:active .parchment-num {
+    color: hsl(var(--ink));
+  }
+
+  .parchment-quote {
+    color: hsl(var(--ink));
+  }
+
+  .parchment-quote-border {
+    border-color: hsl(var(--line) / 0.4);
+  }
+
+  .parchment-icon {
+    color: hsl(var(--ink) / 0.16);
+  }
+
+  /* Plaquinha "Programa Completo", encaixada na borda superior do pergaminho */
+  .parchment-badge {
+    background: linear-gradient(160deg, hsl(213 34% 17%), hsl(212 42% 9%));
+    color: hsl(var(--gold-light));
+    border: 1px solid hsl(var(--gold) / 0.55);
+    box-shadow: 0 10px 22px -10px hsl(212 42% 4% / 0.65);
+  }
+
+  /* Cabos dourados nas laterais, lembrando os rolos de madeira/latão do pergaminho */
+  .parchment-rod {
+    position: absolute;
+    top: -14px;
+    bottom: -14px;
+    width: 12px;
+    border-radius: 9999px;
+    background: linear-gradient(180deg, hsl(var(--gold-light)), hsl(var(--bronze)) 45%, hsl(var(--gold-light)));
+    box-shadow: 0 2px 6px hsl(212 42% 4% / 0.35);
+  }
+
+  .parchment-rod::before,
+  .parchment-rod::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    border-radius: 9999px;
+    transform: translateX(-50%);
+    background: radial-gradient(circle at 35% 30%, hsl(var(--gold-light)), hsl(var(--bronze)));
+    box-shadow: 0 2px 5px hsl(212 42% 4% / 0.45);
+  }
+
+  .parchment-rod::before {
+    top: -10px;
+  }
+
+  .parchment-rod::after {
+    bottom: -10px;
+  }
+
+  .parchment-rod-left {
+    left: -6px;
+  }
+
+  .parchment-rod-right {
+    right: -6px;
+  }
 }
 
 @keyframes slide-up {
@@ -214,6 +393,31 @@
 @keyframes play-pulse {
   0% { transform: scale(1); opacity: 0.45; }
   100% { transform: scale(1.9); opacity: 0; }
+}
+
+@keyframes shimmer-sweep {
+  0% { background-position: 150% 0; }
+  40%, 100% { background-position: -100% 0; }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+@keyframes glow-ring {
+  0%, 100% { box-shadow: 0 0 0 1px hsl(var(--gold) / 0.4), 0 0 18px 0 hsl(var(--gold) / 0.15); }
+  50% { box-shadow: 0 0 0 1px hsl(var(--gold) / 0.7), 0 0 32px 4px hsl(var(--gold) / 0.3); }
+}
+
+@keyframes float-orb {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-4%, 6%) scale(1.08); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -232,6 +436,21 @@
   .play-pulse::before {
     animation: none;
     display: none;
+  }
+
+  .shimmer-sweep::after,
+  .pulse-badge::before,
+  .glow-ring,
+  .ambient-orb {
+    animation: none;
+  }
+
+  .shimmer-sweep::after {
+    display: none;
+  }
+
+  .tap-scale:active {
+    transform: none;
   }
 
   html {

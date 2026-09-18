@@ -55,13 +55,16 @@ export function VideoPlayer({ videoUrl, title }: VideoPlayerProps) {
       )}
       
       {!isPlaying && (
-        <button 
-          onClick={() => setIsPlaying(true)} 
-          className="absolute inset-0 z-20 w-full h-full flex items-center justify-center bg-black/40 hover:bg-black/20 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
+        <button
+          onClick={() => setIsPlaying(true)}
+          className="absolute inset-0 z-20 w-full h-full flex items-center justify-center bg-black/40 hover:bg-black/20 active:bg-black/30 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
           aria-label="Play video"
         >
-          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
-            <Play className="w-5 h-5 sm:w-7 sm:h-7 text-primary-foreground ml-1" />
+          <div className="relative w-12 h-12 sm:w-16 sm:h-16">
+            <div className="play-pulse absolute inset-0" />
+            <div className="relative w-full h-full bg-primary rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 group-active:scale-95 transition-transform">
+              <Play className="w-5 h-5 sm:w-7 sm:h-7 text-primary-foreground ml-1" />
+            </div>
           </div>
         </button>
       )}
