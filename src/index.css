@@ -882,18 +882,42 @@
     transition: none;
   }
 
-  /* O lacre continua valendo: o que sai é a animação, não a interação.
-     O halo some, mas o rótulo "Toque para abrir" continua sinalizando. */
-  .parchment-sealed,
-  .parchment-seal,
-  .parchment-seal-label,
+  /*
+   * "Reduzir movimento" pede menos deslocamento grande — não uma interface
+   * morta. Antes eu zerava toda transição daqui, e o resultado era o pergaminho
+   * estalando aberto e o selo sem nenhum destaque, como se estivesse quebrado.
+   *
+   * Sai o que varre a tela: o desenrolar de ~1300px, a inclinação 3D, o brilho
+   * e o pulso infinito do halo (laço contínuo é o caso mais sensível).
+   * Fica uma transição curta de altura, que não desloca nada longe e evita o
+   * conteúdo aparecer de estalo.
+   */
   .parchment-collapse {
-    transition: none;
+    transition: grid-template-rows 300ms ease;
   }
 
+  .parchment-sealed {
+    transition:
+      height 260ms ease,
+      padding 260ms ease,
+      opacity 200ms ease;
+  }
+
+  /* O selo sai por opacidade: sem crescer nem girar. */
+  .parchment-seal,
+  .parchment-seal-label {
+    transition: opacity 200ms ease;
+  }
+
+  .parchment-sealed.is-open .parchment-seal {
+    transform: none;
+  }
+
+  /* Anel parado, porém mais forte: continua dizendo "toque aqui" sem pulsar. */
   .parchment-seal::before {
     animation: none;
-    opacity: 0.5;
+    opacity: 1;
+    border-color: hsl(36 48% 40% / 0.85);
   }
 
   html {
