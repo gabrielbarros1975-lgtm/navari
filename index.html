@@ -23,6 +23,33 @@
     <meta property="og:image" content="/og-imersao.jpg" />
 
     <meta name="twitter:card" content="summary_large_image" />
+
+    <!--
+      A /v2 usa tema claro. Se esperar o React montar para aplicar a classe, a
+      primeira pintura sai no tema escuro e o usuário vê a página piscar de
+      navy para creme. Aqui o tema entra antes de qualquer pintura; o React
+      continua cuidando da navegação interna e da limpeza ao sair da rota.
+    -->
+    <script>
+      if (window.location.pathname.replace(/\/$/, "") === "/v2") {
+        document.documentElement.classList.add("theme-paper");
+      }
+    </script>
+
+    <!--
+      Por padrão o navegador devolve a pessoa para onde ela estava ao recarregar.
+      Numa landing isso atrapalha: a abertura do hero e o pergaminho lacrado do
+      celular são justamente o começo da história, e quem recarregava caía no
+      meio da página. Com "manual" a recarga sempre começa do topo.
+
+      Links com âncora (#inscricao, #faq) continuam funcionando: quando há hash
+      na URL, o próprio navegador rola até a seção depois de carregar.
+    -->
+    <script>
+      if ("scrollRestoration" in history) {
+        history.scrollRestoration = "manual";
+      }
+    </script>
   </head>
 
   <body>

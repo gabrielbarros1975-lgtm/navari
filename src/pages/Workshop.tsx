@@ -12,18 +12,35 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { mockWorkshop } from "@/data/mockData";
-import { cursoThumb } from "@/data/images";
+import { cursoThumb, navaLockup } from "@/data/images";
+import { cn } from "@/lib/utils";
 import {
   CheckCircle,
   ChevronRight,
+  ChevronDown,
   Play,
   Instagram,
   Compass,
 } from "lucide-react";
 
-const Workshop = () => {
+interface WorkshopProps {
+  /**
+   * "paper" é a landing alternativa (/v2), montada sobre a marca em azul e
+   * dourado. O conteúdo é o mesmo: só a pele muda, via tokens do tema.
+   */
+  variant?: "dark" | "paper";
+}
+
+const Workshop = ({ variant = "dark" }: WorkshopProps) => {
   const workshop = mockWorkshop;
+  const isPaper = variant === "paper";
   const [showStickyBar, setShowStickyBar] = useState(false);
+  /*
+   * Só vale no celular: lá o pergaminho chega lacrado e abre no toque. No
+   * desktop o CSS ignora este estado e a abertura continua no scroll, então
+   * não precisa de listener de resize — o breakpoint é do CSS, o estado é daqui.
+   */
+  const [sealOpen, setSealOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setShowStickyBar(window.scrollY > 700);
@@ -34,7 +51,7 @@ const Workshop = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
+      <Header variant={variant} />
 
       {/* 1. HERO / ABERTURA COM VÍDEO NO TOPO */}
       <section className="lp-section lp-surface pt-28 md:pt-32 pb-16 relative overflow-hidden">
@@ -46,6 +63,19 @@ const Workshop = () => {
 
         <div className="container mx-auto px-4 max-w-5xl relative">
           <div className="flex flex-col gap-10 items-center text-center">
+            {/* Marca de abertura, só na v2: o fundo creme da arte funde com o
+                papel da página, então ela entra inteira, sem recorte. */}
+            {isPaper && (
+              <div className="hero-in w-full flex justify-center -mb-2">
+                <img
+                  src={navaLockup}
+                  alt="NAVA — Registro de Imóveis · Imersão em Incorporação Imobiliária"
+                  className="w-full max-w-[340px] sm:max-w-[400px] md:max-w-[460px] h-auto"
+                  loading="eager"
+                />
+              </div>
+            )}
+
             {/* VÍDEO NO TOPO DA PÁGINA */}
             <div className="w-full max-w-4xl hero-in" style={{ animationDelay: "80ms" }}>
               {workshop.videoUrl ? (
@@ -84,7 +114,7 @@ const Workshop = () => {
               </h1>
 
               <p
-                className="hero-in text-lg md:text-xl font-medium text-gold/90 italic leading-relaxed max-w-2xl"
+                className="hero-in text-lg md:text-xl font-medium text-gold italic leading-relaxed max-w-2xl"
                 style={{ animationDelay: "220ms" }}
               >
                 {workshop.subtitle}
@@ -126,7 +156,9 @@ const Workshop = () => {
         id="por-que"
         className="lp-section lp-surface-photo relative py-20"
         style={{
-          backgroundImage: `linear-gradient(hsl(212 42% 9% / 0.92), hsl(212 42% 9% / 0.92)), url(/wyllian-apresentando.jpg)`,
+          // Véu pelo token, não pelo navy fixo: no tema papel a seção inteira
+          // continuaria escura e destoaria do resto da página.
+          backgroundImage: `linear-gradient(hsl(var(--background) / 0.92), hsl(var(--background) / 0.92)), url(/wyllian-apresentando.jpg)`,
         }}
       >
         <div className="container mx-auto px-4">
@@ -188,7 +220,16 @@ const Workshop = () => {
       {/* 3. O QUE VOCÊ VAI APRENDER — tratamento de pergaminho */}
       <section id="aprendizado" className="lp-section lp-surface-raised py-24 md:py-28">
         <div className="container mx-auto px-4">
-          <Reveal className="max-w-5xl mx-auto">
+          {/* O pergaminho é bem mais alto que a tela, então dispara só quando a
+              borda de cima passa dos 60% da viewport — assim a abertura
+              acontece na tela, e não abaixo da dobra. threshold 0 porque exigir
+              uma fração da área de um bloco tão alto pode nunca ser atingido no
+              mobile. */}
+          <Reveal
+            className="max-w-5xl mx-auto"
+            rootMargin="0px 0px -40% 0px"
+            threshold={0}
+          >
             {/* Moldura: cabos e plaquinha não podem ser cortados pelo clip-path
                 do "desenrolar" abaixo, por isso ficam num wrapper à parte. */}
             <div className="relative parchment-frame">
@@ -201,7 +242,33 @@ const Workshop = () => {
                 </span>
               </span>
 
-              {/* O pergaminho em si: "desenrola" a partir do centro quando entra na tela */}
+              {/* Celular: o pergaminho chega lacrado. O botão some no desktop
+                  pelo próprio CSS (não por classe do Tailwind), para não haver
+                  duas regras de display brigando. */}
+              <button
+                type="button"
+                onClick={() => setSealOpen(true)}
+                aria-expanded={sealOpen}
+                aria-controls="programa-pergaminho"
+                aria-hidden={sealOpen || undefined}
+                tabIndex={sealOpen ? -1 : undefined}
+                className={cn("parchment-sealed parchment-card", sealOpen && "is-open")}
+              >
+                <span aria-hidden className="parchment-seal">
+                  <Compass className="w-8 h-8" />
+                </span>
+                <span className="parchment-seal-label">
+                  Toque para abrir
+                  <ChevronDown aria-hidden className="w-3.5 h-3.5" />
+                </span>
+              </button>
+
+              <div
+                id="programa-pergaminho"
+                className={cn("parchment-collapse", sealOpen && "is-open")}
+              >
+                <div className="parchment-collapse-inner">
+              {/* O pergaminho em si: desenrola a partir da borda de cima */}
               <div className="parchment-card parchment-unroll rounded-[2rem] md:rounded-[2.5rem] overflow-hidden px-6 sm:px-10 md:px-16 pt-14 pb-12 md:pt-16 md:pb-16">
                 <div className="text-center max-w-2xl mx-auto space-y-4">
                   <h2 className="parchment-heading font-display text-3xl md:text-5xl font-bold">
@@ -243,6 +310,8 @@ const Workshop = () => {
                   className="parchment-icon hidden sm:block absolute bottom-6 right-6 w-10 h-10 -rotate-12"
                 />
               </div>
+                </div>
+              </div>
             </div>
           </Reveal>
         </div>
@@ -272,7 +341,7 @@ const Workshop = () => {
                     {workshop.materialDescription}
                   </p>
 
-                  <p className="text-xs text-gold/90 font-medium">
+                  <p className="text-xs text-gold font-medium">
                     * Disponibilizado digitalmente para todos os participantes da Imersão.
                   </p>
                 </div>
@@ -329,7 +398,7 @@ const Workshop = () => {
                     {workshop.ebookDescription}
                   </p>
 
-                  <p className="text-xs text-gold/90 font-medium">
+                  <p className="text-xs text-gold font-medium">
                     * {workshop.ebookNote}
                   </p>
                 </div>
@@ -414,7 +483,10 @@ const Workshop = () => {
                                 href={`https://instagram.com/${cred.instagram}`}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-gold transition-colors mt-0.5"
+                                /* py-2 -my-2: o link tinha 16px de altura, bem
+                                   abaixo do mínimo confortável no toque. O
+                                   negativo cancela o espaço extra no layout. */
+                                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-gold transition-colors mt-0.5 py-2 -my-2"
                               >
                                 <Instagram className="w-3.5 h-3.5" />@{cred.instagram}
                               </a>
@@ -482,7 +554,9 @@ const Workshop = () => {
       <section id="inscricao" className="lp-section lp-surface-raised py-20 scroll-mt-24">
         <div className="container mx-auto px-4">
           <Reveal className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-            <span className="pulse-badge inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-red-500/15 border border-red-500/30 text-red-400 text-xs font-semibold uppercase tracking-widest">
+            {/* Token em vez de red-400: aquele vermelho claro foi escolhido para
+                o fundo navy e some no tema papel. */}
+            <span className="pulse-badge inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-destructive/10 border border-destructive/30 text-destructive text-xs font-semibold uppercase tracking-widest">
               VAGAS LIMITADAS
             </span>
             <h2 className="font-display text-3xl md:text-5xl font-bold">
@@ -619,7 +693,7 @@ const Workshop = () => {
         </div>
       </div>
 
-      <Footer />
+      <Footer variant={variant} />
 
       {/* Espaço para a barra fixa no mobile */}
       <div aria-hidden className="h-20 md:hidden" />

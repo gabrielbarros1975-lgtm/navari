@@ -58,6 +58,64 @@
     /* #7B6D5A bronze: só bordas e detalhes, contraste insuficiente para texto */
     --bronze: 35 15% 42%;
   }
+
+  /*
+   * Tema "papel" da landing v2 (/v2), montado em cima da logo em azul+dourado
+   * sobre creme. As três cores vieram medidas do próprio arquivo da marca:
+   * creme #F1E8DF, marinho #102942 e dourado #A37C43 — assim a arte assenta na
+   * página sem precisar de recorte de fundo.
+   *
+   * Aplicado em <html> pela página, então tudo que usa token (Header, Footer,
+   * Button, .lp-surface, .glass-card...) acompanha sem precisar de variante.
+   */
+  .theme-paper {
+    /* Medido na moldura externa do próprio arquivo da marca (#F2EAE3): é o que
+       faz a arte encostar no fundo sem deixar emenda visível. */
+    --background: 28 37% 92%;
+    --foreground: 210 61% 16%;
+
+    /* Papel mais branco que o fundo: é assim que uma seção "sobe" no tema claro */
+    --card: 38 44% 97%;
+    --card-foreground: 210 61% 16%;
+
+    --popover: 38 44% 97%;
+    --popover-foreground: 210 61% 16%;
+
+    /*
+     * No tema escuro o hover clareia; aqui ele precisa ESCURECER, senão o texto
+     * creme do botão fica ilegível sobre dourado claro.
+     */
+    --primary: 36 50% 32%;
+    --primary-foreground: 38 44% 96%;
+
+    --secondary: 32 30% 86%;
+    --secondary-foreground: 210 61% 16%;
+
+    --muted: 32 28% 88%;
+    --muted-foreground: 212 20% 38%;
+
+    --accent: 32 30% 86%;
+    --accent-foreground: 210 61% 16%;
+
+    --destructive: 0 65% 42%;
+    --destructive-foreground: 38 44% 96%;
+
+    --border: 32 26% 79%;
+    --input: 32 26% 79%;
+    --ring: 36 50% 32%;
+
+    /* Sobre papel a sombra é discreta e quente, não um poço preto */
+    --shadow-card: 0 1px 2px hsl(30 30% 35% / 0.10), 0 2px 8px hsl(30 30% 35% / 0.08);
+    --shadow-card-hover: 0 4px 12px hsl(30 30% 35% / 0.14), 0 10px 28px hsl(30 30% 35% / 0.12);
+
+    /* 32% é o ponto em que o dourado ainda lê como dourado e passa de 4.5:1
+       sobre o creme mesmo nos usos com /90 de opacidade. A 40% o texto pequeno
+       reprovava; sobre papel o dourado precisa ser tinta, não brilho. */
+    --gold: 36 50% 32%;
+    --gold-foreground: 38 44% 96%;
+    --gold-light: 36 58% 25%;
+    --bronze: 32 22% 36%;
+  }
 }
 
 @layer base {
@@ -313,17 +371,23 @@
   }
 
   /*
-   * "Desenrolar": o pergaminho abre a partir do vinco central quando entra na
-   * tela. Usa clip-path (não scaleY) para não esmagar o texto durante a
-   * animação — o overflow-hidden + border-radius do próprio elemento cuidam
-   * dos cantos arredondados quando o clip volta a 0 0 0 0. Um leve rotateX
-   * dá a sensação de o papel se erguer e assentar, como se estivesse mesmo
-   * sendo desenrolado, e não apenas revelado.
+   * "Desenrolar": o papel cai a partir da borda de cima, como um pergaminho
+   * pendurado sendo solto. O card é bem mais alto que a tela (~1,8x no
+   * desktop, mais ainda no mobile), então a animação precisa acontecer na
+   * borda de cima — que é o que o usuário vê primeiro ao rolar até aqui.
+   * Abrir a partir do centro fazia a animação inteira rodar fora da tela.
+   *
+   * Usa clip-path (não scaleY) para não esmagar o texto durante a animação —
+   * o overflow-hidden + border-radius do próprio elemento cuidam dos cantos
+   * arredondados quando o clip volta a 0 0 0 0.
    */
   .parchment-unroll {
-    clip-path: inset(48% 0 48% 0);
-    transform: rotateX(12deg) scaleY(0.88);
-    transform-origin: 50% 50%;
+    clip-path: inset(0 0 100% 0);
+    transform: rotateX(6deg);
+    transform-origin: 50% 0;
+    /* Mesma duração e curva para os dois: com 1400ms no recorte e 900ms na
+       inclinação, o papel acabava de assentar antes de terminar de aparecer.
+       A curva suave nas duas pontas faz o rolo "soltar" em vez de saltar. */
     transition:
       clip-path 1300ms cubic-bezier(0.65, 0, 0.35, 1),
       transform 1300ms cubic-bezier(0.65, 0, 0.35, 1);
@@ -331,22 +395,21 @@
 
   .reveal.is-visible .parchment-unroll {
     clip-path: inset(0 0 0 0);
-    transform: rotateX(0deg) scaleY(1);
+    transform: rotateX(0deg);
   }
 
-  /* Vinco central: sombra da dobra do rolo, que se dissolve assim que o papel termina de abrir */
+  /* Sombra do rolo na borda de cima, que se dissolve conforme o papel desce */
   .parchment-unroll::after {
     content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(
       to bottom,
-      transparent calc(50% - 22px),
-      hsl(26 35% 22% / 0.4) 50%,
-      transparent calc(50% + 22px)
+      hsl(26 35% 22% / 0.35) 0,
+      transparent 70px
     );
     opacity: 1;
-    transition: opacity 500ms ease 650ms;
+    transition: opacity 700ms ease 500ms;
     pointer-events: none;
   }
 
@@ -413,21 +476,26 @@
     color: hsl(var(--ink) / 0.16);
   }
 
-  /* Plaquinha "Programa Completo", encaixada na borda superior do pergaminho */
+  /*
+   * Plaquinha "Programa Completo", encaixada na borda superior do pergaminho.
+   * O fundo é navy fixo nos dois temas, então o texto e a borda também são
+   * fixos: com o token, no tema papel o dourado escuro caía sobre o navy e a
+   * plaquinha ficava ilegível.
+   */
   .parchment-badge {
     background: linear-gradient(160deg, hsl(213 34% 17%), hsl(212 42% 9%));
-    color: hsl(var(--gold-light));
-    border: 1px solid hsl(var(--gold) / 0.55);
+    color: hsl(38 49% 78%);
+    border: 1px solid hsl(37 35% 60% / 0.55);
     box-shadow: 0 10px 22px -10px hsl(212 42% 4% / 0.65);
   }
 
-  /* A plaquinha só "assenta" depois que o pergaminho termina de se abrir */
+  /* A plaquinha fica na borda de cima, então assenta logo no início da abertura */
   .parchment-badge-pop {
     opacity: 0;
     transform: scale(0.6) translateY(10px);
     transition:
-      opacity 420ms ease 950ms,
-      transform 650ms cubic-bezier(0.34, 1.56, 0.64, 1) 950ms;
+      opacity 400ms ease 150ms,
+      transform 650ms cubic-bezier(0.34, 1.56, 0.64, 1) 150ms;
   }
 
   .reveal.is-visible .parchment-badge-pop {
@@ -436,7 +504,7 @@
   }
 
   /* Cabos dourados nas laterais, lembrando os rolos de madeira/latão do pergaminho —
-     "telescopam" a partir do centro, junto com o desenrolar do papel. */
+     crescem de cima para baixo, acompanhando a queda do papel. */
   .parchment-rod {
     position: absolute;
     top: -14px;
@@ -446,11 +514,11 @@
     background: linear-gradient(180deg, hsl(var(--gold-light)), hsl(var(--bronze)) 45%, hsl(var(--gold-light)));
     box-shadow: 0 2px 6px hsl(212 42% 4% / 0.35);
     opacity: 0;
-    transform: scaleY(0.15);
-    transform-origin: 50% 50%;
+    transform: scaleY(0.04);
+    transform-origin: 50% 0;
     transition:
-      transform 1300ms cubic-bezier(0.65, 0, 0.35, 1),
-      opacity 500ms ease 100ms;
+      transform 1400ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 400ms ease 100ms;
   }
 
   .reveal.is-visible .parchment-rod {
@@ -485,6 +553,233 @@
 
   .parchment-rod-right {
     right: -6px;
+  }
+
+  /*
+   * Ajustes do tema papel para o que foi desenhado supondo fundo escuro.
+   * Os tokens resolvem cor; o que não dá para resolver por token fica aqui.
+   */
+
+  /* Orbes de brilho contam com fundo escuro para sumir nas bordas; sobre papel
+     viram manchas. Reduz a opacidade em vez de remover, para não achatar o hero. */
+  .theme-paper .ambient-orb {
+    background: radial-gradient(circle, hsl(var(--gold) / 0.13), transparent 70%);
+  }
+
+  /* Véu sobre a foto: no claro precisa ser mais opaco, senão o texto marinho
+     disputa com a imagem. */
+  .theme-paper .lp-photo-card {
+    background-color: hsl(38 44% 97% / 0.86);
+  }
+
+  /*
+   * Pergaminho lacrado — só no celular.
+   *
+   * Na tela pequena o card tem quase 2000px de altura: desenrolar sozinho no
+   * scroll entrega um paredão de texto de uma vez. Lacrado, ele chega como um
+   * rolo fechado com selo de cera e só abre quando a pessoa toca — o conteúdo
+   * continua todo no HTML (SEO e leitor de tela), só a altura é que é recolhida.
+   *
+   * Quem decide o breakpoint é o CSS, não o JS: sem listener de resize, sem
+   * risco de o estado do React discordar da largura real da tela.
+   */
+  .parchment-sealed {
+    display: none;
+  }
+
+  .parchment-seal {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5.25rem;
+    height: 5.25rem;
+    color: hsl(40 50% 92%);
+    /* Cera não é círculo perfeito: raios desiguais dão a borda derramada */
+    border-radius: 47% 53% 52% 48% / 51% 47% 53% 49%;
+    background:
+      /* anel do carimbo, marcado perto da borda */
+      radial-gradient(
+        circle at 50% 50%,
+        transparent 57%,
+        hsl(28 42% 18% / 0.38) 60%,
+        transparent 67%
+      ),
+      /*
+       * Luz ampla e de pouco contraste: cera é fosca. Um gradiente curto com
+       * brilho forte lia como esfera de vidro, não como selo estampado.
+       */
+      radial-gradient(
+        circle at 38% 32%,
+        hsl(36 44% 45%),
+        hsl(33 42% 34%) 68%,
+        hsl(28 42% 26%)
+      );
+    box-shadow:
+      inset 0 1px 2px hsl(40 50% 88% / 0.25),
+      inset 0 -4px 10px hsl(20 40% 8% / 0.32),
+      0 6px 14px -6px hsl(212 42% 4% / 0.5);
+    transition:
+      transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      opacity 400ms ease-out;
+  }
+
+  /* Emblema afundado na cera, em vez de desenhado por cima */
+  .parchment-seal svg {
+    filter: drop-shadow(0 1px 0 hsl(20 40% 12% / 0.6));
+  }
+
+  /*
+   * Halo pulsante: sem ele o selo parece só enfeite. Vai no ::before porque o
+   * próprio selo já usa transform no toque e ao abrir — animação infinita no
+   * mesmo elemento venceria essas transições e travaria o "estouro".
+   */
+  .parchment-seal::before {
+    content: "";
+    position: absolute;
+    inset: -9px;
+    border-radius: inherit;
+    border: 2px solid hsl(36 48% 44% / 0.6);
+    animation: seal-halo 2.6s ease-out infinite;
+    pointer-events: none;
+  }
+
+  .parchment-sealed.is-open .parchment-seal::before {
+    animation: none;
+    opacity: 0;
+  }
+
+  .parchment-seal-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 1.1rem;
+    border: 1px solid hsl(var(--line) / 0.75);
+    border-radius: 9999px;
+    background: hsl(40 45% 98% / 0.55);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: hsl(var(--ink));
+    transition: opacity 300ms ease-out;
+  }
+
+  @media (max-width: 767px) {
+    .parchment-sealed {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      padding: 3.5rem 1.5rem 2.5rem;
+      border-radius: 2rem;
+      overflow: hidden;
+      /* Atraso curto: dá tempo de ver o selo estourar antes da faixa recolher */
+      transition:
+        height 700ms cubic-bezier(0.65, 0, 0.35, 1) 160ms,
+        padding 700ms cubic-bezier(0.65, 0, 0.35, 1) 160ms,
+        opacity 450ms ease-out 160ms;
+    }
+
+    .parchment-sealed:active .parchment-seal {
+      transform: scale(0.93);
+    }
+
+    /* Ao abrir, o selo "estoura": cresce, gira e some, e a faixa recolhe. */
+    .parchment-sealed.is-open {
+      height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .parchment-sealed.is-open .parchment-seal {
+      transform: scale(1.3) rotate(-10deg);
+      opacity: 0;
+    }
+
+    .parchment-sealed.is-open .parchment-seal-label {
+      opacity: 0;
+    }
+
+    /*
+     * 0fr → 1fr anima a altura sem precisar medir px em JS, mesma técnica do
+     * menu do cabeçalho. O filho precisa de overflow/min-height para recolher.
+     *
+     * Duração e curva iguais às do clip-path do papel logo abaixo: quando eram
+     * diferentes (900ms contra 1400ms), a moldura terminava de crescer com o
+     * papel ainda recortado e sobrava um vazio no fim do movimento. Andando
+     * juntas, a borda do papel acompanha a altura o tempo todo.
+     */
+    .parchment-collapse {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 1100ms cubic-bezier(0.65, 0, 0.35, 1) 160ms;
+    }
+
+    .parchment-collapse.is-open {
+      grid-template-rows: 1fr;
+    }
+
+    .parchment-collapse-inner {
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    /* No celular quem abre é o toque, não o scroll: o desenrolar do papel
+       acompanha a expansão da altura. Precisa vir depois da regra do scroll,
+       que tem a mesma especificidade. */
+    .reveal.is-visible .parchment-unroll {
+      clip-path: inset(0 0 100% 0);
+      transform: rotateX(6deg);
+    }
+
+    .parchment-unroll {
+      transition:
+        clip-path 1100ms cubic-bezier(0.65, 0, 0.35, 1) 160ms,
+        transform 1100ms cubic-bezier(0.65, 0, 0.35, 1) 160ms;
+    }
+
+    .parchment-collapse.is-open .parchment-unroll {
+      clip-path: inset(0 0 0 0);
+      transform: rotateX(0deg);
+    }
+
+    /*
+     * A sombra do rolo e o brilho do papel estavam presos ao scroll: disparavam
+     * com o pergaminho ainda lacrado e, quando a pessoa tocava, já tinham
+     * acabado. Aqui eles passam a acompanhar o toque, que é quando a abertura
+     * realmente acontece.
+     */
+    .reveal.is-visible .parchment-unroll::after {
+      opacity: 1;
+      transition: none;
+    }
+
+    .reveal.is-visible .parchment-unroll::before {
+      animation: none;
+    }
+
+    .parchment-collapse.is-open .parchment-unroll::after {
+      opacity: 0;
+      transition: opacity 700ms ease 450ms;
+    }
+
+    .parchment-collapse.is-open .parchment-unroll::before {
+      animation: parchment-shine 1100ms ease-out 550ms both;
+    }
+  }
+
+  /* O pergaminho perde o efeito se o fundo da página for do mesmo creme.
+     Sobre papel ele fica levemente mais quente e com borda mais marcada. */
+  .theme-paper .parchment-card {
+    border-color: hsl(32 26% 66% / 0.8);
+    box-shadow:
+      inset 0 1px 0 hsl(40 70% 100% / 0.6),
+      inset 0 -36px 70px -40px hsl(28 32% 32% / 0.28),
+      0 18px 40px -20px hsl(30 30% 30% / 0.3);
   }
 }
 
@@ -521,6 +816,12 @@
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes seal-halo {
+  0% { transform: scale(0.9); opacity: 0; }
+  25% { opacity: 0.75; }
+  100% { transform: scale(1.3); opacity: 0; }
 }
 
 @keyframes parchment-shine {
@@ -579,6 +880,20 @@
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  /* O lacre continua valendo: o que sai é a animação, não a interação.
+     O halo some, mas o rótulo "Toque para abrir" continua sinalizando. */
+  .parchment-sealed,
+  .parchment-seal,
+  .parchment-seal-label,
+  .parchment-collapse {
+    transition: none;
+  }
+
+  .parchment-seal::before {
+    animation: none;
+    opacity: 0.5;
   }
 
   html {

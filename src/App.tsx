@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
 import Workshop from "./pages/Workshop";
+import WorkshopV2 from "./pages/WorkshopV2";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
@@ -49,6 +50,8 @@ const App = () => (
               {/* Assinatura descontinuada: a venda agora é por curso. */}
               <Route path="/plans" element={<Navigate to="/courses" replace />} />
               <Route path="/workshop" element={<Workshop />} />
+              {/* Versão alternativa em tema claro, para aprovação da marca nova */}
+              <Route path="/v2" element={<WorkshopV2 />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

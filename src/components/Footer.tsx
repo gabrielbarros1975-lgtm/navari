@@ -1,19 +1,34 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Phone, MapPin } from "lucide-react";
-import { navaMonograma } from "@/data/images";
+import { navaMonograma, navaMonogramaPaper } from "@/data/images";
+import { cn } from "@/lib/utils";
 
-export function Footer() {
+interface FooterProps {
+  /** Ver Header: o monograma dourado depende de fundo escuro. */
+  variant?: "dark" | "paper";
+}
+
+export function Footer({ variant = "dark" }: FooterProps) {
+  const isPaper = variant === "paper";
+  const { pathname } = useLocation();
+  /* Ver Header: na /v2 as âncoras precisam apontar para a própria /v2, senão
+     o rodapé devolve quem está avaliando para a versão antiga. */
+  const homePath = pathname === "/v2" ? "/v2" : "/";
+
   return (
     <footer className="border-t border-border/50 bg-card/50">
       <div className="container mx-auto px-4 py-8 md:py-10">
         <div className="flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-col items-center md:items-start gap-2">
-            <Link to="/" className="flex items-center gap-3">
+            <Link to={homePath} className="flex items-center gap-3">
               <img
-                src={navaMonograma}
+                src={isPaper ? navaMonogramaPaper : navaMonograma}
                 alt=""
                 aria-hidden
-                className="h-9 w-auto mix-blend-screen"
+                className={cn(
+                  "h-9 w-auto",
+                  isPaper ? "rounded-md" : "mix-blend-screen"
+                )}
               />
               <span className="font-display font-bold text-lg text-foreground">
                 Dr. Wyllian Nava
@@ -28,10 +43,10 @@ export function Footer() {
             <Link to="/courses" className="py-1 hover:text-primary active:text-primary transition-colors">
               Cursos
             </Link>
-            <a href="/#inscricao" className="py-1 hover:text-primary active:text-primary transition-colors">
+            <a href={`${homePath}#inscricao`} className="py-1 hover:text-primary active:text-primary transition-colors">
               Imersão
             </a>
-            <a href="/#faq" className="py-1 hover:text-primary active:text-primary transition-colors">
+            <a href={`${homePath}#faq`} className="py-1 hover:text-primary active:text-primary transition-colors">
               FAQ
             </a>
             <a

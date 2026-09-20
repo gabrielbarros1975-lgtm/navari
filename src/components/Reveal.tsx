@@ -6,6 +6,12 @@ interface RevealProps {
   className?: string;
   /** Atraso em ms, para escalonar itens de uma mesma lista. */
   delayMs?: number;
+  /**
+   * Ajuste do ponto de disparo. Blocos mais altos que a tela precisam disparar
+   * mais tarde, senão a animação roda com o conteúdo ainda abaixo da dobra.
+   */
+  rootMargin?: string;
+  threshold?: number;
 }
 
 /**
@@ -17,7 +23,13 @@ interface RevealProps {
  */
 const SAFETY_TIMEOUT_MS = 1500;
 
-export function Reveal({ children, className, delayMs = 0 }: RevealProps) {
+export function Reveal({
+  children,
+  className,
+  delayMs = 0,
+  rootMargin = "0px 0px -10% 0px",
+  threshold = 0.1,
+}: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -44,19 +56,29 @@ export function Reveal({ children, className, delayMs = 0 }: RevealProps) {
           observer.disconnect();
         }
       },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0.1 }
+      { rootMargin, threshold }
     );
 
     observer.observe(el);
 
-    // Rede de segurança: se o observer não responder, mostra o conteúdo assim mesmo.
-    const fallback = window.setTimeout(() => setVisible(true), SAFETY_TIMEOUT_MS);
+    // Rede de segurança: só força a exibição se o elemento já estiver perto da
+    // tela (sinal de que o observer deveria ter disparado e não disparou). Sem
+    // essa checagem, o timeout revelava conteúdo fora da tela antes mesmo do
+    // usuário rolar até ele, "queimando" animações de entrada como a do
+    // pergaminho antes de serem vistas.
+    const fallback = window.setTimeout(() => {
+      const rect = el.getBoundingClientRect();
+      const nearViewport = rect.top < window.innerHeight && rect.bottom > 0;
+      if (nearViewport) {
+        setVisible(true);
+      }
+    }, SAFETY_TIMEOUT_MS);
 
     return () => {
       observer.disconnect();
       window.clearTimeout(fallback);
     };
-  }, []);
+  }, [rootMargin, threshold]);
 
   return (
     <div
