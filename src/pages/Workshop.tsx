@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { VideoPlayer } from "@/components/VideoPlayer";
@@ -12,7 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { mockWorkshop } from "@/data/mockData";
-import { cursoThumb, navaLockup } from "@/data/images";
+import { cursoThumb, videoCapa } from "@/data/images";
 import { cn } from "@/lib/utils";
 import {
   CheckCircle,
@@ -23,18 +23,36 @@ import {
   Compass,
 } from "lucide-react";
 
-interface WorkshopProps {
-  /**
-   * "paper" é a landing alternativa (/v2), montada sobre a marca em azul e
-   * dourado. O conteúdo é o mesmo: só a pele muda, via tokens do tema.
-   */
-  variant?: "dark" | "paper";
-}
-
-const Workshop = ({ variant = "dark" }: WorkshopProps) => {
+const Workshop = () => {
   const workshop = mockWorkshop;
-  const isPaper = variant === "paper";
   const [showStickyBar, setShowStickyBar] = useState(false);
+
+  /*
+   * A landing usa o tema claro; o resto do site (cursos, login, área do aluno)
+   * continua no escuro. O tema entra em <html> — e não num wrapper — para o
+   * fundo do body e o overscroll do celular também ficarem claros.
+   *
+   * No carregamento direto quem aplica a classe é o script do index.html, antes
+   * da primeira pintura. Aqui cobrimos a navegação interna (ex.: voltar de
+   * Cursos) e a limpeza ao sair — layout effect para entrar antes da pintura.
+   *
+   * Na navegação interna os elementos já nasceram com as cores do tema escuro;
+   * trocar a classe com eles montados fazia ~160 deles (tudo com
+   * transition-colors) animarem do escuro para o claro — uma piscada de tema.
+   * "theme-switching" desliga as transições só durante a troca, e o reflow
+   * forçado fixa as cores novas antes de elas voltarem.
+   */
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const setPaperTheme = (on: boolean) => {
+      root.classList.add("theme-switching");
+      root.classList.toggle("theme-paper", on);
+      void root.offsetHeight;
+      root.classList.remove("theme-switching");
+    };
+    setPaperTheme(true);
+    return () => setPaperTheme(false);
+  }, []);
   /*
    * Só vale no celular: lá o pergaminho chega lacrado e abre no toque. No
    * desktop o CSS ignora este estado e a abertura continua no scroll, então
@@ -51,7 +69,7 @@ const Workshop = ({ variant = "dark" }: WorkshopProps) => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header variant={variant} />
+      <Header variant="paper" />
 
       {/* 1. HERO / ABERTURA COM VÍDEO NO TOPO */}
       <section className="lp-section lp-surface pt-28 md:pt-32 pb-16 relative overflow-hidden">
@@ -63,24 +81,15 @@ const Workshop = ({ variant = "dark" }: WorkshopProps) => {
 
         <div className="container mx-auto px-4 max-w-5xl relative">
           <div className="flex flex-col gap-10 items-center text-center">
-            {/* Marca de abertura, só na v2: o fundo creme da arte funde com o
-                papel da página, então ela entra inteira, sem recorte. */}
-            {isPaper && (
-              <div className="hero-in w-full flex justify-center -mb-2">
-                <img
-                  src={navaLockup}
-                  alt="NAVA — Registro de Imóveis · Imersão em Incorporação Imobiliária"
-                  className="w-full max-w-[340px] sm:max-w-[400px] md:max-w-[460px] h-auto"
-                  loading="eager"
-                />
-              </div>
-            )}
-
             {/* VÍDEO NO TOPO DA PÁGINA */}
             <div className="w-full max-w-4xl hero-in" style={{ animationDelay: "80ms" }}>
               {workshop.videoUrl ? (
                 <div className="rounded-2xl overflow-hidden border border-gold/40 shadow-2xl bg-black">
-                  <VideoPlayer videoUrl={workshop.videoUrl} title={workshop.title} />
+                  <VideoPlayer
+                    videoUrl={workshop.videoUrl}
+                    title={workshop.title}
+                    poster={videoCapa}
+                  />
                 </div>
               ) : (
                 <div className="relative rounded-2xl overflow-hidden border border-gold/30 shadow-2xl group">
@@ -693,7 +702,7 @@ const Workshop = ({ variant = "dark" }: WorkshopProps) => {
         </div>
       </div>
 
-      <Footer variant={variant} />
+      <Footer variant="paper" />
 
       {/* Espaço para a barra fixa no mobile */}
       <div aria-hidden className="h-20 md:hidden" />

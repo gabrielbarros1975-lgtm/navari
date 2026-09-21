@@ -9,7 +9,6 @@ import Dashboard from "./pages/Dashboard";
 import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
 import Workshop from "./pages/Workshop";
-import WorkshopV2 from "./pages/WorkshopV2";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
@@ -50,8 +49,9 @@ const App = () => (
               {/* Assinatura descontinuada: a venda agora é por curso. */}
               <Route path="/plans" element={<Navigate to="/courses" replace />} />
               <Route path="/workshop" element={<Workshop />} />
-              {/* Versão alternativa em tema claro, para aprovação da marca nova */}
-              <Route path="/v2" element={<WorkshopV2 />} />
+              {/* A /v2 foi a prévia do tema claro enviada para aprovação; o tema
+                  virou o principal, então o link já compartilhado cai no início. */}
+              <Route path="/v2" element={<Navigate to="/" replace />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

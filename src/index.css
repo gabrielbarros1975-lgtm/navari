@@ -60,17 +60,19 @@
   }
 
   /*
-   * Tema "papel" da landing v2 (/v2), montado em cima da logo em azul+dourado
+   * Tema "papel" da landing (o resto do site segue no escuro do :root), montado
+   * em cima da logo em azul+dourado
    * sobre creme. As três cores vieram medidas do próprio arquivo da marca:
-   * creme #F1E8DF, marinho #102942 e dourado #A37C43 — assim a arte assenta na
-   * página sem precisar de recorte de fundo.
+   * creme #F1E8DF, marinho #102942 e dourado #A37C43 — assim o monograma do
+   * cabeçalho (um JPG com fundo creme) assenta na página sem recorte de fundo.
    *
    * Aplicado em <html> pela página, então tudo que usa token (Header, Footer,
    * Button, .lp-surface, .glass-card...) acompanha sem precisar de variante.
    */
   .theme-paper {
-    /* Medido na moldura externa do próprio arquivo da marca (#F2EAE3): é o que
-       faz a arte encostar no fundo sem deixar emenda visível. */
+    /* Medido na moldura externa do arquivo da marca (#F2EAE3), de onde o
+       monograma do cabeçalho foi recortado: é o que o faz encostar no fundo
+       sem deixar emenda visível. */
     --background: 28 37% 92%;
     --foreground: 210 61% 16%;
 
@@ -115,6 +117,14 @@
     --gold-foreground: 38 44% 96%;
     --gold-light: 36 58% 25%;
     --bronze: 32 22% 36%;
+  }
+
+  /* Ligada só durante a troca de tema (ver Workshop): sem ela, cada elemento
+     com transição de cor anima do tema antigo para o novo. */
+  .theme-switching *,
+  .theme-switching *::before,
+  .theme-switching *::after {
+    transition: none !important;
   }
 }
 

@@ -44,15 +44,8 @@ export function Header({ variant = "dark" }: HeaderProps) {
     navigate("/", { replace: true });
   };
 
-  /*
-   * Na /v2 o "início" é a própria /v2. Sem isso, qualquer clique no logo ou em
-   * "Início" jogava quem está avaliando a versão nova de volta para a antiga,
-   * no meio da comparação.
-   */
-  const homePath = location.pathname === "/v2" ? "/v2" : "/";
-
   const navLinks = [
-    { to: homePath, label: "Início" },
+    { to: "/", label: "Início" },
     { to: "/courses", label: "Cursos" },
   ];
 
@@ -82,7 +75,7 @@ export function Header({ variant = "dark" }: HeaderProps) {
 
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          <Link to={homePath} className="flex items-center gap-3 shrink-0 tap-scale">
+          <Link to="/" className="flex items-center gap-3 shrink-0 tap-scale">
             {/* No tema escuro, "screen" descarta o preto do PNG e mantém o dourado.
                 No tema papel a arte já vem com fundo creme, que se funde ao header. */}
             <img

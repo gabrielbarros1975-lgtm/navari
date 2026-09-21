@@ -25,13 +25,17 @@
     <meta name="twitter:card" content="summary_large_image" />
 
     <!--
-      A /v2 usa tema claro. Se esperar o React montar para aplicar a classe, a
-      primeira pintura sai no tema escuro e o usuário vê a página piscar de
-      navy para creme. Aqui o tema entra antes de qualquer pintura; o React
-      continua cuidando da navegação interna e da limpeza ao sair da rota.
+      A landing usa tema claro (o resto do site segue escuro). Se esperar o
+      React montar para aplicar a classe, a primeira pintura sai no tema escuro
+      e a página pisca de navy para creme. Aqui o tema entra antes de qualquer
+      pintura; o React cuida da navegação interna e da limpeza ao sair.
+
+      "/workshop" é um apelido do início, e "/v2" redireciona para ele — os três
+      precisam estar aqui, senão o redirecionamento piscaria antes de acontecer.
     -->
     <script>
-      if (window.location.pathname.replace(/\/$/, "") === "/v2") {
+      var landing = ["", "/workshop", "/v2"];
+      if (landing.indexOf(window.location.pathname.replace(/\/$/, "")) !== -1) {
         document.documentElement.classList.add("theme-paper");
       }
     </script>

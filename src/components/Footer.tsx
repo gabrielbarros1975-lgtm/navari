@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Phone, MapPin } from "lucide-react";
 import { navaMonograma, navaMonogramaPaper } from "@/data/images";
 import { cn } from "@/lib/utils";
@@ -10,17 +10,13 @@ interface FooterProps {
 
 export function Footer({ variant = "dark" }: FooterProps) {
   const isPaper = variant === "paper";
-  const { pathname } = useLocation();
-  /* Ver Header: na /v2 as âncoras precisam apontar para a própria /v2, senão
-     o rodapé devolve quem está avaliando para a versão antiga. */
-  const homePath = pathname === "/v2" ? "/v2" : "/";
 
   return (
     <footer className="border-t border-border/50 bg-card/50">
       <div className="container mx-auto px-4 py-8 md:py-10">
         <div className="flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-col items-center md:items-start gap-2">
-            <Link to={homePath} className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-3">
               <img
                 src={isPaper ? navaMonogramaPaper : navaMonograma}
                 alt=""
@@ -43,10 +39,10 @@ export function Footer({ variant = "dark" }: FooterProps) {
             <Link to="/courses" className="py-1 hover:text-primary active:text-primary transition-colors">
               Cursos
             </Link>
-            <a href={`${homePath}#inscricao`} className="py-1 hover:text-primary active:text-primary transition-colors">
+            <a href="/#inscricao" className="py-1 hover:text-primary active:text-primary transition-colors">
               Imersão
             </a>
-            <a href={`${homePath}#faq`} className="py-1 hover:text-primary active:text-primary transition-colors">
+            <a href="/#faq" className="py-1 hover:text-primary active:text-primary transition-colors">
               FAQ
             </a>
             <a
