@@ -53,13 +53,13 @@ export async function POST(request: Request) {
       // Volta no webhook e na URL de retorno para sabermos qual ingresso foi pago.
       external_reference: product.id,
       description: product.title,
+      // A API rejeita campos extras aqui (ex.: unit_measure, total_amount por
+      // item) mesmo que a documentação os mostre no exemplo — só isso é aceito.
       items: [
         {
           title: product.title,
           quantity: 1,
-          unit_measure: "unit",
           unit_price: amount,
-          total_amount: amount,
         },
       ],
       config: {
