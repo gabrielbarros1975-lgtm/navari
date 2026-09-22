@@ -122,6 +122,18 @@ export const mockWorkshop: Workshop = {
       highlight: true,
       ctaLabel: "Quero a versão completa",
     },
+    // TODO: remover assim que o teste de produção (checkout → webhook) for validado.
+    {
+      id: "teste-050",
+      name: "TESTE DE PAGAMENTO",
+      batchLabel: "Uso interno",
+      price: 0.5,
+      installmentValue: 0.5,
+      installments: 1,
+      includes: ["Apenas para validar o pagamento em produção. Não é um ingresso."],
+      checkoutUrl: null,
+      ctaLabel: "Testar pagamento (R$0,50)",
+    },
   ],
   faq: [
     {
