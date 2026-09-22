@@ -4,6 +4,25 @@ import { cn } from "@/lib/utils";
 
 const VIMEO_ORIGIN = "https://player.vimeo.com";
 
+/*
+ * Quanto antes do fim o player volta para a capa. O timeupdate chega a cada
+ * ~250ms, então uma janela de 0,35s sempre recebe pelo menos um aviso.
+ */
+const END_MARGIN_S = 0.35;
+
+/*
+ * Formato de objeto, o mesmo que o SDK oficial do Vimeo usa. A inscrição só
+ * vale depois do "ready" do player, por isso é chamada tanto nele quanto no
+ * onLoad do iframe (se o "ready" chegar antes, a do onLoad garante).
+ */
+function subscribeToEnd(iframe: HTMLIFrameElement | null) {
+  const win = iframe?.contentWindow;
+  if (!win) return;
+  for (const value of ["timeupdate", "ended"]) {
+    win.postMessage({ method: "addEventListener", value }, VIMEO_ORIGIN);
+  }
+}
+
 interface VideoPlayerProps {
   videoUrl: string | null;
   title: string;
@@ -23,9 +42,11 @@ export function VideoPlayer({ videoUrl, title, poster }: VideoPlayerProps) {
   /*
    * Ao terminar, o Vimeo cobre o vídeo com a tela final da conta que publicou
    * ("Mais de ...", botão de seguir) — que não tem nada a ver com esta página.
-   * Aqui a gente escuta o fim pela API de postMessage do player e volta ao
-   * estado inicial: o src perde o autoplay, o iframe recarrega no primeiro
-   * quadro e o nosso botão de play reaparece.
+   *
+   * Voltar ao estado inicial no "ended" não basta: ele só chega depois que o
+   * vídeo acabou, quando a tela final já foi desenhada. Por isso a volta
+   * acontece pelo timeupdate, um instante antes do fim, e a tela final nunca
+   * aparece. O "ended" fica como rede de segurança.
    *
    * Precisa vir antes de qualquer return condicional: hook não pode ficar
    * atrás de early return.
@@ -34,19 +55,23 @@ export function VideoPlayer({ videoUrl, title, poster }: VideoPlayerProps) {
     const onMessage = (event: MessageEvent) => {
       if (event.origin !== VIMEO_ORIGIN) return;
 
-      let data: { event?: string };
+      let data: {
+        event?: string;
+        data?: { seconds?: number; duration?: number };
+      };
       try {
         data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
       } catch {
         return;
       }
 
-      // O player só aceita inscrição em eventos depois de avisar que está pronto.
-      if (data?.event === "ready") {
-        iframeRef.current?.contentWindow?.postMessage(
-          JSON.stringify({ method: "addEventListener", value: "ended" }),
-          VIMEO_ORIGIN
-        );
+      if (data?.event === "ready") subscribeToEnd(iframeRef.current);
+
+      if (data?.event === "timeupdate") {
+        const { seconds, duration } = data.data ?? {};
+        if (seconds != null && duration && duration - seconds <= END_MARGIN_S) {
+          setIsPlaying(false);
+        }
       }
 
       if (data?.event === "ended") setIsPlaying(false);
@@ -159,12 +184,7 @@ export function VideoPlayer({ videoUrl, title, poster }: VideoPlayerProps) {
           allowFullScreen
           onLoad={() => {
             setIsLoading(false);
-            // Rede de segurança: se o "ready" tiver chegado antes do listener,
-            // a inscrição no "ended" se perderia.
-            iframeRef.current?.contentWindow?.postMessage(
-              JSON.stringify({ method: "addEventListener", value: "ended" }),
-              VIMEO_ORIGIN
-            );
+            subscribeToEnd(iframeRef.current);
           }}
         />
       )}

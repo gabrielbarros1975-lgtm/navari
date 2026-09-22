@@ -1,4 +1,5 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { usePaperTheme } from "@/hooks/use-paper-theme";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { VideoPlayer } from "@/components/VideoPlayer";
@@ -27,32 +28,7 @@ const Workshop = () => {
   const workshop = mockWorkshop;
   const [showStickyBar, setShowStickyBar] = useState(false);
 
-  /*
-   * A landing usa o tema claro; o resto do site (cursos, login, área do aluno)
-   * continua no escuro. O tema entra em <html> — e não num wrapper — para o
-   * fundo do body e o overscroll do celular também ficarem claros.
-   *
-   * No carregamento direto quem aplica a classe é o script do index.html, antes
-   * da primeira pintura. Aqui cobrimos a navegação interna (ex.: voltar de
-   * Cursos) e a limpeza ao sair — layout effect para entrar antes da pintura.
-   *
-   * Na navegação interna os elementos já nasceram com as cores do tema escuro;
-   * trocar a classe com eles montados fazia ~160 deles (tudo com
-   * transition-colors) animarem do escuro para o claro — uma piscada de tema.
-   * "theme-switching" desliga as transições só durante a troca, e o reflow
-   * forçado fixa as cores novas antes de elas voltarem.
-   */
-  useLayoutEffect(() => {
-    const root = document.documentElement;
-    const setPaperTheme = (on: boolean) => {
-      root.classList.add("theme-switching");
-      root.classList.toggle("theme-paper", on);
-      void root.offsetHeight;
-      root.classList.remove("theme-switching");
-    };
-    setPaperTheme(true);
-    return () => setPaperTheme(false);
-  }, []);
+  usePaperTheme();
   /*
    * Só vale no celular: lá o pergaminho chega lacrado e abre no toque. No
    * desktop o CSS ignora este estado e a abertura continua no scroll, então

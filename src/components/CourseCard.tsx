@@ -47,7 +47,9 @@ export function CourseCard({ course }: CourseCardProps) {
         ) : (
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div className="w-14 h-14 rounded-full bg-background/15 backdrop-blur-sm flex items-center justify-center">
-              <PlayCircle className="w-7 h-7 text-white" />
+              {/* Token, não branco fixo: no tema claro a capa é creme e o
+                  ícone branco sumiria. */}
+              <PlayCircle className="w-7 h-7 text-foreground" />
             </div>
           </div>
         )}
