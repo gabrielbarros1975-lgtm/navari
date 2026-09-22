@@ -1,4 +1,7 @@
-import { PRODUCTS } from "./_products";
+// A extensão .js é obrigatória aqui: o package.json tem "type": "module", e o
+// runtime Node da Vercel exige a extensão completa em imports relativos sob
+// ESM (o TypeScript não acusa isso em dev, só quebra em produção).
+import { PRODUCTS } from "./_products.js";
 
 /**
  * Cria uma order do Checkout Pro (API de Orders — o fluxo recomendado hoje
