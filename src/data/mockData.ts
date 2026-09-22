@@ -9,7 +9,8 @@ export const mockNextLive = {
   joinUrl: "https://meet.google.com/",
 };
 
-// TODO: preencher data, preço e links de checkout do Mercado Pago antes de divulgar.
+// Preços também em api/_products.ts (é de lá que o checkout cobra); o teste
+// src/test/checkout-products.test.ts garante que os dois batem.
 export const mockWorkshop: Workshop = {
   id: "workshop-incorporacao-1",
   title: "Incorporação Imobiliária: da prenotação ao registro",
@@ -91,33 +92,35 @@ export const mockWorkshop: Workshop = {
     {
       id: "ao-vivo",
       name: "AO VIVO",
+      batchLabel: "1º Lote",
       originalPrice: 397,
       price: 296.40,
       installmentValue: 24.70,
       installments: 12,
       includes: [
         "Participação na Imersão online e ao vivo",
-        "Mais de 8 horas de conteúdo",
-        "Interação durante a Imersão",
-        "Caderno de Qualificação da Incorporação Imobiliária",
+        "Interação durante toda a formação",
+        "Caderno de Qualificação para acompanhamento da aula",
         "Certificado digital de participação",
       ],
       checkoutUrl: null,
     },
     {
       id: "ao-vivo-mais-plataforma",
-      name: "AO VIVO + gravação da imersão",
+      name: "AO VIVO + GRAVAÇÃO DA IMERSÃO",
+      batchLabel: "1º Lote",
       originalPrice: 450,
       price: 357.60,
       installmentValue: 29.80,
       installments: 12,
       includes: [
-        "Tudo o que está incluído na modalidade Ao Vivo",
-        "Acesso à gravação da Imersão por 1 ano",
-        "E-book “A Incorporação Imobiliária no Registro de Imóveis: um guia prático de qualificação registral”, em primeira mão",
+        "Tudo que está incluído na modalidade Ao Vivo",
+        "Acesso à gravação da Imersão pelo período de 1 ano",
+        "Acesso, em primeira mão, ao livro digital autoral “A Incorporação Imobiliária no Registro de Imóveis: um guia prático de qualificação registral”",
       ],
       checkoutUrl: null,
       highlight: true,
+      ctaLabel: "Quero a versão completa",
     },
   ],
   faq: [

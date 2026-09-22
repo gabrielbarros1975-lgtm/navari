@@ -6,87 +6,25 @@
 
 @layer base {
   /*
-   * Paleta oficial, extraída da marca NAVA.
-   * Proporção pretendida: ~70% navy, ~20% tons claros, ~10% dourado.
-   * O dourado é champagne/bronze (#BDA276), não amarelo saturado.
+   * Paleta oficial: tema "papel", montado sobre a logo em azul+dourado sobre
+   * creme. As três cores vieram medidas do próprio arquivo da marca — creme
+   * #F1E8DF, marinho #102942 e dourado #A37C43 —, assim o monograma do
+   * cabeçalho (um JPG com fundo creme) assenta na página sem recorte de fundo.
    */
   :root {
-    /* #0D1620 navy profundo */
-    --background: 212 42% 9%;
-    /* #F5F2EC branco quente */
-    --foreground: 40 31% 94%;
-
-    /* #151F2B navy secundário */
-    --card: 213 34% 13%;
-    --card-foreground: 40 31% 94%;
-
-    --popover: 213 34% 13%;
-    --popover-foreground: 40 31% 94%;
-
-    /* #BDA276 dourado principal, reservado a botões e detalhes */
-    --primary: 37 35% 60%;
-    --primary-foreground: 212 42% 9%;
-
-    /* #333E4B azul ardósia */
-    --secondary: 213 19% 25%;
-    --secondary-foreground: 40 31% 94%;
-
-    --muted: 213 19% 25%;
-    /* #B8BEC5 cinza azulado */
-    --muted-foreground: 212 10% 75%;
-
-    --accent: 213 19% 25%;
-    --accent-foreground: 40 31% 94%;
-
-    --destructive: 0 70% 55%;
-    --destructive-foreground: 40 31% 94%;
-
-    --border: 213 19% 25%;
-    --input: 213 19% 25%;
-    --ring: 37 35% 60%;
-
-    --radius: 0.75rem;
-
-    /* Sombras precisam ser mais densas sobre fundo escuro */
-    --shadow-card: 0 1px 2px hsl(212 42% 4% / 0.4), 0 2px 8px hsl(212 42% 4% / 0.35);
-    --shadow-card-hover: 0 4px 12px hsl(212 42% 4% / 0.45), 0 8px 28px hsl(212 42% 4% / 0.4);
-
-    /* #BDA276 e #E3CFAD: dourado e sua variação clara para hover */
-    --gold: 37 35% 60%;
-    --gold-foreground: 212 42% 9%;
-    --gold-light: 38 49% 78%;
-    /* #7B6D5A bronze: só bordas e detalhes, contraste insuficiente para texto */
-    --bronze: 35 15% 42%;
-  }
-
-  /*
-   * Tema "papel" da landing (o resto do site segue no escuro do :root), montado
-   * em cima da logo em azul+dourado
-   * sobre creme. As três cores vieram medidas do próprio arquivo da marca:
-   * creme #F1E8DF, marinho #102942 e dourado #A37C43 — assim o monograma do
-   * cabeçalho (um JPG com fundo creme) assenta na página sem recorte de fundo.
-   *
-   * Aplicado em <html> pela página, então tudo que usa token (Header, Footer,
-   * Button, .lp-surface, .glass-card...) acompanha sem precisar de variante.
-   */
-  .theme-paper {
     /* Medido na moldura externa do arquivo da marca (#F2EAE3), de onde o
        monograma do cabeçalho foi recortado: é o que o faz encostar no fundo
        sem deixar emenda visível. */
     --background: 28 37% 92%;
     --foreground: 210 61% 16%;
 
-    /* Papel mais branco que o fundo: é assim que uma seção "sobe" no tema claro */
+    /* Papel mais branco que o fundo: é assim que uma seção "sobe" */
     --card: 38 44% 97%;
     --card-foreground: 210 61% 16%;
 
     --popover: 38 44% 97%;
     --popover-foreground: 210 61% 16%;
 
-    /*
-     * No tema escuro o hover clareia; aqui ele precisa ESCURECER, senão o texto
-     * creme do botão fica ilegível sobre dourado claro.
-     */
     --primary: 36 50% 32%;
     --primary-foreground: 38 44% 96%;
 
@@ -106,6 +44,8 @@
     --input: 32 26% 79%;
     --ring: 36 50% 32%;
 
+    --radius: 0.75rem;
+
     /* Sobre papel a sombra é discreta e quente, não um poço preto */
     --shadow-card: 0 1px 2px hsl(30 30% 35% / 0.10), 0 2px 8px hsl(30 30% 35% / 0.08);
     --shadow-card-hover: 0 4px 12px hsl(30 30% 35% / 0.14), 0 10px 28px hsl(30 30% 35% / 0.12);
@@ -115,16 +55,13 @@
        reprovava; sobre papel o dourado precisa ser tinta, não brilho. */
     --gold: 36 50% 32%;
     --gold-foreground: 38 44% 96%;
+    /*
+     * Apesar do nome, é o tom do hover — e é MAIS ESCURO que o dourado, senão o
+     * texto creme dos botões fica ilegível. Não serve como brilho: para reflexo
+     * de luz use um creme claro explícito (ver .shimmer-sweep).
+     */
     --gold-light: 36 58% 25%;
     --bronze: 32 22% 36%;
-  }
-
-  /* Ligada só durante a troca de tema (ver Workshop): sem ela, cada elemento
-     com transição de cor anima do tema antigo para o novo. */
-  .theme-switching *,
-  .theme-switching *::before,
-  .theme-switching *::after {
-    transition: none !important;
   }
 }
 
@@ -191,10 +128,10 @@
 
   /*
    * Seção com foto de fundo. A imagem entra por style inline (Vite resolve o
-   * caminho) e o véu escuro garante contraste do texto por cima.
+   * caminho) e o véu na cor do fundo garante contraste do texto por cima.
    */
   .lp-surface-photo {
-    /* navy de segurança: se a foto não carregar, a seção não fica transparente */
+    /* cor de segurança: se a foto não carregar, a seção não fica transparente */
     background-color: hsl(var(--background));
     background-size: cover;
     background-position: 70% center;
@@ -207,9 +144,10 @@
     }
   }
 
-  /* Placa de vidro sobre a foto, para o bloco de texto respirar */
+  /* Placa de vidro sobre a foto, para o bloco de texto respirar. Opaca o
+     bastante para o texto marinho não disputar com a imagem. */
   .lp-photo-card {
-    background-color: hsl(var(--background) / 0.62);
+    background-color: hsl(38 44% 97% / 0.86);
     backdrop-filter: blur(2px);
     border: 1px solid hsl(var(--gold) / 0.22);
   }
@@ -298,11 +236,13 @@
     content: "";
     position: absolute;
     inset: 0;
+    /* Creme explícito, não --gold-light: no tema claro aquele token é o tom
+       escuro do hover, e o "brilho" passava pelo botão como uma mancha. */
     background: linear-gradient(
       100deg,
       transparent 30%,
-      hsl(var(--gold-light) / 0.55) 48%,
-      hsl(var(--gold-light) / 0.55) 52%,
+      hsl(40 70% 96% / 0.4) 48%,
+      hsl(40 70% 96% / 0.4) 52%,
       transparent 70%
     );
     background-size: 250% 100%;
@@ -330,7 +270,8 @@
     border-radius: 9999px;
     filter: blur(60px);
     pointer-events: none;
-    background: radial-gradient(circle, hsl(var(--gold) / 0.35), transparent 70%);
+    /* Opacidade baixa: sobre papel, um brilho mais forte vira mancha */
+    background: radial-gradient(circle, hsl(var(--gold) / 0.13), transparent 70%);
     animation: float-orb 14s ease-in-out infinite;
     will-change: transform;
   }
@@ -338,7 +279,9 @@
   /*
    * "O que você vai aprender": tratamento de pergaminho, inspirado no mockup
    * do cliente. Tudo continua HTML/texto real (acessibilidade, SEO, reveal
-   * por item) — só a pele muda para papel envelhecido sobre o fundo navy.
+   * por item) — só a pele muda para papel envelhecido. Como o fundo da página
+   * também é creme, a borda é mais marcada e o papel levemente mais quente,
+   * senão o pergaminho some no fundo.
    */
   .parchment-card {
     --ink: 27 35% 18%;
@@ -368,11 +311,11 @@
       radial-gradient(circle at 90% 90%, hsl(36 38% 78% / 0.45) 0%, transparent 32%),
       /* base do pergaminho */
       radial-gradient(ellipse 90% 75% at 50% 42%, hsl(42 52% 94%) 0%, hsl(35 36% 85%) 100%);
-    border: 1px solid hsl(30 25% 66% / 0.6);
+    border: 1px solid hsl(32 26% 66% / 0.8);
     box-shadow:
-      inset 0 1px 0 hsl(40 70% 100% / 0.55),
-      inset 0 -36px 70px -40px hsl(28 32% 32% / 0.4),
-      0 30px 60px -22px hsl(212 42% 4% / 0.65);
+      inset 0 1px 0 hsl(40 70% 100% / 0.6),
+      inset 0 -36px 70px -40px hsl(28 32% 32% / 0.28),
+      0 18px 40px -20px hsl(30 30% 30% / 0.3);
   }
 
   /* Perspectiva para o leve giro 3D do pergaminho ao se desenrolar */
@@ -488,8 +431,8 @@
 
   /*
    * Plaquinha "Programa Completo", encaixada na borda superior do pergaminho.
-   * O fundo é navy fixo nos dois temas, então o texto e a borda também são
-   * fixos: com o token, no tema papel o dourado escuro caía sobre o navy e a
+   * O fundo é navy fixo, então o texto e a borda também são fixos: com o token,
+   * o dourado escuro (feito para texto sobre creme) caía sobre o navy e a
    * plaquinha ficava ilegível.
    */
   .parchment-badge {
@@ -563,23 +506,6 @@
 
   .parchment-rod-right {
     right: -6px;
-  }
-
-  /*
-   * Ajustes do tema papel para o que foi desenhado supondo fundo escuro.
-   * Os tokens resolvem cor; o que não dá para resolver por token fica aqui.
-   */
-
-  /* Orbes de brilho contam com fundo escuro para sumir nas bordas; sobre papel
-     viram manchas. Reduz a opacidade em vez de remover, para não achatar o hero. */
-  .theme-paper .ambient-orb {
-    background: radial-gradient(circle, hsl(var(--gold) / 0.13), transparent 70%);
-  }
-
-  /* Véu sobre a foto: no claro precisa ser mais opaco, senão o texto marinho
-     disputa com a imagem. */
-  .theme-paper .lp-photo-card {
-    background-color: hsl(38 44% 97% / 0.86);
   }
 
   /*
@@ -780,16 +706,6 @@
     .parchment-collapse.is-open .parchment-unroll::before {
       animation: parchment-shine 1100ms ease-out 550ms both;
     }
-  }
-
-  /* O pergaminho perde o efeito se o fundo da página for do mesmo creme.
-     Sobre papel ele fica levemente mais quente e com borda mais marcada. */
-  .theme-paper .parchment-card {
-    border-color: hsl(32 26% 66% / 0.8);
-    box-shadow:
-      inset 0 1px 0 hsl(40 70% 100% / 0.6),
-      inset 0 -36px 70px -40px hsl(28 32% 32% / 0.28),
-      0 18px 40px -20px hsl(30 30% 30% / 0.3);
   }
 }
 

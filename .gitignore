@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Segredos locais (Access Token do Mercado Pago etc.). Nunca commitar.
+.env
+.env.*
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

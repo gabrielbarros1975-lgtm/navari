@@ -9,14 +9,10 @@ export const cursoThumb = "/curso-thumb.jpg";
 export const videoCapa = "/video-capa.jpg";
 
 /**
- * Só o monograma, para o cabeçalho e o rodapé: em 40px de altura a palavra
- * "NAVA" da marca completa ficaria ilegível, e o nome já aparece ao lado.
+ * Só o monograma, em azul+dourado sobre creme, para o cabeçalho e o rodapé: em
+ * 40px de altura a palavra "NAVA" da marca completa ficaria ilegível, e o nome
+ * já aparece ao lado. O fundo creme faz parte do JPG e é o mesmo creme do site,
+ * por isso ele assenta sem recorte — sobre um fundo de outra cor apareceria
+ * como um retângulo.
  */
-export const navaMonograma = "/nava-monograma.png";
-
-/**
- * Monograma da marca em azul+dourado sobre creme, para o cabeçalho e o rodapé
- * da landing (tema claro). O fundo creme faz parte do JPG, por isso só funciona
- * sobre o tema papel — sobre o navy apareceria como um retângulo claro.
- */
-export const navaMonogramaPaper = "/nava-monograma-paper.jpg";
+export const navaMonograma = "/nava-monograma-paper.jpg";

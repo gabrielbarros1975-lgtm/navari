@@ -51,6 +51,8 @@ export interface Lesson {
 export interface WorkshopTier {
   id: string;
   name: string;
+  /** Selo de lote exibido acima do nome (ex.: "1º Lote"), para sinalizar reajuste futuro. */
+  batchLabel?: string;
   /** Valor original em reais (riscado) */
   originalPrice?: number;
   /** Valor total promocional à vista em reais. */
@@ -62,6 +64,8 @@ export interface WorkshopTier {
   includes: string[];
   checkoutUrl: string | null;
   highlight?: boolean;
+  /** Texto do botão. Default: "Garantir minha vaga". */
+  ctaLabel?: string;
 }
 
 export interface WorkshopAgendaBlock {

@@ -10,6 +10,7 @@ import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
 import Workshop from "./pages/Workshop";
 import Login from "./pages/Login";
+import PaymentResult from "./pages/PaymentResult";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,8 @@ const App = () => (
               {/* A /v2 foi a prévia do tema claro enviada para aprovação; o tema
                   virou o principal, então o link já compartilhado cai no início. */}
               <Route path="/v2" element={<Navigate to="/" replace />} />
+              {/* Retorno do Checkout Pro do Mercado Pago (back_urls). */}
+              <Route path="/pagamento" element={<PaymentResult />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

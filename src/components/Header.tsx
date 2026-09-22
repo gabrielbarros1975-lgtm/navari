@@ -3,20 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/auth/auth-context";
-import { navaMonograma, navaMonogramaPaper } from "@/data/images";
+import { navaMonograma } from "@/data/images";
 import { cn } from "@/lib/utils";
 
-interface HeaderProps {
-  /**
-   * "paper" troca a marca pela versão em azul sobre creme. O monograma dourado
-   * padrão depende de mix-blend-screen para descartar o fundo preto do PNG, o
-   * que sobre fundo claro apagaria a marca.
-   */
-  variant?: "dark" | "paper";
-}
-
-export function Header({ variant = "dark" }: HeaderProps) {
-  const isPaper = variant === "paper";
+export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -76,16 +66,12 @@ export function Header({ variant = "dark" }: HeaderProps) {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-3 shrink-0 tap-scale">
-            {/* No tema escuro, "screen" descarta o preto do PNG e mantém o dourado.
-                No tema papel a arte já vem com fundo creme, que se funde ao header. */}
+            {/* A arte vem com fundo creme, que se funde ao fundo do cabeçalho */}
             <img
-              src={isPaper ? navaMonogramaPaper : navaMonograma}
+              src={navaMonograma}
               alt=""
               aria-hidden
-              className={cn(
-                "h-10 w-auto",
-                isPaper ? "rounded-md" : "mix-blend-screen"
-              )}
+              className="h-10 w-auto rounded-md"
             />
             <div className="flex flex-col leading-tight">
               <span className="font-display font-bold text-base sm:text-lg text-foreground whitespace-nowrap">

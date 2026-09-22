@@ -1,16 +1,8 @@
 import { Link } from "react-router-dom";
 import { Phone, MapPin } from "lucide-react";
-import { navaMonograma, navaMonogramaPaper } from "@/data/images";
-import { cn } from "@/lib/utils";
+import { navaMonograma } from "@/data/images";
 
-interface FooterProps {
-  /** Ver Header: o monograma dourado depende de fundo escuro. */
-  variant?: "dark" | "paper";
-}
-
-export function Footer({ variant = "dark" }: FooterProps) {
-  const isPaper = variant === "paper";
-
+export function Footer() {
   return (
     <footer className="border-t border-border/50 bg-card/50">
       <div className="container mx-auto px-4 py-8 md:py-10">
@@ -18,13 +10,10 @@ export function Footer({ variant = "dark" }: FooterProps) {
           <div className="flex flex-col items-center md:items-start gap-2">
             <Link to="/" className="flex items-center gap-3">
               <img
-                src={isPaper ? navaMonogramaPaper : navaMonograma}
+                src={navaMonograma}
                 alt=""
                 aria-hidden
-                className={cn(
-                  "h-9 w-auto",
-                  isPaper ? "rounded-md" : "mix-blend-screen"
-                )}
+                className="h-9 w-auto rounded-md"
               />
               <span className="font-display font-bold text-lg text-foreground">
                 Dr. Wyllian Nava

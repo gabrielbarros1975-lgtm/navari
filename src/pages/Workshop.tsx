@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { usePaperTheme } from "@/hooks/use-paper-theme";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { VideoPlayer } from "@/components/VideoPlayer";
@@ -22,13 +21,36 @@ import {
   Play,
   Instagram,
   Compass,
+  Loader2,
 } from "lucide-react";
+import { toast } from "sonner";
 
 const Workshop = () => {
   const workshop = mockWorkshop;
   const [showStickyBar, setShowStickyBar] = useState(false);
+  /** Ingresso cujo checkout está sendo criado; trava os botões contra clique duplo. */
+  const [checkoutTier, setCheckoutTier] = useState<string | null>(null);
 
-  usePaperTheme();
+  const startCheckout = async (tierId: string) => {
+    setCheckoutTier(tierId);
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tierId }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.url) throw new Error(data.error);
+      window.location.href = data.url;
+    } catch (error) {
+      toast.error(
+        (error instanceof Error && error.message) ||
+          "Não foi possível abrir o pagamento. Tente novamente em instantes.",
+      );
+      setCheckoutTier(null);
+    }
+  };
+
   /*
    * Só vale no celular: lá o pergaminho chega lacrado e abre no toque. No
    * desktop o CSS ignora este estado e a abertura continua no scroll, então
@@ -45,7 +67,7 @@ const Workshop = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header variant="paper" />
+      <Header />
 
       {/* 1. HERO / ABERTURA COM VÍDEO NO TOPO */}
       <section className="lp-section lp-surface pt-28 md:pt-32 pb-16 relative overflow-hidden">
@@ -141,8 +163,8 @@ const Workshop = () => {
         id="por-que"
         className="lp-section lp-surface-photo relative py-20"
         style={{
-          // Véu pelo token, não pelo navy fixo: no tema papel a seção inteira
-          // continuaria escura e destoaria do resto da página.
+          // Véu na cor do fundo (token), não um navy fixo: senão a seção
+          // inteira ficaria escura e destoaria do resto da página.
           backgroundImage: `linear-gradient(hsl(var(--background) / 0.92), hsl(var(--background) / 0.92)), url(/wyllian-apresentando.jpg)`,
         }}
       >
@@ -572,6 +594,11 @@ const Workshop = () => {
                   )}
 
                   <div>
+                    {tier.batchLabel && (
+                      <span className="inline-block mb-2 text-xs font-semibold uppercase tracking-[0.15em] text-gold bg-gold/10 border border-gold/30 rounded-full px-3 py-1">
+                        {tier.batchLabel}
+                      </span>
+                    )}
                     <h3 className="font-display text-2xl font-bold text-foreground">
                       {tier.name}
                     </h3>
@@ -615,9 +642,20 @@ const Workshop = () => {
                       variant={tier.highlight ? "hero" : "outline"}
                       size="xl"
                       className="w-full gap-2 font-bold"
+                      disabled={checkoutTier !== null}
+                      onClick={() => startCheckout(tier.id)}
                     >
-                      Garantir minha vaga
-                      <ChevronRight className="w-5 h-5" />
+                      {checkoutTier === tier.id ? (
+                        <>
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                          Abrindo pagamento…
+                        </>
+                      ) : (
+                        <>
+                          {tier.ctaLabel ?? "Garantir minha vaga"}
+                          <ChevronRight className="w-5 h-5" />
+                        </>
+                      )}
                     </Button>
                   </div>
                 </div>
@@ -678,7 +716,7 @@ const Workshop = () => {
         </div>
       </div>
 
-      <Footer variant="paper" />
+      <Footer />
 
       {/* Espaço para a barra fixa no mobile */}
       <div aria-hidden className="h-20 md:hidden" />

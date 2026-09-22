@@ -6,10 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, BookOpen, ArrowRight } from "lucide-react";
 import { useMemo, useState } from "react";
-import { usePaperTheme } from "@/hooks/use-paper-theme";
 
 const Courses = () => {
-  usePaperTheme();
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("Todos");
 
@@ -30,7 +28,7 @@ const Courses = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header variant="paper" />
+      <Header />
 
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4">
@@ -153,7 +151,7 @@ const Courses = () => {
         </div>
       </main>
 
-      <Footer variant="paper" />
+      <Footer />
     </div>
   );
 };
