@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { sendAccessEmail } from "./_email.js";
+import { getSupabase } from "./_supabase.js";
 
 /**
  * Recebe as notificações da API de Orders (evento "Order (Mercado Pago)",
@@ -56,10 +57,44 @@ export async function POST(request: Request) {
     lastPaymentStatusDetail: lastPayment?.status_detail,
   });
 
+  // Registra/atualiza a order no Supabase: dá um histórico de vendas fora do
+  // painel da Mercado Pago e evita mandar o e-mail de acesso duas vezes se
+  // esta notificação for reenviada (o Resend só protege contra isso por 24h).
+  const supabase = getSupabase();
+  let alreadyEmailed = false;
+
+  if (supabase) {
+    const { data: existing } = await supabase
+      .from("orders")
+      .select("email_sent_at")
+      .eq("id", order.id)
+      .maybeSingle();
+    alreadyEmailed = Boolean(existing?.email_sent_at);
+
+    const { error } = await supabase.from("orders").upsert({
+      id: order.id,
+      tier_id: order.external_reference,
+      email: order.payer?.email,
+      status: order.status,
+      amount: order.total_paid_amount,
+      updated_at: new Date().toISOString(),
+    });
+    if (error) console.error("Falha ao salvar order no Supabase:", error.message);
+  } else {
+    console.warn("SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY não configurados: sem histórico de vendas.");
+  }
+
   // Com o pagamento confirmado, manda o e-mail de acesso (link do Meet etc.).
   // A criação de conta na plataforma (caso um dia exista) ainda é manual.
-  if (order.status === "processed") {
+  if (order.status === "processed" && !alreadyEmailed) {
     await sendAccessEmail(order);
+    if (supabase) {
+      const { error } = await supabase
+        .from("orders")
+        .update({ email_sent_at: new Date().toISOString() })
+        .eq("id", order.id);
+      if (error) console.error("Falha ao marcar e-mail como enviado:", error.message);
+    }
   }
 
   return new Response(null, { status: 200 });
