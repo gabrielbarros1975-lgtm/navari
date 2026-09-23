@@ -122,19 +122,51 @@ export const mockWorkshop: Workshop = {
       highlight: true,
       ctaLabel: "Quero a versão completa",
     },
-    // TODO: remover assim que o teste de produção (checkout → webhook) for validado.
-    {
-      id: "teste-050",
-      name: "TESTE DE PAGAMENTO",
-      batchLabel: "Uso interno",
-      price: 0.5,
-      installmentValue: 0.5,
-      installments: 1,
-      includes: ["Apenas para validar o pagamento em produção. Não é um ingresso."],
-      checkoutUrl: null,
-      ctaLabel: "Testar pagamento (R$0,50)",
-    },
   ],
+  caseLab: {
+    eyebrow: "Continuidade e aprofundamento",
+    title: "Laboratório de Casos",
+    subtitle: "Incorporação Imobiliária",
+    intro: [
+      "Para quem deseja avançar ainda mais na prática, o Laboratório de Casos será uma experiência de aprofundamento destinada a profissionais que desejam desenvolver o raciocínio registral a partir da análise e discussão de situações práticas reais relacionadas à incorporação imobiliária.",
+      "Durante 90 dias, um grupo reduzido de participantes terá acesso a um ambiente reservado de acompanhamento e discussão técnica, com espaço para apresentação de dúvidas, compartilhamento de situações práticas e aprofundamento dos conteúdos relacionados à formação.",
+    ],
+    featuresTitle: "O que você encontrará no Laboratório",
+    featuresSubtitle:
+      "Um período dedicado à continuidade e ao amadurecimento do conhecimento construído na formação.",
+    features: [
+      {
+        title: "Grupo restrito",
+        description:
+          "Número limitado de participantes para preservar a qualidade das discussões e do acompanhamento.",
+      },
+      {
+        title: "Discussão de situações práticas",
+        description:
+          "Análise de questões e situações relacionadas à incorporação imobiliária.",
+      },
+      {
+        title: "Acompanhamento coletivo",
+        description:
+          "Um ambiente reservado para dúvidas, trocas e aprofundamento técnico ao longo da experiência.",
+      },
+      {
+        title: "Encontros online periódicos",
+        description:
+          "Momentos de aprofundamento e discussão conduzidos por Dr. Wyllian Nava.",
+      },
+    ],
+    exclusiveTitle: "Condição exclusiva para participantes da Imersão",
+    exclusiveParagraphs: [
+      "Os participantes da Imersão em Incorporação Imobiliária: da prenotação ao registro terão acesso a uma condição exclusiva para ingresso na turma do Laboratório de Casos.",
+      "Após a abertura das inscrições, eventuais vagas remanescentes também poderão ser disponibilizadas a outros profissionais interessados, pelo valor regular, até o preenchimento da turma.",
+    ],
+    scarcityLabel: "Vagas restritas.",
+    statusNote: "A abertura das inscrições para a turma estará disponível em breve.",
+    ctaLabel: "Inscrições em breve",
+    disclaimer:
+      "Nota sobre a dinâmica do Laboratório: as discussões terão caráter exclusivamente técnico e educacional, voltadas ao aprofundamento da prática registral. Para preservar a imparcialidade e a ética da atividade, não serão objeto de análise individualizada casos concretos em tramitação ou destinados à qualificação perante o 3º Registro de Imóveis de São Luís/MA. Situações práticas poderão ser discutidas de forma anonimizada e com finalidade exclusivamente didática, observados os limites e regulamentos do Laboratório.",
+  },
   faq: [
     {
       question: "A imersão é online ou presencial?",

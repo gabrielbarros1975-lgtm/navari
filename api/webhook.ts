@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { sendAccessEmail } from "./_email.js";
 
 /**
  * Recebe as notificações da API de Orders (evento "Order (Mercado Pago)",
@@ -40,17 +41,26 @@ export async function POST(request: Request) {
   }
 
   const order = await orderResponse.json();
+  // Último pagamento tentado: é onde fica o motivo de uma recusa
+  // (ex.: "cc_rejected_insufficient_amount", "cc_rejected_high_risk").
+  const payments = order.transactions?.payments ?? [];
+  const lastPayment = payments[payments.length - 1];
   console.log("Order", {
     id: order.id,
     status: order.status, // "processed" quando o pagamento foi concluído.
+    statusDetail: order.status_detail,
     tier: order.external_reference,
     email: order.payer?.email,
     amount: order.total_paid_amount,
+    lastPaymentStatus: lastPayment?.status,
+    lastPaymentStatusDetail: lastPayment?.status_detail,
   });
 
-  // TODO: com status "processed", liberar o acesso (criar a conta do aluno e
-  // enviar o e-mail de boas-vindas). Por ora a equipe cria a conta manualmente
-  // a partir do painel do Mercado Pago.
+  // Com o pagamento confirmado, manda o e-mail de acesso (link do Meet etc.).
+  // A criação de conta na plataforma (caso um dia exista) ainda é manual.
+  if (order.status === "processed") {
+    await sendAccessEmail(order);
+  }
 
   return new Response(null, { status: 200 });
 }

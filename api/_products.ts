@@ -27,11 +27,4 @@ export const PRODUCTS: Record<string, Product> = {
     price: 357.6,
     installments: 12,
   },
-  // TODO: remover assim que o teste de produção (checkout → webhook) for validado.
-  "teste-050": {
-    id: "teste-050",
-    title: "Teste de pagamento em produção",
-    price: 0.5,
-    installments: 1,
-  },
 };

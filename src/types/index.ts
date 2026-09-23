@@ -78,6 +78,33 @@ export interface WorkshopFaqItem {
   answer: string;
 }
 
+export interface CaseLabFeature {
+  title: string;
+  description: string;
+}
+
+/**
+ * Laboratório de Casos: continuação da imersão, divulgada antes de existir
+ * preço e data. A intenção é medir a adesão da primeira turma primeiro, por
+ * isso não há checkout — só o aviso de "inscrições em breve".
+ */
+export interface CaseLab {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  intro: string[];
+  featuresTitle: string;
+  featuresSubtitle: string;
+  features: CaseLabFeature[];
+  exclusiveTitle: string;
+  exclusiveParagraphs: string[];
+  scarcityLabel: string;
+  statusNote: string;
+  ctaLabel: string;
+  /** Nota de ética/imparcialidade. Precisa aparecer junto da oferta. */
+  disclaimer: string;
+}
+
 export interface InstructorCredential {
   text: string;
   /** Usuário do Instagram, sem o @. */
@@ -113,4 +140,5 @@ export interface Workshop {
   agenda: WorkshopAgendaBlock[];
   tiers: WorkshopTier[];
   faq: WorkshopFaqItem[];
+  caseLab?: CaseLab;
 }

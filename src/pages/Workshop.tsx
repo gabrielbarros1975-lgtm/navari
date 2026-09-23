@@ -22,6 +22,11 @@ import {
   Instagram,
   Compass,
   Loader2,
+  Users,
+  FileSearch,
+  MessagesSquare,
+  CalendarClock,
+  Clock,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -664,6 +669,103 @@ const Workshop = () => {
           </div>
         </div>
       </section>
+
+      {/*
+        7.1 LABORATÓRIO DE CASOS — continuação da imersão, ainda sem preço nem
+        data. Vem depois dos ingressos de propósito: é oferta futura e não pode
+        competir com a decisão de compra da imersão.
+      */}
+      {workshop.caseLab && (
+        <section id="laboratorio" className="lp-section lp-surface py-20 scroll-mt-24">
+          <div className="container mx-auto px-4">
+            <Reveal className="max-w-4xl mx-auto text-center space-y-4">
+              <span className="text-xs font-semibold tracking-[0.2em] uppercase text-gold">
+                {workshop.caseLab.eyebrow}
+              </span>
+              <h2 className="font-display text-3xl md:text-4xl font-bold uppercase">
+                {workshop.caseLab.title}
+              </h2>
+              <p className="font-display text-xl md:text-2xl text-foreground/80">
+                {workshop.caseLab.subtitle}
+              </p>
+            </Reveal>
+
+            <Reveal className="max-w-3xl mx-auto mt-8 space-y-5 text-left">
+              {workshop.caseLab.intro.map((paragraph, i) => (
+                <p key={i} className="text-muted-foreground leading-relaxed">
+                  {paragraph}
+                </p>
+              ))}
+            </Reveal>
+
+            <Reveal className="max-w-4xl mx-auto mt-14 text-center space-y-3">
+              <h3 className="font-display text-2xl font-bold">
+                {workshop.caseLab.featuresTitle}
+              </h3>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                {workshop.caseLab.featuresSubtitle}
+              </p>
+            </Reveal>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto mt-8">
+              {workshop.caseLab.features.map((feature, i) => {
+                const Icone = [Users, FileSearch, MessagesSquare, CalendarClock][i % 4];
+                return (
+                  <Reveal key={feature.title} delayMs={i * 60}>
+                    <div className="glass-card h-full p-6 flex items-start gap-4 text-left">
+                      <span className="shrink-0 w-11 h-11 rounded-xl bg-gold/10 border border-gold/25 flex items-center justify-center">
+                        <Icone aria-hidden className="w-5 h-5 text-gold" />
+                      </span>
+                      <div className="space-y-1.5">
+                        <h4 className="font-semibold text-sm uppercase tracking-[0.12em]">
+                          {feature.title}
+                        </h4>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {feature.description}
+                        </p>
+                      </div>
+                    </div>
+                  </Reveal>
+                );
+              })}
+            </div>
+
+            <Reveal className="max-w-3xl mx-auto mt-12">
+              <div className="glass-card border-gold/30 p-7 md:p-9 space-y-4 text-left">
+                <h3 className="font-display text-xl md:text-2xl font-bold">
+                  {workshop.caseLab.exclusiveTitle}
+                </h3>
+                {workshop.caseLab.exclusiveParagraphs.map((paragraph, i) => (
+                  <p key={i} className="text-muted-foreground leading-relaxed">
+                    {paragraph}
+                  </p>
+                ))}
+
+                <div className="pt-2 flex flex-col sm:flex-row sm:items-center gap-4">
+                  {/* Sem preço e sem data: é aviso, não botão. Um botão
+                      desabilitado só frustraria quem tentasse clicar. */}
+                  <span className="inline-flex items-center gap-2 self-start px-5 py-2.5 rounded-full border border-gold/40 bg-gold/10 text-sm font-semibold uppercase tracking-[0.16em] text-gold">
+                    <Clock aria-hidden className="w-4 h-4" />
+                    {workshop.caseLab.ctaLabel}
+                  </span>
+                  <p className="text-sm text-foreground/80">
+                    <strong className="font-semibold">
+                      {workshop.caseLab.scarcityLabel}
+                    </strong>{" "}
+                    {workshop.caseLab.statusNote}
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal className="max-w-3xl mx-auto mt-6">
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                {workshop.caseLab.disclaimer}
+              </p>
+            </Reveal>
+          </div>
+        </section>
+      )}
 
       {/* 8. PERGUNTAS FREQUENTES */}
       <section id="faq" className="lp-section lp-surface-raised py-20 scroll-mt-24">
