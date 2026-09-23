@@ -60,40 +60,55 @@ export async function POST(request: Request) {
   // Registra/atualiza a order no Supabase: dá um histórico de vendas fora do
   // painel da Mercado Pago e evita mandar o e-mail de acesso duas vezes se
   // esta notificação for reenviada (o Resend só protege contra isso por 24h).
+  //
+  // O e-mail do comprador NÃO vem daqui: testamos com Pix e a order voltou
+  // sem nenhum dado de payer. Quem grava o e-mail é api/checkout.ts, na hora
+  // da criação da order — aqui só lemos o que já foi gravado, sem sobrescrever
+  // com null caso a Mercado Pago não devolva order.payer (mantemos como
+  // fallback só se ela devolver, ex.: pode acontecer em pagamento com cartão).
   const supabase = getSupabase();
   let alreadyEmailed = false;
+  let email: string | undefined;
 
   if (supabase) {
     const { data: existing } = await supabase
       .from("orders")
-      .select("email_sent_at")
+      .select("email, email_sent_at")
       .eq("id", order.id)
       .maybeSingle();
     alreadyEmailed = Boolean(existing?.email_sent_at);
+    email = existing?.email ?? order.payer?.email;
 
-    const { error } = await supabase.from("orders").upsert({
+    const upsertPayload: Record<string, unknown> = {
       id: order.id,
       tier_id: order.external_reference,
-      email: order.payer?.email,
       status: order.status,
       amount: order.total_paid_amount,
       updated_at: new Date().toISOString(),
-    });
+    };
+    if (order.payer?.email) upsertPayload.email = order.payer.email;
+
+    const { error } = await supabase.from("orders").upsert(upsertPayload);
     if (error) console.error("Falha ao salvar order no Supabase:", error.message);
   } else {
     console.warn("SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY não configurados: sem histórico de vendas.");
+    email = order.payer?.email;
   }
 
   // Com o pagamento confirmado, manda o e-mail de acesso (link do Meet etc.).
   // A criação de conta na plataforma (caso um dia exista) ainda é manual.
   if (order.status === "processed" && !alreadyEmailed) {
-    await sendAccessEmail(order);
-    if (supabase) {
-      const { error } = await supabase
-        .from("orders")
-        .update({ email_sent_at: new Date().toISOString() })
-        .eq("id", order.id);
-      if (error) console.error("Falha ao marcar e-mail como enviado:", error.message);
+    if (!email) {
+      console.warn("E-mail de acesso não enviado: order", order.id, "sem e-mail gravado.");
+    } else {
+      const sent = await sendAccessEmail(email, order);
+      if (sent && supabase) {
+        const { error } = await supabase
+          .from("orders")
+          .update({ email_sent_at: new Date().toISOString() })
+          .eq("id", order.id);
+        if (error) console.error("Falha ao marcar e-mail como enviado:", error.message);
+      }
     }
   }
 

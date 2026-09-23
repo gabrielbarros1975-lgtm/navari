@@ -12,23 +12,25 @@ import { EVENT } from "./_event-config.js";
  * Não lança erro se o envio falhar: só loga. O webhook já respondeu 200 pra
  * Mercado Pago nesse ponto, então falhar aqui não deve fazê-la reenviar a
  * notificação (o pagamento já foi confirmado; só o e-mail que não saiu).
+ *
+ * O e-mail (`to`) precisa vir de quem chama esta função (hoje, do que foi
+ * gravado no Supabase em api/checkout.ts) — a order da Mercado Pago não é
+ * confiável para isso: em pagamentos por Pix ela não trouxe nenhum dado de
+ * payer de volta.
+ *
+ * Retorna true se o envio foi aceito pelo Resend, para o chamador só marcar
+ * "e-mail enviado" quando isso realmente aconteceu.
  */
-export async function sendAccessEmail(order: {
-  id: string;
-  external_reference?: string;
-  payer?: { email?: string };
-}) {
+export async function sendAccessEmail(
+  to: string,
+  order: { id: string; external_reference?: string },
+): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;
-  const to = order.payer?.email;
 
   if (!apiKey || !from) {
     console.warn("E-mail de acesso não enviado: RESEND_API_KEY ou EMAIL_FROM não configurados.");
-    return;
-  }
-  if (!to) {
-    console.warn("E-mail de acesso não enviado: order", order.id, "sem e-mail do comprador.");
-    return;
+    return false;
   }
 
   const product = order.external_reference ? PRODUCTS[order.external_reference] : undefined;
@@ -92,5 +94,7 @@ export async function sendAccessEmail(order: {
 
   if (!response.ok) {
     console.error("Falha ao enviar e-mail de acesso:", response.status, await response.text());
+    return false;
   }
+  return true;
 }

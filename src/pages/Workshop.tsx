@@ -11,9 +11,20 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { mockWorkshop } from "@/data/mockData";
 import { cursoThumb, videoCapa } from "@/data/images";
 import { cn } from "@/lib/utils";
+import type { WorkshopTier } from "@/types";
 import {
   CheckCircle,
   ChevronRight,
@@ -36,13 +47,24 @@ const Workshop = () => {
   /** Ingresso cujo checkout está sendo criado; trava os botões contra clique duplo. */
   const [checkoutTier, setCheckoutTier] = useState<string | null>(null);
 
-  const startCheckout = async (tierId: string) => {
+  /*
+   * O e-mail é pedido aqui, antes de ir pra Mercado Pago, porque não dá pra
+   * confiar que ela devolva o e-mail do comprador depois: testamos com Pix e
+   * a order voltou sem nenhum dado de payer. Sem capturar aqui, não teríamos
+   * como mandar o e-mail de acesso pra quem pagou por Pix.
+   */
+  const [emailDialogTier, setEmailDialogTier] = useState<WorkshopTier | null>(null);
+  const [checkoutEmail, setCheckoutEmail] = useState("");
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const startCheckout = async (tierId: string, email: string) => {
     setCheckoutTier(tierId);
     try {
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tierId }),
+        body: JSON.stringify({ tierId, email }),
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok || !data.url) throw new Error(data.error);
@@ -54,6 +76,14 @@ const Workshop = () => {
       );
       setCheckoutTier(null);
     }
+  };
+
+  const confirmCheckoutEmail = () => {
+    if (!EMAIL_PATTERN.test(checkoutEmail)) {
+      setEmailError("Digite um e-mail válido.");
+      return;
+    }
+    if (emailDialogTier) startCheckout(emailDialogTier.id, checkoutEmail);
   };
 
   /*
@@ -647,20 +677,14 @@ const Workshop = () => {
                       variant={tier.highlight ? "hero" : "outline"}
                       size="xl"
                       className="w-full gap-2 font-bold"
-                      disabled={checkoutTier !== null}
-                      onClick={() => startCheckout(tier.id)}
+                      onClick={() => {
+                        setEmailDialogTier(tier);
+                        setCheckoutEmail("");
+                        setEmailError(null);
+                      }}
                     >
-                      {checkoutTier === tier.id ? (
-                        <>
-                          <Loader2 className="w-5 h-5 animate-spin" />
-                          Abrindo pagamento…
-                        </>
-                      ) : (
-                        <>
-                          {tier.ctaLabel ?? "Garantir minha vaga"}
-                          <ChevronRight className="w-5 h-5" />
-                        </>
-                      )}
+                      {tier.ctaLabel ?? "Garantir minha vaga"}
+                      <ChevronRight className="w-5 h-5" />
                     </Button>
                   </div>
                 </div>
@@ -822,6 +846,65 @@ const Workshop = () => {
 
       {/* Espaço para a barra fixa no mobile */}
       <div aria-hidden className="h-20 md:hidden" />
+
+      {/* Captura o e-mail antes de ir pro checkout da Mercado Pago (ver
+          comentário em startCheckout sobre por que isso não pode esperar). */}
+      <Dialog
+        open={emailDialogTier !== null}
+        onOpenChange={(open) => {
+          if (!open) setEmailDialogTier(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Quase lá!</DialogTitle>
+            <DialogDescription>
+              Informe seu e-mail para receber a confirmação da compra e o link de acesso à Imersão.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-2">
+            <Label htmlFor="checkout-email">E-mail</Label>
+            <Input
+              id="checkout-email"
+              type="email"
+              placeholder="voce@email.com"
+              value={checkoutEmail}
+              autoFocus
+              onChange={(e) => {
+                setCheckoutEmail(e.target.value);
+                setEmailError(null);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") confirmCheckoutEmail();
+              }}
+            />
+            {emailError && <p className="text-sm text-destructive">{emailError}</p>}
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="hero"
+              size="xl"
+              className="w-full gap-2 font-bold"
+              disabled={checkoutTier !== null}
+              onClick={confirmCheckoutEmail}
+            >
+              {checkoutTier !== null ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Abrindo pagamento…
+                </>
+              ) : (
+                <>
+                  Continuar para pagamento
+                  <ChevronRight className="w-5 h-5" />
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

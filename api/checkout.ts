@@ -2,11 +2,19 @@
 // runtime Node da Vercel exige a extensão completa em imports relativos sob
 // ESM (o TypeScript não acusa isso em dev, só quebra em produção).
 import { PRODUCTS } from "./_products.js";
+import { getSupabase } from "./_supabase.js";
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
  * Cria uma order do Checkout Pro (API de Orders — o fluxo recomendado hoje
  * pelo Mercado Pago; a antiga API de Preferences virou legado) e devolve o
  * link de pagamento.
+ *
+ * O e-mail vem do nosso próprio formulário (não do checkout da Mercado
+ * Pago): testamos com Pix e a order não trouxe nenhum dado de payer de
+ * volta, então não dá pra confiar nisso depois no webhook. Por isso
+ * capturamos aqui e já gravamos no Supabase — o webhook só lê esse valor.
  *
  * Variáveis de ambiente (Vercel → Settings → Environment Variables):
  * - MP_ACCESS_TOKEN: Access Token de produção (ou de teste) da integração.
@@ -23,8 +31,9 @@ export async function POST(request: Request) {
   }
 
   let tierId: unknown;
+  let email: unknown;
   try {
-    ({ tierId } = await request.json());
+    ({ tierId, email } = await request.json());
   } catch {
     return Response.json({ error: "Requisição inválida." }, { status: 400 });
   }
@@ -32,6 +41,10 @@ export async function POST(request: Request) {
   const product = typeof tierId === "string" ? PRODUCTS[tierId] : undefined;
   if (!product) {
     return Response.json({ error: "Ingresso não encontrado." }, { status: 404 });
+  }
+
+  if (typeof email !== "string" || !EMAIL_PATTERN.test(email)) {
+    return Response.json({ error: "Informe um e-mail válido." }, { status: 400 });
   }
 
   const origin = new URL(request.url).origin;
@@ -53,6 +66,7 @@ export async function POST(request: Request) {
       // Volta no webhook e na URL de retorno para sabermos qual ingresso foi pago.
       external_reference: product.id,
       description: product.title,
+      payer: { email },
       // A API rejeita campos extras aqui (ex.: unit_measure, total_amount por
       // item) mesmo que a documentação os mostre no exemplo — só isso é aceito.
       items: [
@@ -82,5 +96,21 @@ export async function POST(request: Request) {
   }
 
   const order = await mpResponse.json();
+
+  const supabase = getSupabase();
+  if (supabase) {
+    const { error } = await supabase.from("orders").upsert({
+      id: order.id,
+      tier_id: product.id,
+      email,
+      status: order.status,
+      amount: product.price,
+      updated_at: new Date().toISOString(),
+    });
+    if (error) console.error("Falha ao salvar order no Supabase (checkout):", error.message);
+  } else {
+    console.warn("SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY não configurados: e-mail não será gravado.");
+  }
+
   return Response.json({ url: order.checkout_url });
 }
