@@ -28,10 +28,10 @@ export const PRODUCTS: Record<string, Product> = {
     installments: 12,
   },
   // TODO: remover assim que o teste de e-mail de acesso em produção for validado.
-  "teste-010": {
-    id: "teste-010",
+  "teste-005": {
+    id: "teste-005",
     title: "Teste de pagamento em produção",
-    price: 0.1,
+    price: 0.05,
     installments: 1,
   },
 };
