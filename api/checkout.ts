@@ -16,15 +16,16 @@ const DEVICE_ID_PATTERN = /^[\w.-]{1,512}$/;
  * pelo Mercado Pago; a antiga API de Preferences virou legado) e devolve o
  * link de pagamento.
  *
- * O e-mail vem do nosso próprio formulário (não do checkout da Mercado
+ * E-mail e nome vêm do nosso próprio formulário (não do checkout da Mercado
  * Pago): testamos com Pix e a order não trouxe nenhum dado de payer de
  * volta, então não dá pra confiar nisso depois no webhook. Por isso
- * capturamos aqui e já gravamos no Supabase — o webhook só lê esse valor.
+ * capturamos aqui e já gravamos no Supabase — o webhook só lê esses valores.
  *
- * Nome, CPF, telefone e Device ID vão para o antifraude (ver api/_buyer.ts):
- * só com o e-mail, todo cartão era recusado como "cc_rejected_high_risk".
- * statement_descriptor e additional_info.ip_address também ajudariam, mas a
- * API de Orders recusa os dois ("unsupported_properties").
+ * Nome, dados do item e Device ID também vão para o antifraude (ver
+ * api/_buyer.ts): só com o e-mail, todo cartão era recusado como
+ * "cc_rejected_high_risk". statement_descriptor e additional_info.ip_address
+ * também ajudariam, mas a API de Orders recusa os dois
+ * ("unsupported_properties").
  *
  * Variáveis de ambiente (Vercel → Settings → Environment Variables):
  * - MP_ACCESS_TOKEN: Access Token de produção (ou de teste) da integração.
@@ -86,8 +87,6 @@ export async function POST(request: Request) {
         email: buyer.email,
         first_name: buyer.firstName,
         last_name: buyer.lastName,
-        identification: { type: "CPF", number: buyer.cpf },
-        phone: { area_code: buyer.phone.slice(0, 2), number: buyer.phone.slice(2) },
       },
       // A API rejeita alguns campos que a documentação mostra no exemplo (ex.:
       // unit_measure, total_amount por item); estes foram testados e chegam ao
@@ -129,6 +128,8 @@ export async function POST(request: Request) {
       id: order.id,
       tier_id: product.id,
       email: buyer.email,
+      // Nome como vai no certificado.
+      name: buyer.name,
       status: order.status,
       amount: product.price,
       updated_at: new Date().toISOString(),

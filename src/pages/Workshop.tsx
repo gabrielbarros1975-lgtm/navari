@@ -25,7 +25,7 @@ import { mockWorkshop } from "@/data/mockData";
 import { cursoThumb, videoCapa } from "@/data/images";
 import { cn } from "@/lib/utils";
 import type { WorkshopTier } from "@/types";
-import { formatCpf, formatPhone, parseBuyer } from "../../api/_buyer";
+import { parseBuyer } from "../../api/_buyer";
 import {
   CheckCircle,
   ChevronRight,
@@ -50,13 +50,11 @@ const Workshop = () => {
 
   /*
    * Os dados do comprador são pedidos aqui, antes de ir pra Mercado Pago:
-   * - e-mail: não dá pra confiar que ela devolva depois (testamos com Pix e a
-   *   order voltou sem nenhum dado de payer), e é pra ele que vai o acesso;
-   * - nome, CPF e celular: sem eles o antifraude recusava todo cartão como
-   *   "high_risk" (ver api/_buyer.ts).
+   * ela não devolve depois nem o e-mail (pra onde vai o acesso) nem o nome
+   * (que vai no certificado) — ver api/_buyer.ts.
    */
   const [buyerDialogTier, setBuyerDialogTier] = useState<WorkshopTier | null>(null);
-  const emptyBuyerForm = { name: "", email: "", cpf: "", phone: "" };
+  const emptyBuyerForm = { name: "", email: "" };
   const [buyerForm, setBuyerForm] = useState(emptyBuyerForm);
   const [buyerError, setBuyerError] = useState<string | null>(null);
 
@@ -869,7 +867,9 @@ const Workshop = () => {
           if (!open) setBuyerDialogTier(null);
         }}
       >
-        <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto">
+        {/* overflow-x-hidden: com overflow-y-auto, 1px de arredondamento na
+            largura já fazia aparecer uma barra de rolagem horizontal. */}
+        <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto overflow-x-hidden">
           <DialogHeader>
             <DialogTitle>Quase lá!</DialogTitle>
             <DialogDescription>
@@ -892,10 +892,14 @@ const Workshop = () => {
                 id="checkout-name"
                 autoComplete="name"
                 placeholder="Seu nome e sobrenome"
+                aria-describedby="checkout-name-hint"
                 value={buyerForm.name}
                 autoFocus
                 onChange={(e) => updateBuyerForm("name", e.target.value)}
               />
+              <p id="checkout-name-hint" className="text-xs text-muted-foreground">
+                Escreva como deve aparecer no seu certificado.
+              </p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="checkout-email">E-mail</Label>
@@ -907,29 +911,6 @@ const Workshop = () => {
                 value={buyerForm.email}
                 onChange={(e) => updateBuyerForm("email", e.target.value)}
               />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="checkout-cpf">CPF</Label>
-                <Input
-                  id="checkout-cpf"
-                  inputMode="numeric"
-                  placeholder="000.000.000-00"
-                  value={buyerForm.cpf}
-                  onChange={(e) => updateBuyerForm("cpf", formatCpf(e.target.value))}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="checkout-phone">Celular com DDD</Label>
-                <Input
-                  id="checkout-phone"
-                  type="tel"
-                  autoComplete="tel-national"
-                  placeholder="(00) 00000-0000"
-                  value={buyerForm.phone}
-                  onChange={(e) => updateBuyerForm("phone", formatPhone(e.target.value))}
-                />
-              </div>
             </div>
             {buyerError && (
               <p role="alert" className="text-sm text-destructive">

@@ -15,6 +15,7 @@ import { createClient } from "@supabase/supabase-js";
  *     id text primary key,           -- id da order na Mercado Pago (ex: ORD...)
  *     tier_id text,                  -- external_reference (ex: "ao-vivo")
  *     email text,
+ *     name text,                     -- nome do comprador, para o certificado
  *     status text,                   -- último status conhecido da order
  *     amount numeric,
  *     email_sent_at timestamptz,
