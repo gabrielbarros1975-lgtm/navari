@@ -1,4 +1,3 @@
-import { PRODUCTS } from "./_products.js";
 import { EVENT } from "./_event-config.js";
 
 /**
@@ -33,50 +32,55 @@ export async function sendAccessEmail(
     return false;
   }
 
-  const product = order.external_reference ? PRODUCTS[order.external_reference] : undefined;
   const includesRecording = order.external_reference === "ao-vivo-mais-plataforma";
+  // Só para quem comprou a modalidade com gravação: o texto aprovado pela
+  // equipe é o mesmo para os dois ingressos e não menciona o que é exclusivo.
+  const recordingNote =
+    "Como você garantiu a modalidade com gravação, também terá acesso à gravação da Imersão por 1 ano e ao e-book em primeira mão. Mais informações chegarão por e-mail próximo à data.";
 
   const subject = "Sua vaga está confirmada — Imersão Incorporação Imobiliária";
 
+  const details: [string, string][] = [
+    ["Data", EVENT.dateLabel],
+    ["Início", EVENT.startLabel],
+    ["Abertura da sala", EVENT.roomOpenLabel],
+    ["Formato", EVENT.formatLabel],
+    ["Acesso", EVENT.meetLink],
+  ];
+
   const text = [
-    "Olá!",
-    "",
-    `Seu pagamento foi confirmado para: ${product?.title ?? "Imersão Incorporação Imobiliária"}.`,
-    "",
-    `Data: ${EVENT.dateLabel}`,
-    `Horário: ${EVENT.timeLabel}`,
-    `Link de acesso (Google Meet): ${EVENT.meetLink}`,
-    "",
-    includesRecording
-      ? "Como você garantiu a modalidade com gravação, você também terá acesso à gravação da Imersão por 1 ano e ao e-book em primeira mão — mais informações chegarão por e-mail próximo à data."
-      : "",
-    "Chegue com alguns minutos de antecedência para testar áudio e vídeo.",
-    "",
-    `Qualquer dúvida, responda este e-mail ou fale com a gente em ${EVENT.supportEmail}.`,
+    "Olá!\nSua vaga está confirmada!",
+    `Seu pagamento foi confirmado e sua inscrição na ${EVENT.title} está garantida.`,
+    details.map(([label, value]) => `${label}: ${value}`).join("\n"),
+    includesRecording && recordingNote,
+    "Recomendamos que você entre alguns minutos antes para conferir sua conexão e o áudio.",
+    "Nos vemos na imersão!",
+    "Wyllian Nava",
+    `Qualquer dúvida, responde este e-mail ou fale conosco em ${EVENT.supportEmail}`,
   ]
     .filter(Boolean)
-    .join("\n");
+    .join("\n\n");
+
+  const detailRows = details
+    .map(([label, value]) => {
+      const cell = label === "Acesso" ? `<a href="${value}">${value}</a>` : value;
+      return `<tr><td style="padding: 4px 12px 4px 0; color: #6b7280; white-space: nowrap;">${label}</td><td>${cell}</td></tr>`;
+    })
+    .join("");
 
   const html = `
-    <div style="font-family: Georgia, 'Times New Roman', serif; max-width: 560px; margin: 0 auto; color: #1f2933;">
-      <h1 style="font-size: 20px;">Sua vaga está confirmada!</h1>
+    <div style="font-family: Georgia, 'Times New Roman', serif; max-width: 560px; margin: 0 auto; color: #1f2933; line-height: 1.5;">
       <p>Olá!</p>
-      <p>Seu pagamento foi confirmado para:</p>
-      <p style="font-weight: bold;">${product?.title ?? "Imersão Incorporação Imobiliária"}</p>
-      <table style="margin: 16px 0; border-collapse: collapse;">
-        <tr><td style="padding: 4px 12px 4px 0; color: #6b7280;">Data</td><td>${EVENT.dateLabel}</td></tr>
-        <tr><td style="padding: 4px 12px 4px 0; color: #6b7280;">Horário</td><td>${EVENT.timeLabel}</td></tr>
-        <tr><td style="padding: 4px 12px 4px 0; color: #6b7280;">Acesso</td><td><a href="${EVENT.meetLink}">${EVENT.meetLink}</a></td></tr>
-      </table>
-      ${
-        includesRecording
-          ? `<p>Como você garantiu a modalidade com gravação, você também terá acesso à gravação da Imersão por 1 ano e ao e-book em primeira mão — mais informações chegarão próximo à data.</p>`
-          : ""
-      }
-      <p>Chegue com alguns minutos de antecedência para testar áudio e vídeo.</p>
+      <h1 style="font-size: 20px; margin: 0 0 16px;">Sua vaga está confirmada!</h1>
+      <p>Seu pagamento foi confirmado e sua inscrição na <strong>${EVENT.title}</strong> está garantida.</p>
+      <table style="margin: 16px 0; border-collapse: collapse;">${detailRows}</table>
+      ${includesRecording ? `<p>${recordingNote}</p>` : ""}
+      <p>Recomendamos que você entre alguns minutos antes para conferir sua conexão e o áudio.</p>
+      <p>Nos vemos na imersão!</p>
+      <p>Wyllian Nava</p>
       <p style="color: #6b7280; font-size: 14px;">
-        Qualquer dúvida, responda este e-mail ou fale com a gente em
-        <a href="mailto:${EVENT.supportEmail}">${EVENT.supportEmail}</a>.
+        Qualquer dúvida, responde este e-mail ou fale conosco em
+        <a href="mailto:${EVENT.supportEmail}">${EVENT.supportEmail}</a>
       </p>
     </div>
   `;
@@ -89,7 +93,8 @@ export async function sendAccessEmail(
       // Evita reenvio duplicado se o webhook da Mercado Pago repetir a notificação.
       "Idempotency-Key": `order-access-email-${order.id}`,
     },
-    body: JSON.stringify({ from, to, subject, text, html }),
+    // Respostas vão para o contato: o domínio do remetente não recebe e-mail.
+    body: JSON.stringify({ from, to, reply_to: EVENT.supportEmail, subject, text, html }),
   });
 
   if (!response.ok) {
