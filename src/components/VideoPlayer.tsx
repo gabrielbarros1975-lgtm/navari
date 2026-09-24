@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Video, Play } from "lucide-react";
+import { Video, Play, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const VIMEO_ORIGIN = "https://player.vimeo.com";
+
+function postToPlayer(iframe: HTMLIFrameElement | null, message: object) {
+  iframe?.contentWindow?.postMessage(message, VIMEO_ORIGIN);
+}
 
 /*
  * Quanto antes do fim o player volta para a capa. O timeupdate chega a cada
@@ -14,12 +18,11 @@ const END_MARGIN_S = 0.35;
  * Formato de objeto, o mesmo que o SDK oficial do Vimeo usa. A inscrição só
  * vale depois do "ready" do player, por isso é chamada tanto nele quanto no
  * onLoad do iframe (se o "ready" chegar antes, a do onLoad garante).
+ * timeupdate/ended: fim do vídeo; play/volumechange: estado do som.
  */
-function subscribeToEnd(iframe: HTMLIFrameElement | null) {
-  const win = iframe?.contentWindow;
-  if (!win) return;
-  for (const value of ["timeupdate", "ended"]) {
-    win.postMessage({ method: "addEventListener", value }, VIMEO_ORIGIN);
+function subscribeToPlayer(iframe: HTMLIFrameElement | null) {
+  for (const value of ["timeupdate", "ended", "play", "volumechange"]) {
+    postToPlayer(iframe, { method: "addEventListener", value });
   }
 }
 
@@ -40,6 +43,15 @@ export function VideoPlayer({ videoUrl, title, poster }: VideoPlayerProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   /*
+   * O player não tem controles do Vimeo (controls=0), então o som tem botão
+   * próprio. É ele que resolve o iPhone: o iOS não deixa o vídeo começar
+   * sozinho com som, o autoplay cai para mudo, e não havia onde ligar o áudio
+   * (nem com controls=1: no celular a barra do Vimeo não tem botão de som).
+   * null = ainda não sabemos; o botão só aparece com o estado real do player.
+   */
+  const [isMuted, setIsMuted] = useState<boolean | null>(null);
+
+  /*
    * Ao terminar, o Vimeo cobre o vídeo com a tela final da conta que publicou
    * ("Mais de ...", botão de seguir) — que não tem nada a ver com esta página.
    *
@@ -58,6 +70,8 @@ export function VideoPlayer({ videoUrl, title, poster }: VideoPlayerProps) {
       let data: {
         event?: string;
         data?: { seconds?: number; duration?: number };
+        method?: string;
+        value?: unknown;
       };
       try {
         data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
@@ -65,7 +79,16 @@ export function VideoPlayer({ videoUrl, title, poster }: VideoPlayerProps) {
         return;
       }
 
-      if (data?.event === "ready") subscribeToEnd(iframeRef.current);
+      if (data?.event === "ready") subscribeToPlayer(iframeRef.current);
+
+      // O autoplay só cai para mudo depois de tentar tocar, por isso a
+      // pergunta vai no "play", e de novo a cada mudança de volume.
+      if (data?.event === "play" || data?.event === "volumechange") {
+        postToPlayer(iframeRef.current, { method: "getMuted" });
+      }
+      if (data?.method === "getMuted" && typeof data.value === "boolean") {
+        setIsMuted(data.value);
+      }
 
       if (data?.event === "timeupdate") {
         const { seconds, duration } = data.data ?? {};
@@ -147,6 +170,8 @@ export function VideoPlayer({ videoUrl, title, poster }: VideoPlayerProps) {
             // O iframe vai montar agora; sem isso o spinner não apareceria na
             // segunda vez (depois do "ended"), porque o load anterior o zerou.
             if (poster) setIsLoading(true);
+            // O iframe novo começa sem estado de som conhecido.
+            setIsMuted(null);
             setIsPlaying(true);
           }}
           className={cn(
@@ -184,9 +209,36 @@ export function VideoPlayer({ videoUrl, title, poster }: VideoPlayerProps) {
           allowFullScreen
           onLoad={() => {
             setIsLoading(false);
-            subscribeToEnd(iframeRef.current);
+            subscribeToPlayer(iframeRef.current);
           }}
         />
+      )}
+
+      {/*
+        Mesmo canto do botão de play. Mudo, ganha o texto "Ativar som" para
+        chamar atenção (é o estado em que o iPhone começa); com som, fica só o
+        ícone. O getMuted depois do setMuted confirma o estado real em vez de
+        supor que deu certo.
+      */}
+      {isPlaying && isMuted !== null && (
+        <button
+          type="button"
+          onClick={() => {
+            postToPlayer(iframeRef.current, { method: "setMuted", value: !isMuted });
+            postToPlayer(iframeRef.current, { method: "getMuted" });
+          }}
+          className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-20 inline-flex items-center gap-1.5 h-9 sm:h-10 min-w-9 sm:min-w-10 justify-center rounded-full bg-black/60 hover:bg-black/75 backdrop-blur-sm px-2.5 text-white text-xs sm:text-sm font-semibold shadow-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          aria-label={isMuted ? "Ativar som" : "Desativar som"}
+        >
+          {isMuted ? (
+            <>
+              <VolumeX aria-hidden className="w-4 h-4 sm:w-5 sm:h-5" />
+              Ativar som
+            </>
+          ) : (
+            <Volume2 aria-hidden className="w-4 h-4 sm:w-5 sm:h-5" />
+          )}
+        </button>
       )}
     </div>
   );
