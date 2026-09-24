@@ -124,15 +124,15 @@ export const mockWorkshop: Workshop = {
     },
     // TODO: remover assim que o teste de e-mail de acesso em produção for validado.
     {
-      id: "teste-050",
-      name: "TESTE DE PAGAMENTO",
+      id: "teste-cartao",
+      name: "TESTE DE CARTÃO",
       batchLabel: "Uso interno",
-      price: 0.5,
-      installmentValue: 0.5,
+      price: 5,
+      installmentValue: 5,
       installments: 1,
       includes: ["Apenas para validar o pagamento e o e-mail de acesso em produção. Não é um ingresso."],
       checkoutUrl: null,
-      ctaLabel: "Testar pagamento (R$0,50)",
+      ctaLabel: "Testar cartão (R$5,00)",
     },
   ],
   caseLab: {

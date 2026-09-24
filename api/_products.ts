@@ -28,14 +28,14 @@ export const PRODUCTS: Record<string, Product> = {
     installments: 12,
   },
   // TODO: remover assim que o teste de e-mail de acesso em produção for validado.
-  // R$0,50: valor mínimo aceito pela Mercado Pago para cartão de crédito
-  // (https://www.mercadopago.com.br/ajuda/minimo-maximo-posso-pagar_324) —
-  // abaixo disso o cartão é recusado (foi o que aconteceu com os testes de
-  // R$0,10 e R$0,05).
-  "teste-050": {
-    id: "teste-050",
-    title: "Teste de pagamento em produção",
-    price: 0.5,
+  // Valor e título diferentes das tentativas anteriores (R$0,10 / 0,05 / 0,50,
+  // sempre "Teste de pagamento em produção") de propósito: o antifraude da
+  // Mercado Pago rejeitou como "high_risk" por ver itens/valores repetidos em
+  // sequência com o mesmo cartão — ver https://www.mercadopago.com.br/developers/pt/docs/woocommerce/how-tos/improve-payment-approval/reasons-for-rejection
+  "teste-cartao": {
+    id: "teste-cartao",
+    title: "Teste de cartão",
+    price: 5,
     installments: 1,
   },
 };
