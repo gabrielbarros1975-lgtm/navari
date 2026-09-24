@@ -25,6 +25,7 @@ import { mockWorkshop } from "@/data/mockData";
 import { cursoThumb, videoCapa } from "@/data/images";
 import { cn } from "@/lib/utils";
 import type { WorkshopTier } from "@/types";
+import { formatCpf, formatPhone, parseBuyer } from "../../api/_buyer";
 import {
   CheckCircle,
   ChevronRight,
@@ -48,23 +49,30 @@ const Workshop = () => {
   const [checkoutTier, setCheckoutTier] = useState<string | null>(null);
 
   /*
-   * O e-mail é pedido aqui, antes de ir pra Mercado Pago, porque não dá pra
-   * confiar que ela devolva o e-mail do comprador depois: testamos com Pix e
-   * a order voltou sem nenhum dado de payer. Sem capturar aqui, não teríamos
-   * como mandar o e-mail de acesso pra quem pagou por Pix.
+   * Os dados do comprador são pedidos aqui, antes de ir pra Mercado Pago:
+   * - e-mail: não dá pra confiar que ela devolva depois (testamos com Pix e a
+   *   order voltou sem nenhum dado de payer), e é pra ele que vai o acesso;
+   * - nome, CPF e celular: sem eles o antifraude recusava todo cartão como
+   *   "high_risk" (ver api/_buyer.ts).
    */
-  const [emailDialogTier, setEmailDialogTier] = useState<WorkshopTier | null>(null);
-  const [checkoutEmail, setCheckoutEmail] = useState("");
-  const [emailError, setEmailError] = useState<string | null>(null);
-  const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const [buyerDialogTier, setBuyerDialogTier] = useState<WorkshopTier | null>(null);
+  const emptyBuyerForm = { name: "", email: "", cpf: "", phone: "" };
+  const [buyerForm, setBuyerForm] = useState(emptyBuyerForm);
+  const [buyerError, setBuyerError] = useState<string | null>(null);
 
-  const startCheckout = async (tierId: string, email: string) => {
+  const startCheckout = async (tierId: string, form: typeof buyerForm) => {
     setCheckoutTier(tierId);
     try {
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tierId, email }),
+        body: JSON.stringify({
+          tierId,
+          ...form,
+          // Gerado pelo security.js da Mercado Pago (index.html). Se o script
+          // não carregou (ex.: bloqueador), o checkout segue sem ele.
+          deviceId: (window as { MP_DEVICE_SESSION_ID?: string }).MP_DEVICE_SESSION_ID,
+        }),
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok || !data.url) throw new Error(data.error);
@@ -78,12 +86,18 @@ const Workshop = () => {
     }
   };
 
-  const confirmCheckoutEmail = () => {
-    if (!EMAIL_PATTERN.test(checkoutEmail)) {
-      setEmailError("Digite um e-mail válido.");
+  const confirmBuyer = () => {
+    const parsed = parseBuyer(buyerForm);
+    if ("error" in parsed) {
+      setBuyerError(parsed.error);
       return;
     }
-    if (emailDialogTier) startCheckout(emailDialogTier.id, checkoutEmail);
+    if (buyerDialogTier) startCheckout(buyerDialogTier.id, buyerForm);
+  };
+
+  const updateBuyerForm = (field: keyof typeof buyerForm, value: string) => {
+    setBuyerForm((form) => ({ ...form, [field]: value }));
+    setBuyerError(null);
   };
 
   /*
@@ -678,9 +692,9 @@ const Workshop = () => {
                       size="xl"
                       className="w-full gap-2 font-bold"
                       onClick={() => {
-                        setEmailDialogTier(tier);
-                        setCheckoutEmail("");
-                        setEmailError(null);
+                        setBuyerDialogTier(tier);
+                        setBuyerForm(emptyBuyerForm);
+                        setBuyerError(null);
                       }}
                     >
                       {tier.ctaLabel ?? "Garantir minha vaga"}
@@ -847,48 +861,91 @@ const Workshop = () => {
       {/* Espaço para a barra fixa no mobile */}
       <div aria-hidden className="h-20 md:hidden" />
 
-      {/* Captura o e-mail antes de ir pro checkout da Mercado Pago (ver
+      {/* Dados do comprador antes de ir pro checkout da Mercado Pago (ver
           comentário em startCheckout sobre por que isso não pode esperar). */}
       <Dialog
-        open={emailDialogTier !== null}
+        open={buyerDialogTier !== null}
         onOpenChange={(open) => {
-          if (!open) setEmailDialogTier(null);
+          if (!open) setBuyerDialogTier(null);
         }}
       >
-        <DialogContent>
+        <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Quase lá!</DialogTitle>
             <DialogDescription>
-              Informe seu e-mail para receber a confirmação da compra e o link de acesso à Imersão.
+              Preencha seus dados para a confirmação da compra. O link de acesso à Imersão vai para o e-mail informado.
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-2">
-            <Label htmlFor="checkout-email">E-mail</Label>
-            <Input
-              id="checkout-email"
-              type="email"
-              placeholder="voce@email.com"
-              value={checkoutEmail}
-              autoFocus
-              onChange={(e) => {
-                setCheckoutEmail(e.target.value);
-                setEmailError(null);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") confirmCheckoutEmail();
-              }}
-            />
-            {emailError && <p className="text-sm text-destructive">{emailError}</p>}
-          </div>
+          <form
+            id="checkout-buyer"
+            className="space-y-4"
+            noValidate
+            onSubmit={(e) => {
+              e.preventDefault();
+              confirmBuyer();
+            }}
+          >
+            <div className="space-y-2">
+              <Label htmlFor="checkout-name">Nome completo</Label>
+              <Input
+                id="checkout-name"
+                autoComplete="name"
+                placeholder="Seu nome e sobrenome"
+                value={buyerForm.name}
+                autoFocus
+                onChange={(e) => updateBuyerForm("name", e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="checkout-email">E-mail</Label>
+              <Input
+                id="checkout-email"
+                type="email"
+                autoComplete="email"
+                placeholder="voce@email.com"
+                value={buyerForm.email}
+                onChange={(e) => updateBuyerForm("email", e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="checkout-cpf">CPF</Label>
+                <Input
+                  id="checkout-cpf"
+                  inputMode="numeric"
+                  placeholder="000.000.000-00"
+                  value={buyerForm.cpf}
+                  onChange={(e) => updateBuyerForm("cpf", formatCpf(e.target.value))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="checkout-phone">Celular com DDD</Label>
+                <Input
+                  id="checkout-phone"
+                  type="tel"
+                  autoComplete="tel-national"
+                  placeholder="(00) 00000-0000"
+                  value={buyerForm.phone}
+                  onChange={(e) => updateBuyerForm("phone", formatPhone(e.target.value))}
+                />
+              </div>
+            </div>
+            {buyerError && (
+              <p role="alert" className="text-sm text-destructive">
+                {buyerError}
+              </p>
+            )}
+          </form>
 
           <DialogFooter>
             <Button
+              type="submit"
+              form="checkout-buyer"
               variant="hero"
               size="xl"
               className="w-full gap-2 font-bold"
               disabled={checkoutTier !== null}
-              onClick={confirmCheckoutEmail}
             >
               {checkoutTier !== null ? (
                 <>

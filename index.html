@@ -29,5 +29,8 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Device ID da Mercado Pago (window.MP_DEVICE_SESSION_ID): o checkout o
+         repassa ao antifraude, ver api/checkout.ts. -->
+    <script src="https://www.mercadopago.com/v2/security.js" view="checkout"></script>
   </body>
 </html>
