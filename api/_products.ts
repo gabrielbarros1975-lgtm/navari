@@ -31,16 +31,15 @@ export const PRODUCTS: Record<string, Product> = {
     price: 357.6,
     installments: 12,
   },
-  // TODO: remover assim que o teste de e-mail de acesso em produção for validado.
-  // Valor e título diferentes de cada tentativa anterior de propósito: o
-  // antifraude da Mercado Pago rejeitou como "high_risk" por ver o mesmo
-  // cartão usado várias vezes seguidas contra a loja — ver
-  // https://www.mercadopago.com.br/developers/pt/docs/woocommerce/how-tos/improve-payment-approval/reasons-for-rejection
+  // Ingresso de teste, mantido de propósito para validar o pagamento em
+  // produção. R$0,50 é o mínimo da Mercado Pago no crédito (em todas as
+  // bandeiras); nesse valor só existe 1x. O id segue "parcelado" porque é o
+  // external_reference das orders de teste já criadas.
   "teste-cartao-parcelado": {
     id: "teste-cartao-parcelado",
-    title: "Teste de cartão parcelado",
+    title: "Teste de cartão",
     description: "Pagamento de teste da Imersão em Incorporação Imobiliária",
-    price: 10,
-    installments: 2,
+    price: 0.5,
+    installments: 1,
   },
 };

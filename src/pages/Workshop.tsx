@@ -663,12 +663,17 @@ const Workshop = () => {
                           Por apenas
                         </span>
                         <span className="font-display text-3xl md:text-4xl font-bold text-gold">
-                          {tier.installments}x de {brl(tier.installmentValue || 0)}
+                          {brl(tier.price)}
                         </span>
                       </div>
 
+                      {/* Sem valor de parcela: a Mercado Pago cobra os juros do
+                          comprador (12x de R$296,40 saía 12x de R$30,16, não
+                          R$24,70), e a taxa muda com o tempo e a bandeira. */}
                       <p className="text-sm text-muted-foreground font-medium">
-                        ou {brl(tier.price)} à vista
+                        {tier.installments > 1
+                          ? `à vista, ou em até ${tier.installments}x no cartão (com juros)`
+                          : "à vista"}
                       </p>
                     </div>
 

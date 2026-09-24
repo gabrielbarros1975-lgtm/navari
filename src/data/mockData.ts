@@ -95,7 +95,6 @@ export const mockWorkshop: Workshop = {
       batchLabel: "1º Lote",
       originalPrice: 397,
       price: 296.40,
-      installmentValue: 24.70,
       installments: 12,
       includes: [
         "Participação na Imersão online e ao vivo",
@@ -111,7 +110,6 @@ export const mockWorkshop: Workshop = {
       batchLabel: "1º Lote",
       originalPrice: 450,
       price: 357.60,
-      installmentValue: 29.80,
       installments: 12,
       includes: [
         "Tudo que está incluído na modalidade Ao Vivo",
@@ -122,17 +120,18 @@ export const mockWorkshop: Workshop = {
       highlight: true,
       ctaLabel: "Quero a versão completa",
     },
-    // TODO: remover assim que o teste de e-mail de acesso em produção for validado.
+    // Ingresso de teste, mantido de propósito para validar o pagamento em
+    // produção. R$0,50 é o mínimo da Mercado Pago no crédito (em todas as
+    // bandeiras); nesse valor só existe 1x.
     {
       id: "teste-cartao-parcelado",
-      name: "TESTE DE CARTÃO PARCELADO",
+      name: "TESTE DE CARTÃO",
       batchLabel: "Uso interno",
-      price: 10,
-      installmentValue: 5,
-      installments: 2,
+      price: 0.5,
+      installments: 1,
       includes: ["Apenas para validar o pagamento e o e-mail de acesso em produção. Não é um ingresso."],
       checkoutUrl: null,
-      ctaLabel: "Testar cartão (R$10,00)",
+      ctaLabel: "Testar cartão (R$0,50)",
     },
   ],
   caseLab: {

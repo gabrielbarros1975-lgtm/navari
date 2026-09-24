@@ -57,9 +57,7 @@ export interface WorkshopTier {
   originalPrice?: number;
   /** Valor total promocional à vista em reais. */
   price: number;
-  /** Valor da parcela mensal em reais (ex: 24.70 para 12x de R$ 24,70). */
-  installmentValue?: number;
-  /** Número máximo de parcelas exibidas na vitrine. */
+  /** Máximo de parcelas (com juros, pagos pelo comprador) exibido na vitrine. */
   installments: number;
   includes: string[];
   checkoutUrl: string | null;
