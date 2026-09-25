@@ -32,14 +32,15 @@ export const PRODUCTS: Record<string, Product> = {
     installments: 12,
   },
   // Ingresso de teste, mantido de propósito para validar o pagamento em
-  // produção. R$0,50 é o mínimo da Mercado Pago no crédito (em todas as
-  // bandeiras); nesse valor só existe 1x. O id segue "parcelado" porque é o
-  // external_reference das orders de teste já criadas.
+  // produção. R$10 em até 2x foi o valor da primeira venda com cartão
+  // aprovada. Com o mínimo do crédito (R$0,50), 5 de 5 tentativas no cartão
+  // foram recusadas como "high_risk": cobrança pequena repetida é o padrão
+  // de teste de cartão roubado para o antifraude.
   "teste-cartao-parcelado": {
     id: "teste-cartao-parcelado",
-    title: "Teste de cartão",
+    title: "Teste de cartão parcelado",
     description: "Pagamento de teste da Imersão em Incorporação Imobiliária",
-    price: 0.5,
-    installments: 1,
+    price: 10,
+    installments: 2,
   },
 };

@@ -121,17 +121,16 @@ export const mockWorkshop: Workshop = {
       ctaLabel: "Quero a versão completa",
     },
     // Ingresso de teste, mantido de propósito para validar o pagamento em
-    // produção. R$0,50 é o mínimo da Mercado Pago no crédito (em todas as
-    // bandeiras); nesse valor só existe 1x.
+    // produção. Valor e parcelas explicados em api/_products.ts.
     {
       id: "teste-cartao-parcelado",
-      name: "TESTE DE CARTÃO",
+      name: "TESTE DE CARTÃO PARCELADO",
       batchLabel: "Uso interno",
-      price: 0.5,
-      installments: 1,
+      price: 10,
+      installments: 2,
       includes: ["Apenas para validar o pagamento e o e-mail de acesso em produção. Não é um ingresso."],
       checkoutUrl: null,
-      ctaLabel: "Testar cartão (R$0,50)",
+      ctaLabel: "Testar cartão (R$10,00)",
     },
   ],
   caseLab: {
