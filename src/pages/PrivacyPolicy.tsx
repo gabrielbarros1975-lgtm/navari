@@ -10,7 +10,7 @@ import { COMPANY } from "@/data/company";
  * mudar junto.
  */
 const PrivacyPolicy = () => (
-  <LegalPage title="Política de Privacidade" updatedAt="24 de setembro de 2026">
+  <LegalPage title="Política de Privacidade" updatedAt="25 de setembro de 2026">
     <p>
       Esta política explica quais dados pessoais coletamos neste site, para que os usamos, com quem
       os compartilhamos e como você pode exercer os seus direitos, conforme a Lei Geral de Proteção
@@ -37,9 +37,10 @@ const PrivacyPolicy = () => (
       </li>
       <li>
         <strong>No pagamento:</strong> os dados de pagamento (número do cartão, CPF do titular, dados
-        do Pix ou do boleto) são digitados diretamente no ambiente do Mercado Pago. Nós não recebemos
-        nem armazenamos o número do seu cartão. Do Mercado Pago recebemos apenas a situação do
-        pagamento (aprovado, pendente ou recusado), o valor e o ingresso comprado.
+        do Pix ou do boleto) são digitados diretamente no ambiente do Mercado Pago ou, se você optar
+        por ela depois de uma recusa, da Kiwify. Nós não recebemos nem armazenamos o número do seu
+        cartão. Da plataforma de pagamento recebemos apenas a situação do pagamento (aprovado,
+        pendente ou recusado), o valor e o ingresso comprado.
       </li>
       <li>
         <strong>Dados técnicos:</strong> para prevenir fraudes, o site carrega um script de segurança
@@ -77,6 +78,10 @@ const PrivacyPolicy = () => (
       funcionarem, que os tratam em nosso nome:
     </p>
     <ul>
+      <li>
+        <strong>Kiwify:</strong> processamento do pagamento quando você escolhe pagar por ela depois
+        de uma recusa no Mercado Pago.
+      </li>
       <li>
         <strong>Mercado Pago:</strong> processamento do pagamento, prevenção a fraudes e imagens das
         bandeiras de cartão exibidas no site.

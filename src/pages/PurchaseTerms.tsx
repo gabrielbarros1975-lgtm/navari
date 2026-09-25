@@ -9,7 +9,7 @@ import { COMPANY } from "@/data/company";
  * ou remarcação pela organização) é decisão do negócio e pode mudar.
  */
 const PurchaseTerms = () => (
-  <LegalPage title="Termos de Compra e Reembolso" updatedAt="24 de setembro de 2026">
+  <LegalPage title="Termos de Compra e Reembolso" updatedAt="25 de setembro de 2026">
     <p>
       Estes termos valem para a compra de ingressos da Imersão em Incorporação Imobiliária no
       Registro de Imóveis: da Prenotação ao Registro, organizada por{" "}
@@ -35,6 +35,11 @@ const PurchaseTerms = () => (
       você confirmar o pagamento. A inscrição só é confirmada depois que o pagamento é aprovado: Pix e
       cartão costumam ser aprovados na hora, e o boleto pode levar até 3 dias úteis para ser
       compensado.
+    </p>
+    <p>
+      Se o pagamento com cartão for recusado no Mercado Pago, você pode concluir a compra pela
+      Kiwify, outra plataforma de pagamento, pelo mesmo valor e com parcelamento em até 12x (com
+      juros). Nesse caso, também valem os termos de compra da Kiwify.
     </p>
 
     <h2>3. Acesso à Imersão</h2>
@@ -63,7 +68,8 @@ const PurchaseTerms = () => (
       com o seu nome e o e-mail usado na compra.
     </p>
     <p>
-      O reembolso é feito pelo Mercado Pago, pelo mesmo meio de pagamento sempre que possível. No
+      O reembolso é feito pela plataforma em que você pagou (Mercado Pago ou Kiwify), pelo mesmo
+      meio de pagamento sempre que possível. No
       cartão de crédito, o estorno aparece na fatura conforme o prazo da operadora, o que pode levar
       até duas faturas.
     </p>

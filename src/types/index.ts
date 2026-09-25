@@ -61,6 +61,12 @@ export interface WorkshopTier {
   installments: number;
   includes: string[];
   checkoutUrl: string | null;
+  /**
+   * Checkout alternativo (Kiwify) oferecido quando o cartão é recusado no
+   * Mercado Pago: a página /pagamento?status=recusado acha o ingresso pelo
+   * external_reference que o Mercado Pago devolve.
+   */
+  cardFallbackUrl?: string;
   highlight?: boolean;
   /** Texto do botão. Default: "Garantir minha vaga". */
   ctaLabel?: string;

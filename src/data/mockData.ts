@@ -103,6 +103,7 @@ export const mockWorkshop: Workshop = {
         "Certificado digital de participação",
       ],
       checkoutUrl: null,
+      cardFallbackUrl: "https://pay.kiwify.com.br/DFcGGli",
     },
     {
       id: "ao-vivo-mais-plataforma",
@@ -117,6 +118,7 @@ export const mockWorkshop: Workshop = {
         "Acesso, em primeira mão, ao livro digital autoral “A Incorporação Imobiliária no Registro de Imóveis: um guia prático de qualificação registral”",
       ],
       checkoutUrl: null,
+      cardFallbackUrl: "https://pay.kiwify.com.br/IR9ZAqy",
       highlight: true,
       ctaLabel: "Quero a versão completa",
     },
