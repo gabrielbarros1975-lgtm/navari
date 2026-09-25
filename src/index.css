@@ -232,10 +232,22 @@
     overflow: hidden;
   }
 
+  /*
+   * O brilho anda por transform, não por background-position: transform roda
+   * no compositor e segue animando com o dedo na tela ou durante a rolagem.
+   * Com background-position (animação de pintura) o celular, sobretudo o
+   * iPhone, congelava o brilho a cada toque. A faixa tem 250% da largura do
+   * botão, como o background-size antigo, e os deslocamentos equivalem às
+   * posições 150% → -100% de antes, então o visual é o mesmo.
+   */
   .shimmer-sweep::after {
     content: "";
     position: absolute;
-    inset: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 250%;
+    pointer-events: none;
     /* Creme explícito, não --gold-light: no tema claro aquele token é o tom
        escuro do hover, e o "brilho" passava pelo botão como uma mancha. */
     background: linear-gradient(
@@ -245,7 +257,8 @@
       hsl(40 70% 96% / 0.4) 52%,
       transparent 70%
     );
-    background-size: 250% 100%;
+    transform: translateX(-90%);
+    will-change: transform;
     animation: shimmer-sweep 3.2s ease-in-out infinite;
     animation-delay: 1.2s;
   }
@@ -725,8 +738,8 @@
 }
 
 @keyframes shimmer-sweep {
-  0% { background-position: 150% 0; }
-  40%, 100% { background-position: -100% 0; }
+  0% { transform: translateX(-90%); }
+  40%, 100% { transform: translateX(60%); }
 }
 
 @keyframes pulse-ring {
@@ -775,14 +788,11 @@
     display: none;
   }
 
-  .shimmer-sweep::after,
+  /* O brilho dos botões (.shimmer-sweep) fica de fora de propósito: foi
+     pedido que ele rode sempre, sem parar. */
   .pulse-badge::before,
   .ambient-orb {
     animation: none;
-  }
-
-  .shimmer-sweep::after {
-    display: none;
   }
 
   .parchment-unroll {
