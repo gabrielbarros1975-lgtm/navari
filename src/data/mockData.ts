@@ -137,6 +137,14 @@ export const mockWorkshop: Workshop = {
     eyebrow: "Continuidade e aprofundamento",
     title: "Laboratório de Casos",
     subtitle: "Incorporação Imobiliária",
+    // Só o que o texto abaixo já diz, em forma de ficha.
+    facts: [
+      { label: "Duração", value: "90 dias" },
+      { label: "Turma", value: "Grupo reduzido" },
+      { label: "Formato", value: "Online, com encontros periódicos" },
+      { label: "Condução", value: "Dr. Wyllian Nava" },
+      { label: "Inscrições", value: "Em breve" },
+    ],
     intro: [
       "Para quem deseja avançar ainda mais na prática, o Laboratório de Casos será uma experiência de aprofundamento destinada a profissionais que desejam desenvolver o raciocínio registral a partir da análise e discussão de situações práticas reais relacionadas à incorporação imobiliária.",
       "Durante 90 dias, um grupo reduzido de participantes terá acesso a um ambiente reservado de acompanhamento e discussão técnica, com espaço para apresentação de dúvidas, compartilhamento de situações práticas e aprofundamento dos conteúdos relacionados à formação.",
@@ -173,9 +181,9 @@ export const mockWorkshop: Workshop = {
     ],
     scarcityLabel: "Vagas restritas.",
     statusNote: "A abertura das inscrições para a turma estará disponível em breve.",
-    ctaLabel: "Inscrições em breve",
+    disclaimerLabel: "Nota sobre a dinâmica do Laboratório",
     disclaimer:
-      "Nota sobre a dinâmica do Laboratório: as discussões terão caráter exclusivamente técnico e educacional, voltadas ao aprofundamento da prática registral. Para preservar a imparcialidade e a ética da atividade, não serão objeto de análise individualizada casos concretos em tramitação ou destinados à qualificação perante o 3º Registro de Imóveis de São Luís/MA. Situações práticas poderão ser discutidas de forma anonimizada e com finalidade exclusivamente didática, observados os limites e regulamentos do Laboratório.",
+      "As discussões terão caráter exclusivamente técnico e educacional, voltadas ao aprofundamento da prática registral. Para preservar a imparcialidade e a ética da atividade, não serão objeto de análise individualizada casos concretos em tramitação ou destinados à qualificação perante o 3º Registro de Imóveis de São Luís/MA. Situações práticas poderão ser discutidas de forma anonimizada e com finalidade exclusivamente didática, observados os limites e regulamentos do Laboratório.",
   },
   faq: [
     {

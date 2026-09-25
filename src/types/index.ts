@@ -90,6 +90,8 @@ export interface CaseLab {
   eyebrow: string;
   title: string;
   subtitle: string;
+  /** Ficha técnica ao lado do título (rótulo → valor). */
+  facts: { label: string; value: string }[];
   intro: string[];
   featuresTitle: string;
   featuresSubtitle: string;
@@ -98,8 +100,8 @@ export interface CaseLab {
   exclusiveParagraphs: string[];
   scarcityLabel: string;
   statusNote: string;
-  ctaLabel: string;
   /** Nota de ética/imparcialidade. Precisa aparecer junto da oferta. */
+  disclaimerLabel: string;
   disclaimer: string;
 }
 

@@ -17,6 +17,11 @@ export default {
       fontFamily: {
         sans: ["Source Sans 3", "sans-serif"],
         display: ["Source Serif 4", "serif"],
+        // Com aspas: sem elas o "4" solto torna o nome inválido em CSS e o
+        // navegador descarta a declaração. É por isso que font-display sai
+        // vazio e cai na Source Sans (os títulos só têm serifa pela regra de
+        // h1-h6 do index.css). font-serif é a versão que funciona.
+        serif: ['"Source Serif 4"', "Georgia", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",

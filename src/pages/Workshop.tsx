@@ -34,11 +34,6 @@ import {
   Instagram,
   Compass,
   Loader2,
-  Users,
-  FileSearch,
-  MessagesSquare,
-  CalendarClock,
-  Clock,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -718,92 +713,118 @@ const Workshop = () => {
       */}
       {workshop.caseLab && (
         <section id="laboratorio" className="lp-section lp-surface py-20 scroll-mt-24">
+          {/* Cara de prospecto impresso, não de "landing gerada": ficha
+              técnica com filetes, capitular, itens em algarismos romanos e a
+              nota como rodapé. Sem ícones, cartões nem pílulas. */}
           <div className="container mx-auto px-4">
-            <Reveal className="max-w-4xl mx-auto text-center space-y-4">
-              <span className="text-xs font-semibold tracking-[0.2em] uppercase text-gold">
-                {workshop.caseLab.eyebrow}
-              </span>
-              <h2 className="font-display text-3xl md:text-4xl font-bold uppercase">
-                {workshop.caseLab.title}
-              </h2>
-              <p className="font-display text-xl md:text-2xl text-foreground/80">
-                {workshop.caseLab.subtitle}
-              </p>
-            </Reveal>
-
-            <Reveal className="max-w-3xl mx-auto mt-8 space-y-5 text-left">
-              {workshop.caseLab.intro.map((paragraph, i) => (
-                <p key={i} className="text-muted-foreground leading-relaxed">
-                  {paragraph}
+            <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+              {/* Coluna do título: fixa no desktop enquanto o texto rola */}
+              <Reveal className="lg:col-span-5 lg:sticky lg:top-28 lg:self-start">
+                <p className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-gold">
+                  <span aria-hidden className="h-px w-8 bg-gold/60" />
+                  {workshop.caseLab.eyebrow}
                 </p>
-              ))}
-            </Reveal>
+                <h2 className="mt-5 font-serif text-4xl md:text-5xl font-bold leading-[1.05] text-foreground">
+                  {workshop.caseLab.title}
+                </h2>
+                <p className="mt-2 font-serif italic text-2xl md:text-[1.75rem] text-gold">
+                  {workshop.caseLab.subtitle}
+                </p>
 
-            <Reveal className="max-w-4xl mx-auto mt-14 text-center space-y-3">
-              <h3 className="font-display text-2xl font-bold">
-                {workshop.caseLab.featuresTitle}
-              </h3>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                {workshop.caseLab.featuresSubtitle}
-              </p>
-            </Reveal>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto mt-8">
-              {workshop.caseLab.features.map((feature, i) => {
-                const Icone = [Users, FileSearch, MessagesSquare, CalendarClock][i % 4];
-                return (
-                  <Reveal key={feature.title} delayMs={i * 60}>
-                    <div className="glass-card h-full p-6 flex items-start gap-4 text-left">
-                      <span className="shrink-0 w-11 h-11 rounded-xl bg-gold/10 border border-gold/25 flex items-center justify-center">
-                        <Icone aria-hidden className="w-5 h-5 text-gold" />
-                      </span>
-                      <div className="space-y-1.5">
-                        <h4 className="font-semibold text-sm uppercase tracking-[0.12em]">
-                          {feature.title}
-                        </h4>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          {feature.description}
-                        </p>
-                      </div>
+                <dl className="mt-10 border-t border-foreground/15">
+                  {workshop.caseLab.facts.map(({ label, value }, i, all) => (
+                    <div
+                      key={label}
+                      className="flex items-baseline justify-between gap-6 border-b border-foreground/15 py-3.5"
+                    >
+                      <dt className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                        {label}
+                      </dt>
+                      {/* A última linha (inscrições) é o aviso: vai em destaque */}
+                      <dd
+                        className={cn(
+                          "font-serif text-base md:text-lg text-right",
+                          i === all.length - 1 ? "italic text-gold" : "text-foreground",
+                        )}
+                      >
+                        {value}
+                      </dd>
                     </div>
-                  </Reveal>
-                );
-              })}
-            </div>
+                  ))}
+                </dl>
+              </Reveal>
 
-            <Reveal className="max-w-3xl mx-auto mt-12">
-              <div className="glass-card border-gold/30 p-7 md:p-9 space-y-4 text-left">
-                <h3 className="font-display text-xl md:text-2xl font-bold">
-                  {workshop.caseLab.exclusiveTitle}
-                </h3>
-                {workshop.caseLab.exclusiveParagraphs.map((paragraph, i) => (
-                  <p key={i} className="text-muted-foreground leading-relaxed">
-                    {paragraph}
+              <div className="lg:col-span-7">
+                <Reveal className="space-y-5 text-[17px] leading-relaxed text-foreground/85">
+                  {workshop.caseLab.intro.map((paragraph, i) => (
+                    <p
+                      key={i}
+                      className={cn(
+                        i === 0 &&
+                          "first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:font-serif first-letter:text-[3.4rem] md:first-letter:text-[4.2rem] first-letter:font-bold first-letter:leading-[0.8] first-letter:text-gold",
+                      )}
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                </Reveal>
+
+                <Reveal className="mt-14">
+                  <h3 className="font-serif text-2xl md:text-[1.75rem] font-bold text-foreground">
+                    {workshop.caseLab.featuresTitle}
+                  </h3>
+                  <p className="mt-2 font-serif italic text-lg text-muted-foreground">
+                    {workshop.caseLab.featuresSubtitle}
                   </p>
-                ))}
 
-                <div className="pt-2 flex flex-col sm:flex-row sm:items-center gap-4">
+                  <ol className="mt-8 border-t border-foreground/15">
+                    {workshop.caseLab.features.map((feature, i) => (
+                      <li
+                        key={feature.title}
+                        className="grid grid-cols-[2.75rem_1fr] gap-3 border-b border-foreground/15 py-5"
+                      >
+                        <span aria-hidden className="font-serif text-xl text-gold">
+                          {["I", "II", "III", "IV", "V", "VI"][i] ?? i + 1}.
+                        </span>
+                        <div>
+                          <h4 className="font-serif text-lg font-semibold text-foreground">
+                            {feature.title}
+                          </h4>
+                          <p className="mt-1 text-muted-foreground leading-relaxed">
+                            {feature.description}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                </Reveal>
+
+                <Reveal className="mt-14 border-l-2 border-gold pl-6 md:pl-8">
+                  <h3 className="font-serif text-xl md:text-2xl font-bold text-foreground">
+                    {workshop.caseLab.exclusiveTitle}
+                  </h3>
+                  <div className="mt-4 space-y-4 text-foreground/85 leading-relaxed">
+                    {workshop.caseLab.exclusiveParagraphs.map((paragraph, i) => (
+                      <p key={i}>{paragraph}</p>
+                    ))}
+                  </div>
                   {/* Sem preço e sem data: é aviso, não botão. Um botão
                       desabilitado só frustraria quem tentasse clicar. */}
-                  <span className="inline-flex items-center gap-2 self-start px-5 py-2.5 rounded-full border border-gold/40 bg-gold/10 text-sm font-semibold uppercase tracking-[0.16em] text-gold">
-                    <Clock aria-hidden className="w-4 h-4" />
-                    {workshop.caseLab.ctaLabel}
-                  </span>
-                  <p className="text-sm text-foreground/80">
-                    <strong className="font-semibold">
-                      {workshop.caseLab.scarcityLabel}
-                    </strong>{" "}
-                    {workshop.caseLab.statusNote}
+                  <p className="mt-5 font-serif italic text-gold">
+                    {workshop.caseLab.scarcityLabel} {workshop.caseLab.statusNote}
                   </p>
-                </div>
-              </div>
-            </Reveal>
+                </Reveal>
 
-            <Reveal className="max-w-3xl mx-auto mt-6">
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                {workshop.caseLab.disclaimer}
-              </p>
-            </Reveal>
+                <Reveal className="mt-14 border-t border-foreground/15 pt-5">
+                  <p className="text-xs leading-relaxed text-muted-foreground">
+                    <span className="font-semibold text-foreground/80">
+                      {workshop.caseLab.disclaimerLabel}:
+                    </span>{" "}
+                    {workshop.caseLab.disclaimer}
+                  </p>
+                </Reveal>
+              </div>
+            </div>
           </div>
         </section>
       )}
