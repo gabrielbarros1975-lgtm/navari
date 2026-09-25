@@ -1,6 +1,5 @@
 import { Barcode } from "lucide-react";
 import { MERCADO_PAGO_PATH, PIX_PATH } from "@/data/brand-icons";
-import { cn } from "@/lib/utils";
 
 /*
  * Bandeiras de cartão: as imagens oficiais que a API do Mercado Pago devolve
@@ -16,11 +15,15 @@ const CARD_BRANDS = [
   { name: "American Express", src: mpLogo("b4785730-c13f-11ee-b4b3-bb9a23b70639") },
 ];
 
+/** Cartão branco de altura fixa: iguala logos de proporções bem diferentes. */
+const tileClass =
+  "flex h-11 sm:h-14 shrink-0 items-center justify-center rounded-lg border border-border bg-white px-3.5 sm:px-5 shadow-sm";
+
 /** Símbolo + nome na cor da marca (o desenho sozinho não é reconhecível). */
 function BrandMark({ name, path, color }: { name: string; path: string; color: string }) {
   return (
-    <span className="inline-flex items-center gap-1.5 font-semibold text-[15px]" style={{ color }}>
-      <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden>
+    <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-sm sm:text-[15px] font-semibold" style={{ color }}>
+      <svg viewBox="0 0 24 24" className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden>
         <path d={path} fill="currentColor" />
       </svg>
       {name}
@@ -30,25 +33,16 @@ function BrandMark({ name, path, color }: { name: string; path: string; color: s
 
 function LogoSet({ hidden = false }: { hidden?: boolean }) {
   return (
-    <ul
-      // A segunda cópia só existe para o loop: leitores de tela a ignoram e,
-      // sem animação (movimento reduzido), ela nem aparece.
-      aria-hidden={hidden || undefined}
-      className={cn(
-        "flex shrink-0 items-center gap-10 pr-10",
-        hidden
-          ? "motion-reduce:hidden"
-          : "motion-reduce:shrink motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:gap-x-8 motion-reduce:gap-y-4 motion-reduce:pr-0",
-      )}
-    >
-      <li>
+    // A segunda cópia só existe para o loop: leitores de tela a ignoram.
+    <ul aria-hidden={hidden || undefined} className="flex shrink-0 items-center gap-3 sm:gap-4 pr-3 sm:pr-4">
+      <li className={tileClass}>
         <BrandMark name="Pix" path={PIX_PATH} color="#32BCAD" />
       </li>
-      <li>
+      <li className={tileClass}>
         <BrandMark name="Mercado Pago" path={MERCADO_PAGO_PATH} color="#00B1EA" />
       </li>
       {CARD_BRANDS.map(({ name, src }) => (
-        <li key={name}>
+        <li key={name} className={tileClass}>
           <img
             src={src}
             alt={hidden ? "" : name}
@@ -56,13 +50,13 @@ function LogoSet({ hidden = false }: { hidden?: boolean }) {
             decoding="async"
             width={48}
             height={32}
-            className="h-8 w-auto object-contain"
+            className="h-7 sm:h-9 w-auto object-contain"
           />
         </li>
       ))}
-      <li>
-        <span className="inline-flex items-center gap-1.5 font-semibold text-[15px] text-foreground/80">
-          <Barcode aria-hidden className="h-6 w-6" />
+      <li className={tileClass}>
+        <span className="inline-flex items-center gap-1.5 text-sm sm:text-[15px] font-semibold text-foreground/80">
+          <Barcode aria-hidden className="h-5 w-5 sm:h-6 sm:w-6" />
           Boleto
         </span>
       </li>
@@ -71,20 +65,18 @@ function LogoSet({ hidden = false }: { hidden?: boolean }) {
 }
 
 /**
- * Faixa de formas de pagamento rolando em loop, com as bordas esmaecidas.
- * Para ao passar o mouse e fica parada (centralizada, sem cópia) para quem
- * pediu menos movimento no sistema.
+ * Carrossel de formas de pagamento em loop contínuo, com as bordas
+ * esmaecidas. Roda sempre, a pedido: sem pausa no mouse e sem parar para a
+ * preferência de movimento reduzido do sistema.
  */
 export function PaymentLogos() {
   return (
-    <div className="w-full max-w-3xl">
+    <div className="w-full max-w-4xl">
       <p className="mb-3 text-center text-xs uppercase tracking-[0.18em] text-muted-foreground">
         Formas de pagamento
       </p>
-      {/* Bordas esmaecidas só com a faixa andando: parada, elas apagariam os
-          logos das pontas. */}
-      <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)] motion-reduce:[mask-image:none] motion-reduce:[-webkit-mask-image:none]">
-        <div className="flex w-max animate-marquee opacity-90 hover:[animation-play-state:paused] motion-reduce:w-full motion-reduce:animate-none motion-reduce:justify-center">
+      <div className="relative overflow-hidden py-1 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+        <div className="flex w-max animate-marquee">
           <LogoSet />
           <LogoSet hidden />
         </div>
