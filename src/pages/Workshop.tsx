@@ -174,13 +174,15 @@ const Workshop = () => {
               </p>
 
               {/* Informações de Data / Formato */}
-              <div
-                className="hero-in inline-flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-sm md:text-[15px] text-foreground/85 font-medium bg-card/60 border border-gold/20 px-5 sm:px-6 py-2.5 rounded-full"
-                style={{ animationDelay: "280ms" }}
-              >
-                <span>Sábado · 17 de outubro de 2026</span>
-                <span aria-hidden className="hidden sm:block w-px h-3.5 bg-gold/30" />
-                <span>Online · Ao vivo</span>
+              {/* Data por extenso no lugar da pílula com separador (padrão de
+                  landing gerada). */}
+              <div className="hero-in text-center" style={{ animationDelay: "280ms" }}>
+                <p className="font-display text-lg md:text-xl font-semibold leading-snug text-foreground">
+                  Sábado, 17 de outubro de 2026
+                </p>
+                <p className="mt-1 text-[11px] md:text-xs font-semibold uppercase tracking-[0.22em] text-gold">
+                  Online · Ao vivo
+                </p>
               </div>
 
               <div className="hero-in pt-2" style={{ animationDelay: "340ms" }}>
@@ -724,10 +726,10 @@ const Workshop = () => {
                   <span aria-hidden className="h-px w-8 bg-gold/60" />
                   {workshop.caseLab.eyebrow}
                 </p>
-                <h2 className="mt-5 font-serif text-4xl md:text-5xl font-bold leading-[1.05] text-foreground">
+                <h2 className="mt-5 font-display text-4xl md:text-5xl font-bold leading-[1.05] text-foreground">
                   {workshop.caseLab.title}
                 </h2>
-                <p className="mt-2 font-serif italic text-2xl md:text-[1.75rem] text-gold">
+                <p className="mt-2 font-display italic text-2xl md:text-[1.75rem] text-gold">
                   {workshop.caseLab.subtitle}
                 </p>
 
@@ -743,7 +745,7 @@ const Workshop = () => {
                       {/* A última linha (inscrições) é o aviso: vai em destaque */}
                       <dd
                         className={cn(
-                          "font-serif text-base md:text-lg text-right",
+                          "font-display text-base md:text-lg text-right",
                           i === all.length - 1 ? "italic text-gold" : "text-foreground",
                         )}
                       >
@@ -761,7 +763,7 @@ const Workshop = () => {
                       key={i}
                       className={cn(
                         i === 0 &&
-                          "first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:font-serif first-letter:text-[3.4rem] md:first-letter:text-[4.2rem] first-letter:font-bold first-letter:leading-[0.8] first-letter:text-gold",
+                          "first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:font-display first-letter:text-[3.4rem] md:first-letter:text-[4.2rem] first-letter:font-bold first-letter:leading-[0.8] first-letter:text-gold",
                       )}
                     >
                       {paragraph}
@@ -770,10 +772,10 @@ const Workshop = () => {
                 </Reveal>
 
                 <Reveal className="mt-14">
-                  <h3 className="font-serif text-2xl md:text-[1.75rem] font-bold text-foreground">
+                  <h3 className="font-display text-2xl md:text-[1.75rem] font-bold text-foreground">
                     {workshop.caseLab.featuresTitle}
                   </h3>
-                  <p className="mt-2 font-serif italic text-lg text-muted-foreground">
+                  <p className="mt-2 font-display italic text-lg text-muted-foreground">
                     {workshop.caseLab.featuresSubtitle}
                   </p>
 
@@ -783,11 +785,11 @@ const Workshop = () => {
                         key={feature.title}
                         className="grid grid-cols-[2.75rem_1fr] gap-3 border-b border-foreground/15 py-5"
                       >
-                        <span aria-hidden className="font-serif text-xl text-gold">
+                        <span aria-hidden className="font-display text-xl text-gold">
                           {["I", "II", "III", "IV", "V", "VI"][i] ?? i + 1}.
                         </span>
                         <div>
-                          <h4 className="font-serif text-lg font-semibold text-foreground">
+                          <h4 className="font-display text-lg font-semibold text-foreground">
                             {feature.title}
                           </h4>
                           <p className="mt-1 text-muted-foreground leading-relaxed">
@@ -800,7 +802,7 @@ const Workshop = () => {
                 </Reveal>
 
                 <Reveal className="mt-14 border-l-2 border-gold pl-6 md:pl-8">
-                  <h3 className="font-serif text-xl md:text-2xl font-bold text-foreground">
+                  <h3 className="font-display text-xl md:text-2xl font-bold text-foreground">
                     {workshop.caseLab.exclusiveTitle}
                   </h3>
                   <div className="mt-4 space-y-4 text-foreground/85 leading-relaxed">
@@ -810,7 +812,7 @@ const Workshop = () => {
                   </div>
                   {/* Sem preço e sem data: é aviso, não botão. Um botão
                       desabilitado só frustraria quem tentasse clicar. */}
-                  <p className="mt-5 font-serif italic text-gold">
+                  <p className="mt-5 font-display italic text-gold">
                     {workshop.caseLab.scarcityLabel} {workshop.caseLab.statusNote}
                   </p>
                 </Reveal>

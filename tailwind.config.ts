@@ -15,13 +15,12 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Source Sans 3", "sans-serif"],
-        display: ["Source Serif 4", "serif"],
-        // Com aspas: sem elas o "4" solto torna o nome inválido em CSS e o
-        // navegador descarta a declaração. É por isso que font-display sai
-        // vazio e cai na Source Sans (os títulos só têm serifa pela regra de
-        // h1-h6 do index.css). font-serif é a versão que funciona.
-        serif: ['"Source Serif 4"', "Georgia", "serif"],
+        // Nomes entre aspas: sem elas o número solto ("Source Serif 4") torna
+        // o nome inválido em CSS, o navegador descarta a declaração e a
+        // classe sai vazia. Foi assim até 25/09/2026: font-display caía na
+        // Source Sans em tudo que não era título.
+        sans: ['"Source Sans 3"', "sans-serif"],
+        display: ['"Source Serif 4"', "Georgia", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
