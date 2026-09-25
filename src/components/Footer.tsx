@@ -1,11 +1,17 @@
 import { Link } from "react-router-dom";
-import { Phone, MapPin } from "lucide-react";
+import { Phone, MapPin, Mail } from "lucide-react";
 import { navaMonograma } from "@/data/images";
+import { COMPANY } from "@/data/company";
+import { TrustBadges } from "@/components/TrustBadges";
 
 export function Footer() {
   return (
     <footer className="border-t border-border/50 bg-card/50">
       <div className="container mx-auto px-4 py-8 md:py-10">
+        <div className="pb-8 mb-8 border-b border-border/50">
+          <TrustBadges />
+        </div>
+
         <div className="flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-col items-center md:items-start gap-2">
             <Link to="/" className="flex items-center gap-3">
@@ -35,7 +41,7 @@ export function Footer() {
               FAQ
             </a>
             <a
-              href="https://wa.me/5598984923268"
+              href={COMPANY.whatsappUrl}
               target="_blank"
               rel="noreferrer"
               className="py-1 hover:text-primary active:text-primary transition-colors"
@@ -53,13 +59,36 @@ export function Footer() {
               className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
             >
               <Phone className="w-3.5 h-3.5" />
-              Contato: (98) 98492-3268
+              Contato: {COMPANY.whatsappLabel}
+            </a>
+            <a
+              href={`mailto:${COMPANY.email}`}
+              className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
+            >
+              <Mail className="w-3.5 h-3.5" />
+              {COMPANY.email}
             </a>
             <span className="inline-flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5" />
-              Localização: São Luís, MA
+              Localização: {COMPANY.city}
             </span>
           </div>
+        </div>
+
+        {/* Razão social e CNPJ visíveis: exigência do Decreto 7.962/2013
+            para quem vende pela internet. */}
+        <div className="mt-4 flex flex-col md:flex-row items-center justify-center md:justify-between gap-2 text-xs text-muted-foreground text-center">
+          <p>
+            {COMPANY.legalName} · CNPJ {COMPANY.cnpj}
+          </p>
+          <nav className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+            <Link to="/politica-de-privacidade" className="underline-offset-2 hover:underline hover:text-foreground">
+              Política de Privacidade
+            </Link>
+            <Link to="/termos-de-compra" className="underline-offset-2 hover:underline hover:text-foreground">
+              Termos de Compra e Reembolso
+            </Link>
+          </nav>
         </div>
       </div>
     </footer>

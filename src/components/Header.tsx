@@ -1,8 +1,6 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/auth/auth-context";
 import { navaMonograma } from "@/data/images";
 import { cn } from "@/lib/utils";
 
@@ -10,8 +8,6 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
@@ -29,11 +25,9 @@ export function Header() {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/", { replace: true });
-  };
-
+  // Sem botão "Entrar": o login era de demonstração (contas salvas só no
+  // navegador, senha em texto aberto) e não dava acesso a nada. Volta quando
+  // existir uma área do aluno de verdade.
   const navLinks = [
     { to: "/", label: "Início" },
     { to: "/courses", label: "Cursos" },
@@ -91,27 +85,6 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-2.5">
-            {user ? (
-              <>
-                <Link to="/dashboard">
-                  <Button variant="outline" size="sm">
-                    Minha Área
-                  </Button>
-                </Link>
-                <Button type="button" variant="ghost" size="sm" onClick={handleLogout}>
-                  Sair
-                </Button>
-              </>
-            ) : (
-              <Link to="/login">
-                <Button variant="default" size="sm">
-                  Entrar
-                </Button>
-              </Link>
-            )}
-          </div>
-
           <button
             className="md:hidden -mr-2 p-2.5 text-foreground tap-scale relative"
             onClick={() => setMobileMenuOpen((v) => !v)}
@@ -157,34 +130,6 @@ export function Header() {
                   {link.label}
                 </Link>
               ))}
-
-              <div
-                className="flex flex-col gap-2.5 pt-3 mt-2 border-t border-border/40"
-                style={
-                  mobileMenuOpen
-                    ? { animation: `fade-in-up 300ms ease-out both`, animationDelay: `${navLinks.length * 40}ms` }
-                    : undefined
-                }
-              >
-                {user ? (
-                  <>
-                    <Link to="/dashboard">
-                      <Button variant="outline" className="w-full">
-                        Minha Área
-                      </Button>
-                    </Link>
-                    <Button type="button" variant="outline" className="w-full" onClick={handleLogout}>
-                      Sair
-                    </Button>
-                  </>
-                ) : (
-                  <Link to="/login">
-                    <Button variant="default" className="w-full">
-                      Entrar
-                    </Button>
-                  </Link>
-                )}
-              </div>
             </nav>
           </div>
         </div>

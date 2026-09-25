@@ -672,7 +672,7 @@ const Workshop = () => {
                           R$24,70), e a taxa muda com o tempo e a bandeira. */}
                       <p className="text-sm text-muted-foreground font-medium">
                         {tier.installments > 1
-                          ? `à vista, ou em até ${tier.installments}x no cartão (com juros)`
+                          ? `à vista, ou em até ${tier.installments}x no cartão (com\u00a0juros)`
                           : "à vista"}
                       </p>
                     </div>
@@ -922,6 +922,18 @@ const Workshop = () => {
                 {buyerError}
               </p>
             )}
+            {/* Nova aba: navegar aqui fecharia o diálogo e perderia o que foi digitado. */}
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Ao continuar, você concorda com os{" "}
+              <a href="/termos-de-compra" target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-foreground">
+                Termos de Compra e Reembolso
+              </a>{" "}
+              e declara ter lido a{" "}
+              <a href="/politica-de-privacidade" target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-foreground">
+                Política de Privacidade
+              </a>
+              .
+            </p>
           </form>
 
           <DialogFooter>

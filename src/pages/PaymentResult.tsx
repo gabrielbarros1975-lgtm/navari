@@ -9,7 +9,7 @@ const RESULTS = {
   aprovado: {
     icon: CheckCircle,
     title: "Inscrição confirmada!",
-    text: "Seu pagamento foi aprovado. Em breve você receberá no e-mail informado no pagamento os dados de acesso à Imersão.",
+    text: "Seu pagamento foi aprovado. Em breve você receberá os dados de acesso à Imersão no e-mail informado na inscrição.",
   },
   pendente: {
     icon: Clock,
