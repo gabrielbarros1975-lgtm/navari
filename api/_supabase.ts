@@ -12,7 +12,7 @@ import { createClient } from "@supabase/supabase-js";
  * Tabela esperada (rodar no SQL Editor do Supabase):
  *
  *   create table orders (
- *     id text primary key,           -- id da order na Mercado Pago (ex: ORD...)
+ *     id text primary key,           -- order do Mercado Pago (ORD...) ou kiwify_<venda>
  *     tier_id text,                  -- external_reference (ex: "ao-vivo")
  *     email text,
  *     name text,                     -- nome do comprador, para o certificado
