@@ -1,6 +1,7 @@
-import { Barcode, CreditCard, Lock, QrCode, RotateCcw, ShieldCheck } from "lucide-react";
+import { Lock, RotateCcw, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { ComponentType } from "react";
+import { PaymentLogos } from "@/components/PaymentLogos";
 
 type Badge = {
   icon: ComponentType<{ className?: string }>;
@@ -18,12 +19,6 @@ const BADGES: Badge[] = [
   { icon: ShieldCheck, title: "Compra segura", subtitle: "Site protegido com SSL" },
   { icon: Lock, title: "Mercado Pago", subtitle: "Pagamento processado com segurança" },
   { icon: RotateCcw, title: "Garantia de 7 dias", subtitle: "Direito de arrependimento", to: "/termos-de-compra" },
-];
-
-const PAYMENT_METHODS = [
-  { icon: QrCode, label: "Pix" },
-  { icon: CreditCard, label: "Cartão de crédito" },
-  { icon: Barcode, label: "Boleto" },
 ];
 
 export function TrustBadges() {
@@ -60,18 +55,7 @@ export function TrustBadges() {
         })}
       </ul>
 
-      <div className="flex flex-wrap items-center justify-center gap-2">
-        <span className="text-xs text-muted-foreground mr-1">Formas de pagamento:</span>
-        {PAYMENT_METHODS.map(({ icon: Icon, label }) => (
-          <span
-            key={label}
-            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background/70 px-2.5 py-1 text-xs font-medium text-foreground/80"
-          >
-            <Icon aria-hidden className="w-3.5 h-3.5 text-gold" />
-            {label}
-          </span>
-        ))}
-      </div>
+      <PaymentLogos />
     </div>
   );
 }

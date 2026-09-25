@@ -77,7 +77,10 @@ const PrivacyPolicy = () => (
       funcionarem, que os tratam em nosso nome:
     </p>
     <ul>
-      <li><strong>Mercado Pago:</strong> processamento do pagamento e prevenção a fraudes.</li>
+      <li>
+        <strong>Mercado Pago:</strong> processamento do pagamento, prevenção a fraudes e imagens das
+        bandeiras de cartão exibidas no site.
+      </li>
       <li><strong>Vercel:</strong> hospedagem do site.</li>
       <li><strong>Supabase:</strong> armazenamento dos dados da inscrição.</li>
       <li><strong>Resend:</strong> envio do e-mail de confirmação.</li>

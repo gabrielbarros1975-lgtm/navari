@@ -77,11 +77,18 @@ export default {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
         },
+        // A faixa tem o conteúdo duas vezes: andar -50% cai exatamente no
+        // começo da segunda cópia, e o loop não dá salto.
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         shimmer: "shimmer 2s infinite linear",
+        marquee: "marquee 28s linear infinite",
       },
     },
   },
