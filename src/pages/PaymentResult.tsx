@@ -45,7 +45,9 @@ const PaymentResult = () => {
       <Header />
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4">
-          <div className="glass-card p-10 md:p-14 text-center max-w-lg mx-auto">
+          {/* Margem menor no celular: com p-10, numa tela de 320px os quadros
+              de Pix e cartão ficavam com uns 170px de texto. */}
+          <div className="glass-card px-5 py-8 sm:p-10 md:p-14 text-center max-w-lg mx-auto">
             <div className="w-12 h-12 mx-auto rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mb-5">
               <Icon className="w-5 h-5 text-primary" />
             </div>
