@@ -66,7 +66,10 @@ export async function fetchKiwifySale(saleId: string, creds: Credentials): Promi
   });
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`Consulta da venda ${saleId} falhou: ${res.status} ${await res.text()}`);
-  return res.json();
+  // Venda inexistente não vem como 404, ao contrário do documentado: vem 200
+  // com { error: "TypeError: ... '_source'" } (testado em 25/09/2026).
+  const data = await res.json();
+  return data && typeof data.id === "string" && !data.error ? data : null;
 }
 
 /**

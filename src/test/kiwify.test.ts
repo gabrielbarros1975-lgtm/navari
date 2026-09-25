@@ -83,6 +83,13 @@ describe("Kiwify: webhook", () => {
     expect(sent).toHaveLength(0);
   });
 
+  it("venda inexistente respondida como 200 com erro também é ignorada", async () => {
+    // É o que a API real devolve hoje, em vez de 404.
+    mockKiwify({ error: "TypeError: Cannot read properties of undefined (reading '_source')" });
+    expect((await call({ order_id: "fake" })).status).toBe(200);
+    expect(sent).toHaveLength(0);
+  });
+
   it("sem credenciais responde 500 para a Kiwify tentar de novo", async () => {
     vi.stubEnv("KIWIFY_CLIENT_ID", "");
     mockKiwify(null);
