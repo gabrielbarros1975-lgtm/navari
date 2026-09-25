@@ -14,6 +14,7 @@ describe("Kiwify: auxiliares", () => {
   it("identifica o ingresso pelo preço base em centavos", () => {
     expect(productFromBasePrice(29640)?.id).toBe("ao-vivo");
     expect(productFromBasePrice(35760)?.id).toBe("ao-vivo-mais-plataforma");
+    expect(productFromBasePrice(1000)?.id).toBe("teste-cartao-parcelado");
     expect(productFromBasePrice(12345)).toBeUndefined();
     expect(productFromBasePrice(undefined)).toBeUndefined();
   });

@@ -130,6 +130,9 @@ export const mockWorkshop: Workshop = {
       batchLabel: "Uso interno",
       price: 10,
       installments: 2,
+      // Oferta de teste da Kiwify, também R$10: o webhook dela reconhece o
+      // ingresso de teste pelo preço. Sai junto com este ingresso.
+      cardFallbackUrl: "https://pay.kiwify.com.br/XalgTsA",
       includes: ["Apenas para validar o pagamento e o e-mail de acesso em produção. Não é um ingresso."],
       checkoutUrl: null,
       ctaLabel: "Testar cartão (R$10,00)",
